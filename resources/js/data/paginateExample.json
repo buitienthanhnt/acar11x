@@ -1,0 +1,81 @@
+{
+	"current_page": 1,
+	"data": [
+		{
+			"id": 10,
+			"title": "7740",
+			"alias": "asdasd",
+			"active": "hoạt động",
+			"desciption": "mo ta demo",
+			"image_path": "http://adoc.dev/storage/files/uploads/261479696_1820281014826477_6400419339212881138_n_084353.jpg",
+			"deleted_at": null,
+			"created_at": "2025-08-11T15:55:32.000000Z",
+			"updated_at": "2025-08-11T15:55:32.000000Z",
+			"writer": 1
+		},
+		{
+			"id": 11,
+			"title": "test 1 edited",
+			"alias": "demo for test khong xac dinh",
+			"active": "hoạt động",
+			"desciption": "demo for test 1 23",
+			"image_path": "http://adoc.dev/storage/files/uploads/15439947_618736711647586_7282073870375019745_n_084429.jpg",
+			"deleted_at": null,
+			"created_at": "2025-08-11T16:03:38.000000Z",
+			"updated_at": "2025-08-14T15:23:35.000000Z",
+			"writer": 41
+		}
+	],
+	"first_page_url": "http://adoc.dev/list?page=1",
+	"from": 1,
+	"last_page": 1,
+	"last_page_url": "http://adoc.dev/list?page=1",
+	"links": [
+			{
+				"url": "http://adoc.dev/list?page=2",
+				"label": "&laquo; Previous",
+				"active": false
+			},
+			{
+				"url": "http://adoc.dev/list?page=1",
+				"label": "1",
+				"active": false
+			},
+			{
+				"url": "http://adoc.dev/list?page=2",
+				"label": "2",
+				"active": false
+			},
+			{
+				"url": "http://adoc.dev/list?page=3",
+				"label": "3",
+				"active": true
+			},
+			{
+				"url": "http://adoc.dev/list?page=4",
+				"label": "4",
+				"active": false
+			},
+			{
+				"url": "http://adoc.dev/list?page=5",
+				"label": "5",
+				"active": false
+			},
+			{
+				"url": "http://adoc.dev/list?page=6",
+				"label": "6",
+				"active": false
+			},
+			{
+				"url": "http://adoc.dev/list?page=4",
+				"label": "Next &raquo;",
+				"active": false
+			}
+	],
+	"next_page_url": null,
+	"path": "http://adoc.dev/list",
+	"per_page": 12,
+	"prev_page_url": null,
+	"to": 2,
+	"total": 2
+}
