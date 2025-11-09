@@ -32,7 +32,7 @@ return [
 
         'local' => [
             'driver' => 'local',
-            'root' => storage_path('app/private'),
+            'root' => storage_path('app'), // change: 'app/private'(v11) -> 'app'(v10)
             'serve' => true,
             'throw' => false,
             'report' => false,
@@ -75,6 +75,7 @@ return [
 
     'links' => [
         public_path('storage') => storage_path('app/public'),
+        public_path('source') => resource_path('public'),  // add by tha: mapping source folder in public to-> assets folder in resource
     ],
 
 ];

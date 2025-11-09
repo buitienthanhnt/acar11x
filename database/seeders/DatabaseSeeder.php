@@ -2,8 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+
+use App\Models\Page;
+use App\Models\Story;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -13,11 +15,27 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        // \App\Models\User::factory(10)->create();
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        // \App\Models\User::factory()->create([
+        //     'name' => 'Test User',
+        //     'email' => 'test@example.com',
+        // ]);
+
+        // Story::factory()->create([
+        //     Story::ATTR_ACTIVE => false,
+        //     Story::ATTR_TITLE => 'demo for titile',
+        // ]);
+        $this->newPage();
+    }
+
+    /**
+     * create new page by Page factory
+     */
+    protected function newPage() : void {
+        Page::factory()->create([
+            Page::DESCRIPTION => 'demo content'
         ]);
+        return;
     }
 }
