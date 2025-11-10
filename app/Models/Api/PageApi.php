@@ -539,6 +539,23 @@ class PageApi
 	public function pageFilterTimeline(string $type = 'timeline', int $limit = 6)
 	{
 		/**
+		 * support for mysql and sqlite.
+		 */
+		$connection = array_keys(DB::getConnections())[0];
+		$exjson = $connection === 'mysql' ? 'JSON_EXTRACT' : 'json_extract';
+		$timeSql = $connection === 'mysql' ? 'DATE_FORMAT' : 'STRFTIME';
+		$timeFormat = $connection === 'mysql' ? '%Y-%m-%d %h:%i:%s' : '%Y-%m-%d %H:%M:%S';
+		$now = $connection === 'mysql' ? 'NOW()' : "datetime('now')";
+		$timeValueRaw = function ($input) use ($connection, $timeSql, $exjson, $timeFormat) {
+			return $connection === 'sqlite' ? <<<SQL
+		$timeSql('$timeFormat', $exjson($input, '$.timeValue'))
+		SQL : <<<TIM
+		$timeSql($exjson($input, '$.timeValue'), '$timeFormat')
+		TIM;
+		};
+
+		// dd($timeValueRaw("page_contents.`value`"));
+		/**
 		 * Cách này là tối ưu nhất cho việc lọc, sắp xếp cho các bài viết có kiểu: timeline
 		 * Cách số 2 thì phải qua 2 câu truy vấn, không tối ưu bằng chỉ 1 câu truy vấn như cách 1
 		 * Cách số 3 Hiện đang bị lỗi về cách sắp xếp theo giá trị timeValue của content.
@@ -555,16 +572,16 @@ class PageApi
 			"pages.id",      		// khóa chính bảng 1
 			"=",			 		// phương thức so sánh
 			"page_contents.page_id" // khóa phụ bảng 2
-		)->selectRaw("DISTINCT pages.*, JSON_EXTRACT(page_contents.`value`, '$.timeValue') AS timeValue")
+		)->selectRaw("DISTINCT pages.*, $exjson( page_contents.`value`, '$.timeValue') AS timeValue")
 			->where("page_contents.type", "=", $type)
-			->whereRaw("DATE_FORMAT(JSON_EXTRACT(page_contents.`value`, '$.timeValue'), '%Y-%m-%d %h:%i:%s') > NOW()")
+			->whereRaw($timeValueRaw("page_contents.`value`") . " > $now")
 			->orderBy('timeValue', 'ASC')
 			->limit($limit)
 			->groupBy('page_contents.page_id')
-			->with(['pageContents' => function ($query) use ($type) {
+			->with(['pageContents' => function ($query) use ($type, $now, $timeValueRaw) {
 				$query->where(PageContentInterface::TYPE, $type)
-					->whereRaw("DATE_FORMAT(JSON_EXTRACT(value, '$.timeValue'), '%Y-%m-%d %h:%i:%s') > NOW()")
-					->orderByRaw("DATE_FORMAT(JSON_EXTRACT(value, '$.timeValue'), '%Y-%m-%d %h:%i:%s') ASC"); // sắp xếp thứ tự tăng dần luôn.
+					->whereRaw($timeValueRaw('value') . " > $now")
+					->orderByRaw($timeValueRaw('value') . " ASC"); // sắp xếp thứ tự tăng dần luôn.
 			}])
 			->get()
 			->sortBy(function ($page) {

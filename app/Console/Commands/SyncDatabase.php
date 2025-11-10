@@ -16,7 +16,7 @@ class SyncDatabase extends Command
 {
     /**
      * The name and signature of the console command.
-     * ẽ: php artisan app:sync-database pages,writers
+     * ex: php artisan app:sync-database pages,writers
      *
      * @var string
      */
