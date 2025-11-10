@@ -1,9 +1,15 @@
 import { Head } from "@inertiajs/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { useEffect } from "react";
 
 const queryClient = new QueryClient();
 
 export default function Baselayout({ children }) {
+	useEffect(()=>{
+		/**
+		 * App luôn luôn chạy với tất cả các thành phần từ thành phần gốc.
+		 */
+	}, [])
 	return (
 		<QueryClientProvider client={queryClient}>
 			<Head>
