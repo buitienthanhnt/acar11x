@@ -535,6 +535,7 @@ class PageApi
 	 * filter timeValue of string json value.
 	 * @param string $type
 	 * @param int $limit
+	 * @return static[]|\Illuminate\Database\Eloquent\Collection
 	 */
 	public function pageFilterTimeline(string $type = 'timeline', int $limit = 6)
 	{
@@ -547,11 +548,11 @@ class PageApi
 		$timeFormat = $connection === 'mysql' ? '%Y-%m-%d %h:%i:%s' : '%Y-%m-%d %H:%M:%S';
 		$now = $connection === 'mysql' ? 'NOW()' : "datetime('now')";
 		$timeValueRaw = function ($input) use ($connection, $timeSql, $exjson, $timeFormat) {
-			return $connection === 'sqlite' ? <<<SQL
+			return $connection === 'sqlite' ? <<<SQLITE
 		$timeSql('$timeFormat', $exjson($input, '$.timeValue'))
-		SQL : <<<TIM
+		SQLITE : <<<MYSQL
 		$timeSql($exjson($input, '$.timeValue'), '$timeFormat')
-		TIM;
+		MYSQL;
 		};
 
 		// dd($timeValueRaw("page_contents.`value`"));

@@ -17,6 +17,8 @@ class SyncDatabase extends Command
     /**
      * The name and signature of the console command.
      * ex: php artisan app:sync-database pages,writers
+     * sync storage image run: 
+     * sudo cp -rf /var/www/html/10xreact/storage/app/public/ /var/www/html/acar11x/storage/app/
      *
      * @var string
      */

@@ -206,6 +206,8 @@ class Page extends Model implements PageInterface
 
     /**
      * return list tag of the page(1-to many).
+     * for packages define relationship: https://laravel.com/docs/12.x/eloquent-relationships#querying-relationship-absence
+     * use: resolveRelationUsing
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function tags(): HasMany

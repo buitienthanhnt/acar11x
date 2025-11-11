@@ -10,7 +10,7 @@ const DupLayout = ({ children, topMenu }) => {
 			<TopContent />
 			{children}
 			<FootContent />
-			<Link href={'/'} className="rounded-full justify-center items-center flex bg-blue-gray-300 w-20 h-20 top-24 left-24 fixed">
+			<Link href={'/'} className="rounded-full justify-center items-center flex bg-blue-gray-300 p-2 bottom-20 left-20 fixed">
 				<HomeIcon className="w-14 h-14 text-deep-purple-600"></HomeIcon>
 			</Link>
 		</Baselayout>
