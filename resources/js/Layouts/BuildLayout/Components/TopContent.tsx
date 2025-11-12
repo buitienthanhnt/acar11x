@@ -31,7 +31,7 @@ function NavItem({ children, href }) {
     );
 }
 
-export function TopContent({ }) {
+function TopContent({ }) {
     const { props: { topMenu, auth: { user } }, } = usePage();
     const [open, setOpen] = React.useState(false);
     function handleOpen() {

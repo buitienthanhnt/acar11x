@@ -5,7 +5,7 @@ const LINKS = ["About Us", "Careers", "Press", "Blog", "Pricing"];
 const SUB_LINKS = ["Claim", "Privacy", "Terms"];
 const CURRENT_YEAR = new Date().getFullYear();
 
-export function FootContent() {
+function FootContent() {
   return (
     // <WhenVisible data={'foot_page'}>
       <footer className="mt-10 px-4 pt-20 bg-white ">
