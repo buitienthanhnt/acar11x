@@ -19,3 +19,8 @@
 # -----> upper performent
 # https://viblo.asia/p/gioi-thieu-ve-swoole-mot-framework-xu-ly-bat-dong-bo-cua-php-cuc-nhanh-3P0lP9Vp5ox
 # https://laravel.com/docs/11.x/octane
+
+
+
+# change all file type in folder(ex change .jsx to tsx)
+#   for file in *.jsx; do mv "$file" "$(basename "$file" .jsx).tsx" done
