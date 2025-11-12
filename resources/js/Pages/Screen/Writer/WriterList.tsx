@@ -36,13 +36,13 @@ function WriterItem({ writer }) {
     return (
         <Link href={route("writerDetail", { id: writer.id })} className="bg-slate-400 p-2 flex-1 rounded-xl space-y-2">
             <div className="flex flex-row py-1">
-                <h4 className="font-semibold text-xl text-white">{writer.name}</h4>
+                <h4 className="font-semibold text-xl text-black hover:text-blue-500">{writer.name}</h4>
                 <h4 className="text-gray-800 font-semibold text-xl underline px-1">({writer.alias})</h4>
             </div>
             <img src={writer.image_path} alt="" className="rounded-md hover:resize-2" />
             <div>
                 <p className="text-gray-200 float-end">{writer.date_of_birth.substring(0, 10)}</p>
-                <p className=" underline font-semibold">{writer.phone}</p>
+                <p className="underline font-semibold">{writer.phone}</p>
                 <p className=" text-gray-200">{writer.description}</p>
             </div>
         </Link>

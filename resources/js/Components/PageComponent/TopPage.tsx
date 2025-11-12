@@ -37,11 +37,11 @@ const SecondPages = ({ pages }) => {
 			{pages.map((page, index) => {
 				return (
 					<Link prefetch cacheFor="2m" // @inertiajs/react 2.0 or newest
-						className="bg-blue-gray-500 rounded-md relative grid-rows-1 flex justify-center items-center"
+						className="rounded-md relative grid-rows-1 flex justify-center items-center"
 						key={`second-${index}`}
 						href={route('detail', { alias: page.alias })}
 					>
-						<p className="absolute bottom-4 left-2 md:left-4 line-clamp-2 font-semibold text-2xl text-green-600 hover:text-white">{page.title}</p>
+						<p className="absolute bottom-0 left-2 md:left-4 line-clamp-2 font-semibold text-2xl text-orange-700 hover:text-black">{page.title}</p>
 						<ImagePage source={page.image_path} className={'w-full h-auto rounded-md'}></ImagePage>
 					</Link>
 				)
