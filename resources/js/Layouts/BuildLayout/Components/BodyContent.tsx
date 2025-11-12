@@ -1,6 +1,6 @@
 import React from "react";
 
-const BodyContent = ({ content, children, topChildren }) => {
+const BodyContent = ({ content, children, topChildren }: any) => {
     return (
         <div className="container mx-auto p-2">
             {topChildren ? <>

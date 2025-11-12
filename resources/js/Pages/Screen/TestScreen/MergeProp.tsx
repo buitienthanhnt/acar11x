@@ -35,8 +35,8 @@ const MergeProp = (props) => {
 				})}
 			</div>
 			<div className='flex gap-2'>
-				<Button onClick={onAddNoti}>add noti and merge props</Button>
-				<Button onClick={resetNoti}>reset notifi</Button>
+				<Button onClick={onAddNoti} type='submit'>add noti and merge props</Button>
+				<Button onClick={resetNoti} type='button'>reset notifi</Button>
 			</div>
 		</>
 	)

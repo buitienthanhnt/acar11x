@@ -2,7 +2,14 @@ import { Paginate } from "@/Components/Custom";
 import SingleLayout from "@/Layouts/BuildLayout/SingleLayout";
 import { Head, Link } from "@inertiajs/react";
 
-export default function WriterList({ current_page, last_page, data, links }) {
+interface WriterList {
+    current_page: Number;
+    last_page: Number;
+    data: any;
+    links?: any;
+}
+
+export default function WriterList({ current_page, last_page, data }: WriterList) {
 
     if (!data) {
         return null;
@@ -18,7 +25,7 @@ export default function WriterList({ current_page, last_page, data, links }) {
                     return <WriterItem writer={item} key={index}></WriterItem>
                 })}
             </div>
-            <Paginate pageSize={last_page} currentPage={current_page} links={links} url={window.location.href}></Paginate>
+            <Paginate pageSize={last_page} currentPage={current_page} url={window.location.href}></Paginate>
         </SingleLayout>
     )
 }

@@ -33,7 +33,7 @@ function WriterDetail({ writer, pages }) {
                     })}
                 </div>}
                 {last_page &&
-                    <Paginate pageSize={last_page} currentPage={current_page} links={links} url={window.location.href}></Paginate>
+                    <Paginate pageSize={last_page} currentPage={current_page} url={window.location.href}></Paginate>
                 }
             </div>
         </SingleLayout>

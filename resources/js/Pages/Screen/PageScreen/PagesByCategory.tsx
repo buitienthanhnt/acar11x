@@ -3,7 +3,7 @@ import SingleLayout from "@/Layouts/BuildLayout/SingleLayout";
 import { Head, usePage } from "@inertiajs/react";
 
 export default function PagesByCategory() {
-    const { category, pages: { current_page, last_page, data, links } } = usePage().props;
+    const { category, pages: { current_page, last_page, data, links } } = usePage().props as any;
 
     if (!category) {
         return null;
@@ -22,7 +22,7 @@ export default function PagesByCategory() {
                     })}
                 </div>}
                 {last_page &&
-                    <Paginate pageSize={last_page} currentPage={current_page} links={links} url={window.location.href}></Paginate>
+                    <Paginate pageSize={last_page} currentPage={current_page} url={window.location.href}></Paginate>
                 }
             </div>
         </SingleLayout>

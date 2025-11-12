@@ -4,7 +4,7 @@ import FootContent from "./Components/FootContent";
 import TopContent from "./Components/TopContent";
 import { HomeIcon } from '@heroicons/react/24/solid';
 
-const DupLayout = ({ children, topMenu }) => {
+const DupLayout = ({ children, topMenu }: any) => {
 	return (
 		<Baselayout>
 			<TopContent />

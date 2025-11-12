@@ -1,7 +1,7 @@
 import BodyContent from "./Components/BodyContent";
 import DupLayout from "./DupLayout";
 
-const SingleLayout = ({ children, topMenu }) => {
+const SingleLayout = ({ children, topMenu }: any) => {
     return (
         <DupLayout>
             <BodyContent content={children}></BodyContent>

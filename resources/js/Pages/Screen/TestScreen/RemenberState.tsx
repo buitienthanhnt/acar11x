@@ -56,7 +56,7 @@ RemenberState.layout = page => <SingleLayout children={page}></SingleLayout>;
 export default RemenberState;
 
 const SearchElement = () => {
-	const { props: { dataSearch: { data, last_page, current_page }, errors } } = usePage();
+	const { props: { dataSearch: { data, last_page, current_page }, errors } } = usePage() as any;
 	/**
 	 * reload the page
 	 * clear search query, clear dataSearch value.
@@ -94,7 +94,7 @@ const SearchElement = () => {
 					placeholder='search input'
 					className='rounded-md w-full md:w-96'
 				/>
-				<Link href={window.location.href} data={{ query: formState.search, page: undefined }} reset={['page']} preserveState>
+				<Link href={window.location.href} data={{ query: formState.search, page: undefined }} preserveState>
 					<FingerPrintIcon width={36} height={36} className='hover:scale-110 text-gray-500 hover:text-black'></FingerPrintIcon>
 				</Link>
 			</div>
