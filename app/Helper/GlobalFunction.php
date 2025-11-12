@@ -1,5 +1,6 @@
 <?php
 
+const ADMIN_PREFIX = 'adminhtml';
 /**
  * define global function same as helper function.
  * check env of request.
