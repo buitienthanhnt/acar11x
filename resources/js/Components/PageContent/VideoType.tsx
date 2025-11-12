@@ -2,7 +2,7 @@ import { useCallback, useMemo, useState } from "react";
 import YouTube from "react-youtube";
 
 export default function VideoType(params) {
-	const [height, setHeight] = useState();
+	const [height, setHeight] = useState(100);
 
 	const opts = useMemo(() => {
 		return {
@@ -18,8 +18,8 @@ export default function VideoType(params) {
 	const onPlayerReady = useCallback((event) => {
 		// access to player in all event handlers via event.target
 		// height = windownH - topNavHeight - paddingY
-		const pageContentHeight = window.innerHeight -72 - 16;
-		const tyleman = window.innerWidth/window.innerHeight;
+		const pageContentHeight: number = window.innerHeight -72 - 16;
+		const tyleman: number = window.innerWidth/window.innerHeight;
 
 		setHeight(tyleman > 1 ? pageContentHeight : event.target.getSize().width / 9 * 15);
 		// event.target.pauseVideo();

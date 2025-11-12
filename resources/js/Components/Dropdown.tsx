@@ -2,7 +2,17 @@ import { Transition } from '@headlessui/react';
 import { Link } from '@inertiajs/react';
 import { createContext, useContext, useState } from 'react';
 
-const DropDownContext = createContext();
+interface DropdownProps {
+    open: boolean;
+    setOpen: (value: boolean) => void;
+    toggleOpen: () => void;
+};
+const defaultProps: DropdownProps = {
+    open: false,
+    setOpen: ()=>{},
+    toggleOpen: ()=>{},
+};
+const DropDownContext = createContext(defaultProps);
 
 const Dropdown = ({ children }) => {
     const [open, setOpen] = useState(false);
