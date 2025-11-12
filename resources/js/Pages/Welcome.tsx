@@ -7,7 +7,6 @@ import { TopPage } from '@/Components/PageComponent';
 import { ListSke } from '@/Components/Skeleton';
 import SingleLayout from '@/Layouts/BuildLayout/SingleLayout';
 import { Link, Head, } from '@inertiajs/react';
-import React from "react";
 import Slider from "react-slick";
 
 export default function Welcome({ auth, components }) {

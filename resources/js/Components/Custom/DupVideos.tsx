@@ -4,7 +4,11 @@ import { PlayCircleIcon } from "@heroicons/react/24/solid";
 import YouTube from "react-youtube";
 import { Link, } from "@inertiajs/react";
 
-const DupVideos = ({ name, data }) => {
+interface Props {
+	name: string;
+	data: any;
+}
+const DupVideos = ({ name, data }: Props) => {
 	// http://img.youtube.com/vi/XSBQJ3bVJ0U/maxresdefault.jpg
 	// aspect-[7/9]: tỷ lệ kích thước chiều cao và chiều ngang của thành phần.
 	// absolute center: absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2
@@ -17,10 +21,6 @@ const DupVideos = ({ name, data }) => {
 			</div>
 		</div>
 	)
-}
-
-const RenderVideo = ({ data, name }) => {
-
 }
 
 const VideoBanner = ({ item: { id, page_contents, title, alias } }) => {

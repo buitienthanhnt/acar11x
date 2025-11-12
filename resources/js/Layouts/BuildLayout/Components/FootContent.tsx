@@ -1,4 +1,4 @@
-import { Link, WhenVisible } from "@inertiajs/react";
+import { Link, } from "@inertiajs/react";
 import { Typography, Button, Input } from "@material-tailwind/react";
 
 const LINKS = ["About Us", "Careers", "Press", "Blog", "Pricing"];
