@@ -24,3 +24,6 @@
 
 # change all file type in folder(ex change .jsx to tsx)
 #   for file in *.jsx; do mv "$file" "$(basename "$file" .jsx).tsx" done
+
+
+# dùng ssr(server side rendering) đang bị lỗi tương thích mô-đun (CommonJS so với ESM) khi dùng thư viện: @material-tailwind/react chưa xử lý được.

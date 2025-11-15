@@ -13,7 +13,7 @@ class rApi {
   cAxios;
 
   constructor() {
-    this.baseUrl = 'http://acar.dev'
+    this.baseUrl = 'http://acar11x.dev'
     this.apiKey = 'EnvConfig.API_KEY';
     this.initToken();
     this.cAxios = axios.create({
