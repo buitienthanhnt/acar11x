@@ -4,7 +4,7 @@ import { useEffect } from "react";
 
 const queryClient = new QueryClient();
 
-export default function Baselayout({ children }) {
+export default function Baselayout({ children }: { children: React.ReactNode }) {
 	useEffect(()=>{
 		/**
 		 * App luôn luôn chạy với tất cả các thành phần từ thành phần gốc.

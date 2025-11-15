@@ -3,8 +3,13 @@ import Baselayout from "../BaseLayout";
 import FootContent from "./Components/FootContent";
 import TopContent from "./Components/TopContent";
 import { HomeIcon } from '@heroicons/react/24/solid';
+import { FunctionComponent } from "react";
 
-const DupLayout = ({ children, topMenu }: any) => {
+interface DupLayoutProps {
+	children: React.ReactNode
+}
+
+const DupLayout: FunctionComponent<DupLayoutProps> = ({ children }: any) => {
 	return (
 		<Baselayout>
 			<TopContent />
