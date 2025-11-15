@@ -29,8 +29,14 @@ class HomeController extends Controller
     use LoadContructLayout;
     use ImageHelper;
 
+    /**
+     * @var \Illuminate\Http\Request $request
+     */
     protected $request;
 
+    /**
+     * @var \App\Models\Api\PageApi $pageApi
+     */
     protected $pageApi;
     protected $writerApi;
     protected $viewSourceApi;
@@ -202,12 +208,23 @@ class HomeController extends Controller
     }
 
     /**
-     * demo for video player.
+     *return list of all pages sort by newest.
      */
     public function about()
     {
+        /**
+         * set default sort for list page by merge request parameter
+         */
+        $this->request->merge([
+            'sort' => 'desc',
+            'order' => 'id',
+        ]);
+
+        /**
+         * render about page with paginate data format value by resourceClass.
+         */
         return Inertia::render('About', [
-            "pages" => Inertia::scroll(fn() => $this->pageApi->pageFilterPaginate(6)),
+            "pages" => Inertia::scroll(fn() => new PaginateData($this->pageApi->pageFilterPaginate(6))),
         ]);
     }
 

@@ -43,6 +43,9 @@ class PageController extends Controller
      */
     public function list(): \Illuminate\Contracts\View\View
     {
+        /**
+         * set default sort for list page by merge request parameter
+         */
         $this->request->merge([
             'sort' => 'desc',
             'order' => 'id',

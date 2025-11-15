@@ -72,7 +72,7 @@ class HandleInertiaRequests extends Middleware
     protected function globalShare(): void {
         Inertia::share('foot_page', Inertia::optional(function(){
             return [
-                'app_name' => 'adoc.dev',
+                'app_name' => 'adoc11x.dev',
                 'dev' => 'thanh.nt',
                 'email' => 'adoc@gmail.com',
             ];
