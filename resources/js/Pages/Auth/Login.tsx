@@ -45,10 +45,9 @@ const Login = ({ topMenu, status, canResetPassword }) => {
 
         {status && <div className="mb-4 font-medium text-sm text-green-600">{status}</div>}
 
-        <form onSubmit={submit} autoComplete="true" className='flex-1'>
+        <form onSubmit={submit} autoComplete="true" className='flex-1 sm:max-w-md px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg'>
           <div>
             <InputLabel htmlFor="email" value="Email" />
-
             <TextInput
               id="email"
               type="email"
@@ -60,13 +59,11 @@ const Login = ({ topMenu, status, canResetPassword }) => {
               onChange={(e) => setData('email', e.target.value)}
               placeholder='Enter your email'
             />
-
             <InputError message={errors.email} className="mt-2" />
           </div>
 
           <div className="mt-4">
             <InputLabel htmlFor="password" value="Password" />
-
             <TextInput
               id="password"
               type="password"
@@ -77,7 +74,6 @@ const Login = ({ topMenu, status, canResetPassword }) => {
               onChange={(e) => setData('password', e.target.value)}
               placeholder='Enter your password'
             />
-
             <InputError message={errors.password} className="mt-2" />
           </div>
 
