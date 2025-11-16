@@ -114,10 +114,8 @@ class HomeController extends Controller
     /**
      * detail of paper
      */
-    public function detail(Page $page)
+    public function detail(string $page)
     {
-        dd($this->request->ip());
-        dd($page);
         /**
          * get page by alias(first of paper by alias)
          * inject with writer model, page content, tags data, category value in list value
@@ -261,7 +259,7 @@ class HomeController extends Controller
     {
         return Inertia::render('Screen/PageScreen/PageByTag', [
             'tag' => $value,
-            'pages' => $this->pageApi->pageByTag($value)
+            'pages' => new PaginateData( $this->pageApi->pageByTag($value)),
         ]);
     }
 

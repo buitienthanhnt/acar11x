@@ -411,7 +411,7 @@ class PageApi
 		$cache_key = "tag.$tag." . $this->request->get('page', 1);
 		return Cache::remember($cache_key, 1 * 60 * 60, function () use ($tag) {
 			$listTags = $this->tag->where(TagInterface::KEY, '=', $tag)->get(TagInterface::TARGET_ID);
-			return $this->page->whereIn(PageInterface::ID, $listTags)->paginate(12);
+			return $this->page->whereIn(PageInterface::ID, $listTags)->paginate(6);
 		});
 	}
 
