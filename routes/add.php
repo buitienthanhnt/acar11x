@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Frontend\CommentController;
 use App\Http\Controllers\HomeController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -15,7 +17,10 @@ Route::get('{category}.htm', [HomeController::class, 'category'])->name('categor
 
 Route::get('status', [\App\Http\Controllers\Frontend\ContentController::class, 'listStatus']);
 
-Route::get('{alias}.html', [HomeController::class, 'detail'])->name('detail');
+Route::get('{page:alias}.html', [HomeController::class, 'detail'])->name('detail')->missing(function (Request $request) {
+	// Thông thường, phản hồi HTTP 404 sẽ được tạo nếu không tìm thấy mô hình liên kết ngầm. Tuy nhiên, bạn có thể tùy chỉnh hành vi này bằng cách gọi missing
+	return Redirect::route('home');
+});;
 
 Route::get('tag/{value}', [HomeController::class, 'tag'])->name('tag');
 
@@ -33,12 +38,13 @@ Route::post('/lang-setup', [HomeController::class, 'langSetup']);
 
 Route::get('writer/{id}', [HomeController::class, 'writerDetail'])->name('writerDetail');
 
-Route::prefix('comment')->group(function () : void {
+Route::prefix('comment')->group(function (): void {
 
 	Route::post('add', [CommentController::class, 'store']);
-
 });
 
 Route::post('add-source', [\App\Http\Controllers\HomeController::class, 'addSource']);
 
-Route::get('search', [\App\Http\Controllers\TestController::class, 'remenberState'])->name('search');
+Route::get('search/{query?}', [\App\Http\Controllers\TestController::class, 'remenberState'])->name('search'); //->where(['query' => '[a-z]+']);;
+
+

@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\CategoryApiController;
 use App\Http\Controllers\Api\PageApiController;
 use App\Http\Controllers\Frontend\CommentController;
+use App\Http\Controllers\TestController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -36,3 +37,16 @@ Route::get('top-comment', [PageApiController::class, 'topComment']);
 Route::get('top-page', [PageApiController::class, 'topPages']);
 
 Route::get('center-categories', [CategoryApiController::class, 'centerCategories']);
+
+Route::get('test-error', function ()  {
+    //  throw new \App\Exceptions\ApiException('This is a message for ApiException.', 422);
+
+    /**
+     * not work vì đã khai báo trong bootstrap/app.php
+     */
+    throw new \App\Exceptions\PassException('This is a test pass exception and not report.');
+
+    throw new \App\Exceptions\ContentException('This is a test content exception.');
+});
+
+Route::get('test-log', [TestController::class, 'testLog']);

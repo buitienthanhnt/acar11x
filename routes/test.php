@@ -3,7 +3,7 @@
 use App\Enums\PageEnum;
 use App\Enums\ShareEnum;
 use App\Events\ViewCount;
-use App\Http\Controllers\HomeController;
+use App\Http\Controllers\TestController;
 use App\Models\Api\PageApi;
 use App\Models\Page;
 use Illuminate\Http\Request;
@@ -60,8 +60,8 @@ if (isTestEnv()) {
 			// $link = \Linkeys\UrlSigner\Facade\UrlSigner::generate('https://www.example.com/invitation');
 			// echo $link->getFullUrl(); // https://www.example.com/invitation?uuid=UUID
 
-			$link = \Linkeys\UrlSigner\Facade\UrlSigner::generate(action([HomeController::class, 'list']), ['id' => 1], '+1 hours', 1);
-			return $link->getFullUrl();
+			// $link = \Linkeys\UrlSigner\Facade\UrlSigner::generate(action([HomeController::class, 'list']), ['id' => 1], '+1 hours', 1);
+			// return $link->getFullUrl();
 
 			// test url voi chu ky(neu co nguoi sua id sang=3 thi se bao loi)
 			$signutre = URL::signedRoute('detail', ['user' => 2]);
@@ -105,5 +105,19 @@ if (isTestEnv()) {
 		Route::get('timeline', [\App\Http\Controllers\TestController::class, 'timeline']);
 
 		Route::get('paginate', [\App\Http\Controllers\TestController::class, 'paginate']);
+
+		Route::get('cache', [TestController::class, 'testCache']);
 	});
 }
+
+/**
+ * define a route to catch all undefined routes match.
+ * hàm này sử dụng biểu thức chính quy để bắt tất cả các URL không được định nghĩa trước đó trong ứng dụng.
+ * lưu ý là nó cần được định nghĩa ở cuối cùng trong file routes để tránh việc ghi đè các route đã định nghĩa trước đó.
+ * example: http://acar11x.dev/path1/path2/path3/path4/path5
+ * path1/path2/path3/path4/path5 will be catch by this route.
+ * @return void
+ */
+Route::get('{all}', function ($url) {
+	echo $url;
+})->where('all', '.*');

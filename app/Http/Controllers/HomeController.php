@@ -14,6 +14,7 @@ use App\Models\Api\ViewSourceApi;
 use App\Models\Api\WriterApi;
 use App\Models\Category;
 use App\Models\Design;
+use App\Models\Page;
 use App\Models\Types\CategoryInterface;
 use App\Models\Types\DesignInterface;
 use App\Models\Types\PageInterface;
@@ -113,14 +114,16 @@ class HomeController extends Controller
     /**
      * detail of paper
      */
-    public function detail(string $alias, Request $request)
+    public function detail(Page $page)
     {
+        dd($this->request->ip());
+        dd($page);
         /**
          * get page by alias(first of paper by alias)
          * inject with writer model, page content, tags data, category value in list value
          * done!
          */
-        $pageDetail = $this->pageApi->detailByAttr(PageInterface::ALIAS, $alias);
+        $pageDetail = $this->pageApi->detailByAttr(PageInterface::ALIAS, $page);
         /**
          * dispatch event for count of page view.
          */

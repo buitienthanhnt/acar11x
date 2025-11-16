@@ -2,26 +2,32 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\ViewSourceEnum;
-use App\Http\Resources\PaginateData;
-use App\Models\Page;
-use App\Models\Types\PageInterface;
-use App\Models\Types\ViewSourceInterface;
 use Exception;
-use Illuminate\Http\Request;
+use App\Models\Page;
 use Inertia\Inertia;
+use Illuminate\Http\Request;
+use App\Enums\ViewSourceEnum;
+use App\Models\Types\PageInterface;
+use App\Http\Resources\PaginateData;
+use App\Models\Types\ViewSourceInterface;
 
 class TestController extends Controller
 {
     protected $viewSourceApi;
     protected $pageApi;
+    /**
+     * @var \App\Helper\LogHelper $logHelper
+     */
+    protected $logHelper;
 
     public function __construct(
         \App\Models\Api\ViewSourceApi $viewSourceApi,
         \App\Models\Api\PageApi $pageApi,
+        \App\Helper\LogHelper $logHelper,
     ) {
         $this->viewSourceApi = $viewSourceApi;
         $this->pageApi = $pageApi;
+        $this->logHelper = $logHelper;
     }
 
     public function addViewSource(Request $request)
@@ -125,7 +131,7 @@ class TestController extends Controller
     /**
      * @return \Inertia\Response
      */
-    public function remenberState(Request $request)
+    public function remenberState(Request $request, ?string $query = null)
     {
         if ($request->has('query')) {
             $request->validate([
@@ -146,14 +152,85 @@ class TestController extends Controller
         return back();
     }
 
-    public function timeline() {
+    public function timeline()
+    {
         return $this->pageApi->pageFilterTimeline('timeline');
     }
 
     /**
      * 
      */
-    function paginate() {
-       return (new PaginateData($this->pageApi->pagePaginate(6))); 
+    function paginate()
+    {
+        return (new PaginateData($this->pageApi->pagePaginate(6)));
+    }
+
+    /**
+     * the function to test logging
+     */
+    function testLog(): bool
+    {
+        /**
+         * log dayly
+         */
+        $this->logHelper->logToDay('test log message 11234', 'warning');
+        /**
+         * log all to tha file
+         */
+        $this->logHelper->logTha('test log message tha 11234', 'info', ['user_id' => 123]);
+
+        /**
+         * ghi log nhiều channel 1 lúc
+         * chanel stack là kênh log mặc định trong laravel(laarvel.log)
+         */
+        $this->logHelper->logMultiChannel(
+            message: 'test log multi channel message 11234',
+            channels: [
+                \Illuminate\Support\Facades\Log::channel('stack'),
+            ],
+            type: 'error',
+            context: ['order_id' => 456],
+        );
+        return true;
+    }
+
+    /**
+     * define function to test cache
+     * 
+     */
+    public function testCache(Request $request)
+    {
+        /**
+         * set cache value
+         */
+        if (\Illuminate\Support\Facades\Cache::store('redis')->has('test_cache_key')) {
+            $value =  response()->json([
+                'message' => \Illuminate\Support\Facades\Cache::store('redis')->get('test_cache_key'),
+                'code' => 201,
+            ]);
+        } else {
+            \Illuminate\Support\Facades\Cache::store('redis')->put('test_cache_key', 'test_cache_value_update', 600); // 600 seconds
+
+            /**
+             * get cache data
+             */
+        }
+        $value = \Illuminate\Support\Facades\Cache::store('redis')->get('test_cache_key');
+
+        /**
+         * test:
+         * this is response code 500 status of reponse request.
+         */
+        return response()->json([
+            'message' => $value,
+            'code' => 200,
+        ], 500);
+        // or
+        return response("12312312", 404);
+
+        /**
+         * view response string return render attribute status()
+         */
+        $string_reponse =  response(json_encode(['cache_value' => $value,]), status: 400)->__toString();
     }
 }
