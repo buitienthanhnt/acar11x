@@ -2,13 +2,11 @@
 
 namespace App\Listeners;
 
-use App\Helper\RedisHelper;
+use App\Helper\LogHelper;
 use App\Models\Api\PageApi;
-use App\Models\Types\CategoryInterface;
 use App\Models\Types\PageInterface;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Support\Facades\Log;
 
 /**
  * không implements ShouldQueue là mặc định chạy đồng bộ.
@@ -45,12 +43,19 @@ class ViewCountListen implements ShouldQueue
     protected $pageApi;
 
     /**
+     * @var \App\Helper\LogHelper
+     */
+    protected $logHelper;
+
+    /**
      * Create the event listener.
      */
     public function __construct(
         PageApi $pageApi,
+        LogHelper $logHelper,
     ) {
         $this->pageApi = $pageApi;
+        $this->logHelper = $logHelper;
     }
 
     /**
@@ -63,15 +68,6 @@ class ViewCountListen implements ShouldQueue
          * define key of value.
          */
         $target = $event->targetObject;
-        $viewed = session('page_views', []);
-        if (in_array($target->{PageInterface::ID}, $viewed)) {
-            return;
-        }
-        /**
-         * push: insert into array value of key
-         * put: 
-         */
-        session()->push('page_views', $target->{PageInterface::ID});
         /**
          * dispatch action redis.
          */
@@ -80,6 +76,9 @@ class ViewCountListen implements ShouldQueue
          * log message for test
          */
         // Log::info("saved value for page id: $target->id", $value);
+        $this->logHelper->logToday("saved view count for page id: " . $target->{PageInterface::ID}, 'info', [
+            'page_id' => $target->{PageInterface::ID},
+        ]);
     }
 
     /**

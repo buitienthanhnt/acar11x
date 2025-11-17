@@ -233,4 +233,38 @@ class TestController extends Controller
          */
         $string_reponse =  response(json_encode(['cache_value' => $value,]), status: 400)->__toString();
     }
+
+    /**
+     * render for form view to select file upload
+     */
+    public function selectfile()
+    {
+        return Inertia::render('Screen/TestScreen/FileChoose');
+    }
+
+    /**
+     * controller to handle file upload
+     */
+    public function uploadfile(Request $request)
+    {
+        $request->validate([
+            'upload_file' => ['required', 'file', 'max:2048'], // max 2MB
+        ]);
+
+        $uploadedFile = $request->file('upload_file');
+
+        $path = $uploadedFile->storePublicly(
+            'public/test/uploads',
+            // ['visibility' => 'public']
+        );
+
+        /**
+         * {"message":"File uploaded successfully","file_path":"public/test/uploads/RqNKFxNJMNjl7NrbGgVgsM92DU30n5iFPyAAZV8d.png"}
+         * link: http://acar11x.dev/storage/test/uploads/RqNKFxNJMNjl7NrbGgVgsM92DU30n5iFPyAAZV8d.png
+         */
+        return response()->json([
+            'message' => 'File uploaded successfully',
+            'file_path' => $path,
+        ]);
+    }
 }

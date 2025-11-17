@@ -107,6 +107,10 @@ if (isTestEnv()) {
 		Route::get('paginate', [\App\Http\Controllers\TestController::class, 'paginate']);
 
 		Route::get('cache', [TestController::class, 'testCache']);
+
+		Route::get('selectfile', [TestController::class, 'selectfile']);
+
+		Route::post('uploadfile', [TestController::class, 'uploadfile']);
 	});
 }
 

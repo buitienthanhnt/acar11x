@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Api\ViewCountApi;
 use App\Enums\DesignEnum;
 use App\Enums\ViewSourceEnum;
 use App\Events\ViewCount;
@@ -42,6 +43,7 @@ class HomeController extends Controller
     protected $writerApi;
     protected $viewSourceApi;
     protected $categoryApi;
+    protected ViewCountApi $viewCountApi;
 
     protected $design;
 
@@ -52,12 +54,14 @@ class HomeController extends Controller
         ViewSourceApi $viewSourceApi,
         CategoryApi $categoryApi,
         Design $design,
+        ViewCountApi $viewCountApi,
     ) {
         $this->request = $request;
         $this->pageApi = $pageApi;
         $this->writerApi = $writerApi;
         $this->viewSourceApi = $viewSourceApi;
         $this->categoryApi = $categoryApi;
+        $this->viewCountApi = $viewCountApi;
         $this->design = $design;
     }
 
@@ -123,9 +127,9 @@ class HomeController extends Controller
          */
         $pageDetail = $this->pageApi->detailByAttr(PageInterface::ALIAS, $page);
         /**
-         * dispatch event for count of page view.
+         * dispatch for count of page view.
          */
-        ViewCount::dispatch($pageDetail);
+        $this->viewCountApi->incrementViewCount($pageDetail);
 
         /**
          * load data layout for page components
@@ -259,7 +263,7 @@ class HomeController extends Controller
     {
         return Inertia::render('Screen/PageScreen/PageByTag', [
             'tag' => $value,
-            'pages' => new PaginateData( $this->pageApi->pageByTag($value)),
+            'pages' => new PaginateData($this->pageApi->pageByTag($value)),
         ]);
     }
 
