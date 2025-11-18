@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Log;
 class LogHelper
 {
 	/**
+	 * cmd add permission for storage/logs folder: sudo chmod -R 777 storage/logs
 	 * log message to daily log file
 	 * clear storage/thanhnt folder:  sudo rm -rf storage/logs/thanhnt
 	 * @param string $message

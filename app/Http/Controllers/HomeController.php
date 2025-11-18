@@ -129,7 +129,9 @@ class HomeController extends Controller
         /**
          * dispatch for count of page view.
          */
-        $this->viewCountApi->incrementViewCount($pageDetail);
+      if (!$this->request->header('X-Inertia-Partial-Data')) {
+          $this->viewCountApi->incrementViewCount($pageDetail);
+      }
 
         /**
          * load data layout for page components

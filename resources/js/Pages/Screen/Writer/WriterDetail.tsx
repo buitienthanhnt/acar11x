@@ -1,9 +1,11 @@
 import { ListItem, Paginate } from "@/Components/Custom";
+import { useAuth } from "@/hook/useAuth";
+import { useWriterDetail } from "@/hook/useWriter";
 import SingleLayout from "@/Layouts/BuildLayout/SingleLayout";
 import { Head } from "@inertiajs/react";
 
-function WriterDetail({ writer, pages }) {
-    const { last_page, current_page, links, data } = pages;
+function WriterDetail() {
+    const { pages: { last_page, current_page, data }, writer } = useWriterDetail();
 
     if (!writer) {
         return;

@@ -2,6 +2,7 @@
 
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Process;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,3 +18,12 @@ use Illuminate\Support\Facades\Artisan;
 Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');
+
+/**
+ * run cmd: php artisan sync-storage
+ */
+Artisan::command('sync-storage', function () {
+    $result = Process::run('sudo cp -rf /var/www/html/10xreact/storage/app/public/ /var/www/html/acar11x/storage/app/')->throw();
+    $this->comment($result->output());
+    // dd($result->output());
+});

@@ -1,15 +1,11 @@
 import { Paginate } from "@/Components/Custom";
+import { useListWriter } from "@/hook/useWriter";
 import SingleLayout from "@/Layouts/BuildLayout/SingleLayout";
+import { WriterItemProp } from "@/type/writer";
 import { Head, Link } from "@inertiajs/react";
 
-interface WriterList {
-    current_page: Number;
-    last_page: Number;
-    data: any;
-    links?: any;
-}
-
-export default function WriterList({ current_page, last_page, data }: WriterList) {
+export default function WriterList() {
+    const {current_page, last_page, data} = useListWriter();
 
     if (!data) {
         return null;
@@ -31,7 +27,7 @@ export default function WriterList({ current_page, last_page, data }: WriterList
 }
 
 
-function WriterItem({ writer }) {
+function WriterItem({ writer }: {writer: WriterItemProp}) {
 
     return (
         <Link href={route("writerDetail", { id: writer.id })}

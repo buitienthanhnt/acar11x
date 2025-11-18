@@ -145,6 +145,9 @@ class SyncDatabase extends Command
 
     /**
      * https://laravel.com/docs/12.x/queries#streaming-results-lazily
+     * @param string $table
+     * @param string $unique
+     * @return void;
      */
     private function insertAutoById(string $table, ?string $unique = null)
     {

@@ -1,9 +1,10 @@
 import { stringConvert } from '@/Helper/DateTime';
+import { PageInfoProp } from '@/type/page';
 import { HeartIcon, StarIcon, FireIcon, HandThumbUpIcon, ChatBubbleOvalLeftEllipsisIcon } from '@heroicons/react/24/solid';
 import { Link } from '@inertiajs/react';
 import { useCallback } from 'react';
 
-const ListItem = ({ item: { id, title, desciption, image_path, alias, updated_at, source, comments_count } }) => {
+const ListItem = ({ item: { id, title, desciption, image_path, alias, updated_at, source, comments_count } }: { item: PageInfoProp }) => {
 	return (
 		<div
 			className="scale-100 p-6 bg-white hover:ring-1 dark:bg-gray-800/50 dark:bg-gradient-to-bl from-gray-700/50 via-transparent dark:ring-1 dark:ring-inset dark:ring-white/5 rounded-lg shadow-2xl shadow-gray-500/20 dark:shadow-none flex motion-safe:hover:scale-[1.01] transition-all duration-250 focus:outline focus:outline-2 focus:outline-red-500"
@@ -13,7 +14,7 @@ const ListItem = ({ item: { id, title, desciption, image_path, alias, updated_at
 					<div className="h-16 w-16 bg-red-50 dark:bg-red-800/20 flex items-center justify-center rounded-full">
 						<img src={image_path} alt="" className="w-full h-full rounded-full object-cover" title={title} />
 					</div>
-					<ListItemInfo source={source} updated_at={updated_at} comments_count={comments_count}></ListItemInfo>
+					<ListItemInfo id={id} source={source} updated_at={updated_at} comments_count={comments_count}></ListItemInfo>
 				</div>
 				<Link href={route('detail', { alias: alias })} // data={{page:1, size: 8}}
 				>
@@ -42,13 +43,13 @@ const ListItem = ({ item: { id, title, desciption, image_path, alias, updated_at
 	)
 }
 
-export const ListItemInfo = ({source, updated_at, comments_count, className}) => {
+export const ListItemInfo = ({ id, source, updated_at, comments_count, className = '' }) => {
 	const addViewd = useCallback(() => {
 		return;
 		const viewed = localStorage.getItem('viewed')?.split('|') || [];
 		localStorage.setItem('viewed', [...viewed, id].join('|'));
 	}, [])
-	
+
 	return (
 		<div className={`flex flex-1 flex-col items-start justify-end ${className}`}>
 			<span className='text-deep-purple-400'>{stringConvert(updated_at)}</span>
