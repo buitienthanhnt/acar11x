@@ -128,10 +128,11 @@ class HomeController extends Controller
         $pageDetail = $this->pageApi->detailByAttr(PageInterface::ALIAS, $page);
         /**
          * dispatch for count of page view.
+         * pass if the request is sub request of page component
          */
-      if (!$this->request->header('X-Inertia-Partial-Data')) {
-          $this->viewCountApi->incrementViewCount($pageDetail);
-      }
+        if (!$this->request->header('X-Inertia-Partial-Data')) {
+            $this->viewCountApi->incrementViewCount($pageDetail);
+        }
 
         /**
          * load data layout for page components
