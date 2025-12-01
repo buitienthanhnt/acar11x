@@ -2,7 +2,6 @@
 
 use App\Exceptions\ApiException;
 use App\Exceptions\PassException;
-use App\Exceptions\ContentException;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
 use App\Http\Middleware\VerifyCsrfToken;

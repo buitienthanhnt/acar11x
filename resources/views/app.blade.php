@@ -17,6 +17,7 @@
         @inertiaHead
     </head>
     <body class="font-sans antialiased">
-        @inertia
+        {{-- default app id is 'app' (<div id='app'></div>) --}}
+        @inertia('acar-global')
     </body>
 </html>

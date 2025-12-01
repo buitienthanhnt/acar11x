@@ -13,12 +13,11 @@ import { createRoot } from 'react-dom/client';
 import { createInertiaApp } from '@inertiajs/react';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 
-const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
+// const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
 createInertiaApp({
-    // id: 'custom-id-my-app',
-    title: (title) => title,
-    // title: (title) => `${title} - ${appName}`,
+    id: 'acar-global', // default id='app' (custom id must be sync with inertia function in blade template file app.blade.php)
+    title: (title) => title, // title: (title) => `${title} - ${appName}`,
     resolve: (name) => resolvePageComponent(`./Pages/${name}.tsx`, import.meta.glob('./Pages/**/*.tsx')),
     setup({ el, App, props }) {
         const root = createRoot(el);

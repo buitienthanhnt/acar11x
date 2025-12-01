@@ -5,6 +5,12 @@
     "description": "The skeleton application for the Laravel framework.",
     "keywords": ["laravel", "framework"],
     "license": "MIT",
+     "repositories": [
+            {
+                "type": "path",
+                "url": "packages/thanhnt/amuaglobal"
+            }
+        ],
     "require": {
         "php": "^8.2",
         "inertiajs/inertia-laravel": "^2.0",
@@ -16,7 +22,8 @@
         "predis/predis": "^3.2",
         "realrashid/sweet-alert": "^7.3",
         "tightenco/ziggy": "^2.0",
-        "unisharp/laravel-filemanager": "^2.12"
+        "unisharp/laravel-filemanager": "^2.12",
+        "thanhnt/amuaglobal": "@dev"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.16",

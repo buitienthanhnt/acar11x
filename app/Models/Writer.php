@@ -10,8 +10,9 @@ use App\Models\ShareAction\FormField;
 use App\Models\ShareAction\ImageManualAttr;
 use App\Models\Types\PageInterface;
 use App\Models\Types\WriterInterface;
+use App\Observers\WriterObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Attributes\ScopedBy;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -20,7 +21,8 @@ use Illuminate\Support\Facades\Storage;
 /**
  * define scope attribute.
  */
-#[ScopedBy([ActiveScope::class])]
+#[ScopedBy([ActiveScope::class])]      // define global scope for the object 
+#[ObservedBy([WriterObserver::class])] // define observer action for the object
 class Writer extends Model implements WriterInterface
 {
     /**
