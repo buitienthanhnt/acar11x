@@ -8,7 +8,7 @@ class DemoCommand extends Command
 {
     /**
      * The name and signature of the console command.
-     * add: 'Thanhnt\Nan\Commands\Demo' to protected $commands in: App\Console\Kernel
+     * add: 'Thanhnt\Nan\Commands\Demo' to: AmuaglobalProvider
      *
      * @var string
      */
