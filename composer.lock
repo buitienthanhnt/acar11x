@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "db7a719cc52c84e20b4b9654901dbd59",
+    "content-hash": "fcf614fd8b57f95833260a0bb868912e",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -2863,20 +2863,20 @@
         },
         {
             "name": "nette/utils",
-            "version": "v4.0.9",
+            "version": "v4.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/utils.git",
-                "reference": "505a30ad386daa5211f08a318e47015b501cad30"
+                "reference": "fa1f0b8261ed150447979eb22e373b7b7ad5a8e0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/utils/zipball/505a30ad386daa5211f08a318e47015b501cad30",
-                "reference": "505a30ad386daa5211f08a318e47015b501cad30",
+                "url": "https://api.github.com/repos/nette/utils/zipball/fa1f0b8261ed150447979eb22e373b7b7ad5a8e0",
+                "reference": "fa1f0b8261ed150447979eb22e373b7b7ad5a8e0",
                 "shasum": ""
             },
             "require": {
-                "php": "8.0 - 8.5"
+                "php": "8.2 - 8.5"
             },
             "conflict": {
                 "nette/finder": "<3",
@@ -2899,7 +2899,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "4.0-dev"
+                    "dev-master": "4.1-dev"
                 }
             },
             "autoload": {
@@ -2946,9 +2946,9 @@
             ],
             "support": {
                 "issues": "https://github.com/nette/utils/issues",
-                "source": "https://github.com/nette/utils/tree/v4.0.9"
+                "source": "https://github.com/nette/utils/tree/v4.1.0"
             },
-            "time": "2025-10-31T00:45:47+00:00"
+            "time": "2025-12-01T17:49:23+00:00"
         },
         {
             "name": "nikic/php-parser",
@@ -6604,8 +6604,32 @@
             "time": "2025-10-27T20:36:44+00:00"
         },
         {
+            "name": "thanhnt/acarglobal",
+            "version": "dev-amua-package",
+            "dist": {
+                "type": "path",
+                "url": "packages/thanhnt/acarglobal",
+                "reference": "78303a8f6f5aa73e8ad9a618759dac7dd2c44207"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Thanhnt\\Acarglobal\\": "src/"
+                }
+            },
+            "authors": [
+                {
+                    "name": "thanhnt",
+                    "email": "buitienthanhnt@gmail.com"
+                }
+            ],
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
             "name": "thanhnt/amuaglobal",
-            "version": "dev-dev-acar-tsx",
+            "version": "dev-amua-package",
             "dist": {
                 "type": "path",
                 "url": "packages/thanhnt/amuaglobal",
@@ -9581,7 +9605,8 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "thanhnt/amuaglobal": 20
+        "thanhnt/amuaglobal": 20,
+        "thanhnt/acarglobal": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,

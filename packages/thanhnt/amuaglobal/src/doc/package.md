@@ -6,8 +6,11 @@ Inside your vendor directory, create a directory for your package name (e.g., yo
 Inside your-package, create a src directory to hold your package's source code. You might also create directories like config, resources/views, routes, database/migrations, etc., depending on your package's needs. 
 2. Initialize Composer:
 Navigate into your package's root directory: cd packages/your-vendor/your-package.
+
 # Run: composer init     (lưu ý là cần chạy init để tạo file composer.json và các source khác chứ không được tạo tile composer.json thủ công sẽ không load package vào được root composer.json)
+
 	to create a composer.json file for your package. Follow the prompts to provide details like package name, description, author, and license.
+
 3. Define the Package in composer.json:
 Ensure your package's composer.json includes the necessary information, especially the autoload section to define how your classes are loaded. For example:
 Mã
@@ -40,7 +43,9 @@ Mã
             "your-vendor/your-package": "@dev"
         }
     }
-Run composer update in your main Laravel project to link the package.
+
+# Run: composer update (in your main Laravel project to link the package.)
+
 5. Create a Service Provider:
 Inside your package's src directory, create a service provider file (e.g., YourPackageServiceProvider.php). This class will extend Illuminate\Support\ServiceProvider.
 Implement the register() and boot() methods to register services, publish configuration files, load views, define routes, etc.

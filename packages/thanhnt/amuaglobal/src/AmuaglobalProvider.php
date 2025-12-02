@@ -17,6 +17,7 @@ class AmuaglobalProvider extends ServiceProvider
 		// Load views, routes, migrations, publish assets, etc.
 		$this->loadViewsFrom(__DIR__ . '/resources/views', 'amuaglobal');
 		$this->loadRoutesFrom(__DIR__ . '/routes/front.php');
+		$this->loadRoutesFrom(__DIR__ . '/routes/adminhtml.php');
 		$this->loadMigrationsFrom(__DIR__.'/database/migrations');
 		$this->loadFactoriesFrom(__DIR__.'/database/factories');
 		/**

@@ -8,4 +8,6 @@ return [
     App\Providers\FortifyServiceProvider::class,
     App\Providers\JetstreamServiceProvider::class,
     Thanhnt\Amuaglobal\AmuaglobalProvider::class,
+    Thanhnt\Acarglobal\AcarglobalPrivider::class,
+    
 ];
