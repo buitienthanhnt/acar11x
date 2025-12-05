@@ -18,7 +18,7 @@ class HomeFactory extends Factory implements HomeInterface
 	public function definition() {
 		return [
 			self::NAME => $this->faker->name(),
-			self::DESCRIPTION => $this->faker->words(10),
+			self::DESCRIPTION => $this->faker->paragraph(1),
 			self::DISTRICT => $this->faker->paragraph(),
 		];
 	}

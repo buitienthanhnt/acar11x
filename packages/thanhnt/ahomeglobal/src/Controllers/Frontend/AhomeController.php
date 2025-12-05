@@ -4,6 +4,7 @@ namespace Thanhnt\Ahomeglobal\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use Inertia\Inertia;
+use Thanhnt\Ahomeglobal\Models\Home;
 
 final class AhomeController extends Controller
 {
@@ -20,5 +21,9 @@ final class AhomeController extends Controller
 		return Inertia::render('Ahomeglobal/Screens/Ahome', [
 			"data" => 123,
 		]);
+	}
+
+	public function createHome() {
+		return Home::factory()->create();
 	}
 }

@@ -7,6 +7,9 @@ use Thanhnt\Ahomeglobal\Models\Home;
 
 final class HomeSeeder extends Seeder
 {
+	/**
+	 * run: php artisan db:seed --class=Thanhnt\\Ahomeglobal\\Database\\Seeders\\HomeSeeder
+	 */
 	public function run(): void
 	{
 		/**

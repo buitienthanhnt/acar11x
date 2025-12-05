@@ -7,6 +7,9 @@ use Thanhnt\Ahomeglobal\Models\Order;
 
 final class OrderSeeder extends Seeder
 {
+	/**
+	 * run: php artisan db:seed --class=Thanhnt\\Ahomeglobal\\Database\\Seeders\\OrderSeeder
+	 */
 	public function run(): void
 	{
 		/**

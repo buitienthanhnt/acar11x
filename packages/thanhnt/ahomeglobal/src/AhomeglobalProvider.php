@@ -39,13 +39,13 @@ final class AhomeglobalProvider extends ServiceProvider
 
 		/**
 		 * load migration define 
-		 * make migration: php artisan make:migration create_homes_table --path=packages/thanhnt/ahomeglobal/src/database/migrations
+		 * make migration: php artisan make:migration create_homes_table --path=packages/thanhnt/ahomeglobal/src/Database/migrations
 		 */
-		$this->loadMigrationsFrom(__DIR__ . '/database/migrations');
+		$this->loadMigrationsFrom(__DIR__ . '/Database/Migrations');
 		/**
 		 * load factory for package
 		 */
-		$this->loadFactoriesFrom(__DIR__ . '/database/factories');
+		$this->loadFactoriesFrom(__DIR__ . '/Database/Factories');
 
 		/**
 		 * coppy config file from the package to global config
@@ -64,11 +64,13 @@ final class AhomeglobalProvider extends ServiceProvider
 		], 'ahomeglobal-inertiajs');
 
 		/**
-		 * publish database seeders to seeders global
+		 * publish Database seeders to seeders global
 		 * php artisan vendor:publish --tag=ahomeglobal-seeders
+		 * Hiện tại không cần xử lý đoạn pushlish này vì có thể gọi trực tiếp class Seeder.
+		 * php artisan db:seed --class=Thanhnt\\Ahomeglobal\\Database\\Seeders\\OrderSeeder 
 		 */
-		$this->publishes([
-            __DIR__.'/database/seeders' => database_path('seeders'),
-        ], 'ahomeglobal-seeders');
+		// $this->publishes([
+        //     __DIR__.'/Database/Seeders' => database_path('seeders'),
+        // ], 'ahomeglobal-seeders');
 	}
 }

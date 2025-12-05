@@ -10,4 +10,6 @@ Route::prefix('ahome')->group(function () {
 	Route::get('/', [AhomeController::class, 'default']);
 
 	Route::get('home', [AhomeController::class, 'home']);
+
+	Route::get('create-home', [AhomeController::class, 'createHome']);
 });

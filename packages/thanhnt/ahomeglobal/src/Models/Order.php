@@ -3,14 +3,18 @@
 namespace Thanhnt\Ahomeglobal\Models;
 
 use Illuminate\Database\Eloquent\Attributes\UseFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Thanhnt\Acarglobal\Models\Types\OrderInterface;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Thanhnt\Ahomeglobal\Database\Factories\OrderFactory;
+use Thanhnt\Ahomeglobal\Models\Types\OrderInterface;
 
 #[UseFactory(OrderFactory::class)]
 class Order extends Model implements OrderInterface
 {
+    use HasFactory;
+    use SoftDeletes;
     /**
      * khai báo chuyển đổi kiểu dữ liệu
      */

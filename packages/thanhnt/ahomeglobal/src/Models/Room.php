@@ -3,16 +3,18 @@
 namespace Thanhnt\Ahomeglobal\Models;
 
 use Illuminate\Database\Eloquent\Attributes\UseFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Thanhnt\Acarglobal\Models\Types\RoomInterface;
 use Thanhnt\Ahomeglobal\Database\Factories\RoomFactory;
+use Thanhnt\Ahomeglobal\Models\Types\RoomInterface;
 
 #[UseFactory(RoomFactory::class)] // define class attribute by using #(https://www.php.net/manual/en/language.attributes.overview.php)
 class Room extends Model implements RoomInterface
 {
+    use HasFactory;
     use SoftDeletes;
     
     /**
