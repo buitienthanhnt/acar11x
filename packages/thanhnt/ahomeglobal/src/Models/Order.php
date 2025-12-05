@@ -15,12 +15,15 @@ class Order extends Model implements OrderInterface
 {
     use HasFactory;
     use SoftDeletes;
+
     /**
      * khai báo chuyển đổi kiểu dữ liệu
      */
     protected $casts = [
         self::SELECTED_TIME => 'array',  // Casts the 'SELECTED_TIME' column to an array
     ];
+
+    protected $hidden = self::HIDDEN_FIELDS;
 
     /**
      * link the order to room

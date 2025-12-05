@@ -9,4 +9,6 @@ interface HomeInterface{
 	const NAME = 'name';
 	const DESCRIPTION = 'description'; 
 	const DISTRICT = 'district';
+
+	const HIDDEN_FIELDS = ['created_at', 'updated_at'];
 }

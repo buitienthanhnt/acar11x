@@ -16,6 +16,8 @@ class Room extends Model implements RoomInterface
 {
     use HasFactory;
     use SoftDeletes;
+
+    protected $hidden = self::HIDDEN_FIELDS;
     
     /**
      * link to home of the room

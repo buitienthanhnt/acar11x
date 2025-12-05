@@ -20,6 +20,8 @@ class Home extends Model implements HomeInterface
     use HasFactory;
     use SoftDeletes;
 
+    protected $hidden = self::HIDDEN_FIELDS;
+
     /**
      * links to list rooms of the home
      * @return Illuminate\Database\Eloquent\Relations\HasMany

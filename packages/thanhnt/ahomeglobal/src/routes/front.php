@@ -12,4 +12,11 @@ Route::prefix('ahome')->group(function () {
 	Route::get('home', [AhomeController::class, 'home']);
 
 	Route::get('create-home', [AhomeController::class, 'createHome']);
+
+	Route::get('list-home', [AhomeController::class, 'listHome']);
+
+	Route::get('list-room/{home?}', [AhomeController::class, 'listRoom']);
+
+	Route::get('list-order', [AhomeController::class, 'listOrder']);
+
 });

@@ -21,6 +21,7 @@ return new class extends Migration
             $table->date(OrderInterface::DATE_TO)->nullable();
             $table->json(OrderInterface::SELECTED_TIME);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
