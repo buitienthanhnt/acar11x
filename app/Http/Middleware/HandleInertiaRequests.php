@@ -61,16 +61,20 @@ class HandleInertiaRequests extends Middleware
          */
         return [
             ...parent::share($request),
+            // 'auth' => [
+            //     'user' => $request->user(),
+            // ],
             'topMenu' => $topMenu,
             'responseData' => $request->session()->get('responseData'), // include for response data form.
         ];
     }
 
-     /**
+    /**
      * auto share for all pages.
      */
-    protected function globalShare(): void {
-        Inertia::share('foot_page', Inertia::optional(function(){
+    protected function globalShare(): void
+    {
+        Inertia::share('foot_page', Inertia::optional(function () {
             return [
                 'app_name' => 'adoc11x.dev',
                 'dev' => 'thanh.nt',

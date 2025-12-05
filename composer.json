@@ -16,6 +16,10 @@
         {
             "type": "path",
             "url": "packages/thanhnt/acarglobal"
+        },
+         {
+            "type": "path",
+            "url": "packages/thanhnt/ahomeglobal"
         }
     ],
     "require": {
@@ -31,7 +35,8 @@
         "tightenco/ziggy": "^2.0",
         "unisharp/laravel-filemanager": "^2.12",
         "thanhnt/amuaglobal": "@dev",
-        "thanhnt/acarglobal": "@dev"
+        "thanhnt/acarglobal": "@dev",
+        "thanhnt/ahomeglobal": "@dev"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.16",

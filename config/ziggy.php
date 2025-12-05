@@ -15,8 +15,8 @@ return [
 		'admin_*',// Excludes all routes starting route name with 'admin'. example: [admin_writer_create]
 		'livewire.*',
 		'debugbar.*',
-		'verification.*',
-		'two-factor.*',
+		// 'verification.*',
+		// 'two-factor.*',
 		// 'password.*',
 	],
 ];

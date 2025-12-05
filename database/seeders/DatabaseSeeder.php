@@ -7,6 +7,9 @@ namespace Database\Seeders;
 use App\Models\Page;
 use App\Models\Story;
 use Illuminate\Database\Seeder;
+use Thanhnt\Ahomeglobal\Database\Seeders\HomeSeeder;
+use Thanhnt\Ahomeglobal\Database\Seeders\OrderSeeder;
+use Thanhnt\Ahomeglobal\Database\Seeders\RoomSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -26,7 +29,12 @@ class DatabaseSeeder extends Seeder
         //     Story::ATTR_ACTIVE => false,
         //     Story::ATTR_TITLE => 'demo for titile',
         // ]);
-        $this->newPage();
+        $this->call([
+            HomeSeeder::class,
+            RoomSeeder::class,
+            OrderSeeder::class,
+        ]);
+        // $this->newPage();
     }
 
     /**

@@ -9,5 +9,6 @@ return [
     App\Providers\JetstreamServiceProvider::class,
     Thanhnt\Amuaglobal\AmuaglobalProvider::class,
     Thanhnt\Acarglobal\AcarglobalProvider::class,
+    Thanhnt\Ahomeglobal\AhomeglobalProvider::class,
     
 ];

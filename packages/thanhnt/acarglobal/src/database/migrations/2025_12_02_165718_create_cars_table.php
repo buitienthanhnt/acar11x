@@ -8,6 +8,7 @@ use Thanhnt\Acarglobal\Models\Types\CarInterface;
 return new class extends Migration
 {
     /**
+     * Make migration: php artisan make:migration create_cars_table --path=packages/thanhnt/acarglobal/src/database/migrations
      * Run the migrations.
      */
     public function up(): void
