@@ -10,5 +10,5 @@ interface HomeInterface{
 	const DESCRIPTION = 'description'; 
 	const DISTRICT = 'district';
 
-	const HIDDEN_FIELDS = ['created_at', 'updated_at'];
+	const HIDDEN_FIELDS = ['created_at', 'updated_at', 'deleted_at', ];
 }

@@ -12,5 +12,5 @@ interface OrderInterface{
 	const SELECTED_TIME = 'selected_time';
 	const STATUS = 'status'; // complete, success, cancel,
 
-	const HIDDEN_FIELDS = ['created_at', 'updated_at', self::HOME_ID, self::ROOM_ID, ];
+	const HIDDEN_FIELDS = ['created_at', 'updated_at', 'deleted_at', self::HOME_ID, self::ROOM_ID, ];
 }

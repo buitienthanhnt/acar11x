@@ -15,6 +15,8 @@ Route::prefix('ahome')->group(function () {
 
 	Route::get('list-home', [AhomeController::class, 'listHome']);
 
+	Route::get('home-detail/{home}', [AhomeController::class, 'homeDetail']);
+
 	Route::get('list-room/{home?}', [AhomeController::class, 'listRoom']);
 
 	Route::get('list-order', [AhomeController::class, 'listOrder']);

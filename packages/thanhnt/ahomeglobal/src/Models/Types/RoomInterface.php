@@ -14,5 +14,5 @@ interface RoomInterface{
 	const TYPE = 'type';
 	const TYPE_VALUE = ['one', 'two', 'three', 'four', 'five', 'six', 'all'];
 	const HOME_ID = 'home_id';
-	const HIDDEN_FIELDS = ['created_at', 'updated_at', self::HOME_ID];
+	const HIDDEN_FIELDS = ['created_at', 'updated_at', 'deleted_at', self::HOME_ID];
 }
