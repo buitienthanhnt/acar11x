@@ -14,7 +14,7 @@ final class RoomApi
 
 	/**
 	 * @param int $roomId
-	 * @return Thanhnt\Ahomeglobal\Models\Room|null
+	 * @return \Thanhnt\Ahomeglobal\Models\Room|null
 	 */
 	public function getRoomDetail(int $roomId)
 	{

@@ -1,10 +1,10 @@
 import { Link, usePage } from "@inertiajs/react";
 
 const Ahome = (params) => {
-	const {props} = usePage();
+	const props = usePage();
 
 	console.log('====================================');
-	console.log(props);
+	console.log(props, params);
 	console.log('====================================');
 
 	return (

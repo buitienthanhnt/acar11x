@@ -2,6 +2,7 @@
 
 namespace Thanhnt\Ahomeglobal\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Attributes\UseFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -9,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Thanhnt\Ahomeglobal\Database\Factories\RoomFactory;
+use Thanhnt\Ahomeglobal\Models\Types\OrderInterface;
 use Thanhnt\Ahomeglobal\Models\Types\RoomInterface;
 
 #[UseFactory(RoomFactory::class)] // define class attribute by using #(https://www.php.net/manual/en/language.attributes.overview.php)
@@ -31,7 +33,8 @@ class Room extends Model implements RoomInterface
      * links to list order of the room
      * @return Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function  orders() : HasMany {
-        return $this->hasMany(Order::class, Order::ROOM_ID, self::ID);
+    public function orders() : HasMany {
+        // https://stackoverflow.com/questions/36249828/how-to-search-json-array-in-mysql
+        return $this->hasMany(Order::class, Order::ROOM_ID, self::ID)->where(OrderInterface::DATE_FROM, '>=', substr(Carbon::now()->toISOString(), 0, 10));
     }
 }

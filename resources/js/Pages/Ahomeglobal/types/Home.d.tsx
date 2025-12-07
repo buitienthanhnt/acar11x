@@ -1,6 +1,6 @@
 import { RoomItem } from "./Room"
 
-export type HomeItem = {
+export type HomeItem= {
 	id: number,
 	name: string,
 	description?: string,

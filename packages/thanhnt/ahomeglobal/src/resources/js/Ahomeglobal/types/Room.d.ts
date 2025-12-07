@@ -1,4 +1,5 @@
 import { HomeItem } from "./Home.d";
+import { OrderItemInterface } from "./Order";
 
 type TypeValue = "one" | "two" | "three" | "four" | "five" | "six" | "all";
 
@@ -13,4 +14,5 @@ export type RoomItem = {
 
 export type RoomDetail = RoomItem & {
 	home: HomeItem,
+	orders: OrderItemInterface[],
 }

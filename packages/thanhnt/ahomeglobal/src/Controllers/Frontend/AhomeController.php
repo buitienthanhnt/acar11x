@@ -3,6 +3,7 @@
 namespace Thanhnt\Ahomeglobal\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Thanhnt\Ahomeglobal\Api\HomeApi;
@@ -10,6 +11,7 @@ use Thanhnt\Ahomeglobal\Api\RoomApi;
 use Thanhnt\Ahomeglobal\Models\Home;
 use Thanhnt\Ahomeglobal\Models\Order;
 use Thanhnt\Ahomeglobal\Models\Room;
+use Thanhnt\Ahomeglobal\Models\Types\OrderInterface;
 use Thanhnt\Ahomeglobal\Models\Types\RoomInterface;
 
 final class AhomeController extends Controller
@@ -54,18 +56,28 @@ final class AhomeController extends Controller
 	 * https://www.npmjs.com/package/react-calendar
 	 * https://www.npmjs.com/package/react-calendar-timeline
 	 */
-	public function homeDetail(Request $request, $home)
+	public function homeDetail(\Illuminate\Http\Request $request, $home)
 	{
+		$homeDetail = $this->homeApi->getHomeDetail($home);
 		/**
 		 * please get all order of the room then pass to Js page for disable the day selected.
 		 */
 		// dd($request->integer('room'), $home);
+		if ($request->isMethod('POST')) {
+			$newOrder = Order::factory()->create([
+				OrderInterface::HOME_ID => $homeDetail->{OrderInterface::ID},
+				OrderInterface::ROOM_ID => $request->integer('room') ?: $homeDetail->rooms->random()->id,
+				OrderInterface::DATE_FROM => Carbon::now(),
+				OrderInterface::SELECTED_TIME => $request->array('values'),
+			]);
+			$request->session()->flash('messages', 'created for order with id:'.$newOrder->{OrderInterface::ID},);
+		}
 
 		return Inertia::render(
 			'Ahomeglobal/Screens/HomeDetail',
 			[
-				'detail' => $this->homeApi->getHomeDetail($home),
-				'room_selected' => Inertia::defer(function()use($request){
+				'homeDetail' => $homeDetail,
+				'roomSelected' => Inertia::defer(function()use($request){
 					if (!$request->integer('room')) {
 						return null;
 					}

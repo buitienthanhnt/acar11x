@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Thanhnt\Ahomeglobal\Database\Factories\HomeFactory;
 use Thanhnt\Ahomeglobal\Models\Types\HomeInterface;
+use Thanhnt\Ahomeglobal\Models\Types\RoomInterface;
 
 /**
  * create by cmd: php artisan acar:make-model Home ahomeglobal

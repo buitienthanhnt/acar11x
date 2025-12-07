@@ -66,6 +66,7 @@ class HandleInertiaRequests extends Middleware
             // ],
             'topMenu' => $topMenu,
             'responseData' => $request->session()->get('responseData'), // include for response data form.
+            'messages' => $request->session()->get('messages', []),
         ];
     }
 
