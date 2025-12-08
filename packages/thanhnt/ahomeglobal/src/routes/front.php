@@ -21,4 +21,7 @@ Route::prefix('ahome')->group(function () {
 
 	Route::get('list-order', [AhomeController::class, 'listOrder']);
 
+	Route::prefix('test')->group(function(){
+		Route::get('filter-order', [AhomeController::class, 'orderFiler']);
+	});
 });

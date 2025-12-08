@@ -7,9 +7,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 // use Illuminate\Database\Eloquent\Concerns\HasTimestamps;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Thanhnt\Ahomeglobal\Database\Factories\HomeFactory;
 use Thanhnt\Ahomeglobal\Models\Types\HomeInterface;
+use Thanhnt\Ahomeglobal\Models\Types\OrderTimeInterface;
 use Thanhnt\Ahomeglobal\Models\Types\RoomInterface;
 
 /**
@@ -36,5 +38,12 @@ class Home extends Model implements HomeInterface
      */
     public function orders() : HasMany {
         return $this->hasMany(Order::class, Order::HOME_ID, self::ID);
+    }
+
+    /**
+     * return list booked time of the home
+     */
+    public function orderTimes() : HasMany {
+        return $this->hasMany(OrderTime::class, OrderTimeInterface::HOME_ID, self::ID);
     }
 }

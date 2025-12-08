@@ -14,3 +14,15 @@ order:{
 home->room
 |
 attribute
+
+
+order time
+
+	date: 2025-12-09
+	list_room: [1,2,3,4,5,]
+	home_id: number,
+
+
+	1 nam =>356
+	10 nam => 3650
+	100 => 36500

@@ -14,5 +14,6 @@ export type RoomItem = {
 
 export type RoomDetail = RoomItem & {
 	home: HomeItem,
-	orders: OrderItemInterface[],
+	// orders: OrderItemInterface[],
+	booked_dates: string[],
 }

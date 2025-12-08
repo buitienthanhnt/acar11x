@@ -4,32 +4,31 @@ import { HomeDetail as HomeDetailType } from '../types/Home.d';
 import { RoomDetail, RoomItem as RoomItemType } from '../types/Room';
 import { router } from '@inertiajs/react';
 import { useRoomOrders } from '../hooks/useRoomOrders';
-import { formatIsoStringToLocal } from '../Helper/DateTimeHelper';
 import { CustomTimeTable } from '../Components/CustomCalenda';
 import { Button } from '@material-tailwind/react';
 import { XMarkIcon } from '@heroicons/react/24/solid';
+import Urls from '../netWork/Urls';
+import { HomeIcon } from '@heroicons/react/24/solid';
 
 const RoomItem = ({ room }: { room: RoomItemType }) => {
 	const booked = useRoomOrders();
-	const onClickRoom = (room: RoomItemType)=>{
+	const onClickRoom = (room: RoomItemType) => {
 		const urlParams = new URLSearchParams(window.location.search);
 		if (urlParams.get('room') === room.id.toString()) {
 			router.visit(window.location.pathname, {
 				method: 'get',
 				only: ['roomSelected'],
 			});
-		}else{
-			console.log(window.location.pathname, room.id);
-			
+		} else {
 			router.visit(window.location.pathname, {
 				method: 'get',
-				data: {room: room.id},
+				data: { room: room.id },
 				only: ['roomSelected'],
 			})
 		}
 	}
 	return (
-		<p className={`p-4 py-2 bg-deep-purple-300 rounded-md ${booked?.id === room.id ? 'bg-green-400' : ''}`} onClick={()=>{
+		<p className={`p-4 py-2 bg-deep-purple-300 rounded-md ${booked?.id === room.id ? 'bg-green-400' : ''}`} onClick={() => {
 			onClickRoom(room);
 		}}>
 			<p className='font-semibold'>
@@ -41,14 +40,16 @@ const RoomItem = ({ room }: { room: RoomItemType }) => {
 
 const RoomTime = () => {
 	const booked = useRoomOrders();
-	const bookedDate = booked?.orders.map(order => {
-		return order.selected_time.map(d => formatIsoStringToLocal(d))
-	}).flat().filter((value, index, self) => { return self.indexOf(value) === index; }) || [];
+	const bookedDate = booked?.booked_dates || [];
 
 	const [dateSelected, setDateSelected] = useState<Date[]>([]);
 
 	const onSubmitOrder = useCallback(() => {
-		const selectedValues = dateSelected.map(d => [d.getFullYear(), d.getMonth() + 1, d.getDate()].join('-'));
+		const selectedValues = dateSelected.map(d => [
+			d.getFullYear(),
+			d.getMonth() + 1 >= 10 ? d.getMonth() + 1 : '0' + (d.getMonth() + 1).toString(),
+			d.getDate() < 10 ? '0' + d.getDate().toString() : d.getDate(),
+		].join('-'));
 		router.visit(window.location.href, {
 			method: 'post',
 			data: {
@@ -108,10 +109,16 @@ type Props = {
 	homeDetail: HomeDetailType,
 	roomSelected: RoomDetail,
 }
-const HomeDetail: FunctionComponent<Props> = ({ homeDetail, roomSelected }) => {
+const HomeDetail: FunctionComponent<Props> = ({ homeDetail, }) => {
 
 	return (
 		<div className='p-4 bg-blue-gray-100 rounded-md min-h-screen space-y-2'>
+			<div className='bg-white p-4 flex space-x-3 rounded-md' onClick={() => {
+				router.get(Urls.homeList);
+			}}>
+				<HomeIcon className='font-semibold text-blue-400 text-2xl size-8'></HomeIcon>
+				<h2 className='font-semibold text-blue-400 text-2xl'>Home List redirect</h2>
+			</div>
 			<p className='text-2xl font-bold text-black'>Hotel: {homeDetail.name}</p>
 			<p className='text-xl font-semibold text-purple-500'>List rooms of the hotel:</p>
 			<div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4'>

@@ -8,7 +8,7 @@ use Thanhnt\Ahomeglobal\Models\Types\HomeInterface;
 return new class extends Migration
 {
     /**
-     * make migration: php artisan make:migration create_homes_table --path=packages/thanhnt/ahomeglobal/src/database/migrations
+     * make migration: php artisan make:migration create_homes_table --path=packages/thanhnt/ahomeglobal/src/Database/Migrations
      * Run the migrations.
      */
     public function up(): void

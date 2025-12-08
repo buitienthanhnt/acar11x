@@ -58,6 +58,15 @@ final class AhomeController extends Controller
 	 */
 	public function homeDetail(\Illuminate\Http\Request $request, $home)
 	{
+		// test
+		if ($request->integer('room') && $request->integer('test')) {
+			$room = $this->roomApi->getRoomDetail($request->integer('room'));
+			$orderTimes = $this->roomApi->orderTimes($room);
+			dd($orderTimes);
+		}
+
+
+		// code...
 		$homeDetail = $this->homeApi->getHomeDetail($home);
 		/**
 		 * please get all order of the room then pass to Js page for disable the day selected.
@@ -70,18 +79,18 @@ final class AhomeController extends Controller
 				OrderInterface::DATE_FROM => Carbon::now(),
 				OrderInterface::SELECTED_TIME => $request->array('values'),
 			]);
-			$request->session()->flash('messages', 'created for order with id:'.$newOrder->{OrderInterface::ID},);
+			// $request->session()->flash('messages', 'created for order with id:'.$newOrder->{OrderInterface::ID},);
 		}
 
 		return Inertia::render(
 			'Ahomeglobal/Screens/HomeDetail',
 			[
 				'homeDetail' => $homeDetail,
-				'roomSelected' => Inertia::defer(function()use($request){
+				'roomSelected' => Inertia::defer(function () use ($request) {
 					if (!$request->integer('room')) {
 						return null;
 					}
-					$room = $this->roomApi->getRoomDetail($request->integer('room'));
+					$room = $this->roomApi->getRoomDetailNoOrders($request->integer('room'));
 					return $room;
 				}),
 			],
@@ -102,5 +111,14 @@ final class AhomeController extends Controller
 	{
 		$orders = Order::with('room', 'home')->get();
 		return $orders;
+	}
+
+	public function orderFiler(Request $request)
+	{
+		$room = Room::find($request->integer('room'));
+
+		$now = substr(Carbon::now()->toISOString(), 0, 10);
+		$orders = Order::whereJsonContains('selected_time', '2025-12-13')->get();
+		dd($orders);
 	}
 }

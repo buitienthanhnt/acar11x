@@ -2,6 +2,7 @@
 
 namespace Thanhnt\Ahomeglobal\Models;
 
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Attributes\UseFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -9,8 +10,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Thanhnt\Ahomeglobal\Database\Factories\OrderFactory;
 use Thanhnt\Ahomeglobal\Models\Types\OrderInterface;
+use Thanhnt\Ahomeglobal\Observers\OrderObserver;
 
 #[UseFactory(OrderFactory::class)]
+#[ObservedBy([OrderObserver::class])]
 class Order extends Model implements OrderInterface
 {
     use HasFactory;
