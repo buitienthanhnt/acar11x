@@ -1,5 +1,5 @@
 const Urls = {
-	homeList: '/ahome/list-home',
+	homeList: '/ahome/homes',
 	homeDetail: '/ahome/home-detail/%s',
 }
 

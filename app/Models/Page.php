@@ -4,7 +4,6 @@ namespace App\Models;
 
 use App\Enums\CacheEnum;
 use App\Events\PageSaved;
-use App\Helper\RedisHelper;
 use App\Models\Scopes\ActiveScope;
 use App\Models\Scopes\SortScope;
 use App\Models\ShareAction\ActiveAttrModel;

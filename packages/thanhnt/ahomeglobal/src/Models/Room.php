@@ -50,17 +50,37 @@ class Room extends Model implements RoomInterface
     }
 
     /**
-     * get list dated has booked in the future of the room.
+     * get list date has booked in the future of the room.
      */
     protected function bookedDates(): Attribute
     {
+        // vendor/laravel/framework/src/Illuminate/Database/Concerns/BuildsWhereDateClauses.php
         return new Attribute(
-            get: fn() => OrderTime::whereNowOrFuture(OrderTime::DATE)
+            get: fn() => OrderTime::whereTodayOrAfter(OrderTime::DATE)
                 ->whereJsonContains(OrderTimeInterface::ROOM_IDS, $this->id)
                 ->select(OrderTimeInterface::DATE)
                 ->get()
                 ->pluck(OrderTimeInterface::DATE)
                 ->toArray(),
+        );
+    }
+
+    public function type(): Attribute
+    {
+        return new Attribute(
+            get: function (string $value) {
+                switch ($value) {
+                    case 'one':
+                        return 'phong don';
+                        break;
+                    case 'two':
+                        return 'phong doi';
+                        break;
+                    default:
+                        return 'ngau nhien';
+                        break;
+                }
+            }
         );
     }
 }

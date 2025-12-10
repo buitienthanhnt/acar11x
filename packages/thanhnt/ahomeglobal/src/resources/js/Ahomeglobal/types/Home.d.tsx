@@ -1,3 +1,4 @@
+import { OrderTimeInterface } from "./OrderTime"
 import { RoomItem } from "./Room"
 
 export type HomeItem= {
@@ -10,4 +11,5 @@ export type HomeItem= {
 
 export type HomeDetail = HomeItem & {
 	rooms: RoomItem[],
+	order_times: OrderTimeInterface[]
 }

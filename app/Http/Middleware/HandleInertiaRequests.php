@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 use Inertia\Middleware;
 
@@ -65,8 +66,8 @@ class HandleInertiaRequests extends Middleware
             //     'user' => $request->user(),
             // ],
             'topMenu' => $topMenu,
-            'responseData' => $request->session()->get('responseData'), // include for response data form.
-            'messages' => $request->session()->get('messages', []),
+            'responseData' => Session::get('responseData'), // include for response data form.
+            'messages' => Session::get('messages', null),
         ];
     }
 

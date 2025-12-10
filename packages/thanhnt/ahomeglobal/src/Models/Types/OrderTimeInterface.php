@@ -13,4 +13,6 @@ interface OrderTimeInterface{
 
 	const FILLED_FILEDS = [self::HOME_ID, self::ORDER_IDS, self::ROOM_IDS, self::DATE];
 
+	const HIDDEN_FIELDS = ['created_at', 'updated_at', 'deleted_at', 'order_ids'];
+
 }

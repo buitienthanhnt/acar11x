@@ -228,10 +228,10 @@ const CustomTimeTable: FunctionComponent<CustomTimeProp> = ({ selected, onChange
 				</div>
 				{listDates.map((item: Date, index) => <DateItem key={index.toString()} date={item}></DateItem>)}
 			</div>
-			<div className='flex flex-col items-center bg-white p-1 rounded-md md:py-4 font-semibold md:font-bold text-blue-600'>
+			{/* <div className='flex flex-col items-center bg-white p-1 rounded-md md:py-4 font-semibold md:font-bold text-blue-600'>
 				<p>ISO:{focusDate.toISOString().slice(0, 10)}&nbsp; &nbsp; &nbsp; Local:{focusDate.toLocaleDateString()}</p>
-				{/* {selected.map(s => <p key={s.toLocaleDateString()}>{s.toLocaleDateString()}</p>)} */}
-			</div>
+				{selected.map(s => <p key={s.toLocaleDateString()}>{s.toLocaleDateString()}</p>)}
+			</div> */}
 		</CustomTimeContext.Provider>
 	)
 }

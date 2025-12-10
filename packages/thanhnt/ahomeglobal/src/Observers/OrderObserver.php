@@ -22,12 +22,13 @@ final class OrderObserver
         $homeId = $order->{OrderInterface::HOME_ID};
         $listTimes = $order->{OrderInterface::SELECTED_TIME};
         foreach ($listTimes as $value) {
-            $orderTime = OrderTime::where(OrderTimeInterface::HOME_ID, $homeId)->where(OrderTimeInterface::DATE, $value)->first();
+            $orderTime = OrderTime::where(OrderTimeInterface::HOME_ID, $homeId)
+                ->where(OrderTimeInterface::DATE, $value)
+                ->first();
             if ($orderTime) {
-                $orderTime->{OrderTimeInterface::ROOM_IDS} = [...$orderTime->{OrderTimeInterface::ROOM_IDS}, $order->{OrderInterface::ROOM_ID}];
-                $orderTime->{OrderTimeInterface::ORDER_IDS} = [...$orderTime->{OrderTimeInterface::ORDER_IDS}, $order->{OrderInterface::ID}];
+                $orderTime->{OrderTimeInterface::ROOM_IDS} = array_unique([...$orderTime->{OrderTimeInterface::ROOM_IDS}, $order->{OrderInterface::ROOM_ID}]);
+                $orderTime->{OrderTimeInterface::ORDER_IDS} = array_unique([...$orderTime->{OrderTimeInterface::ORDER_IDS}, $order->{OrderInterface::ID}]);
                 $orderTime->save();
-                // $orderTime->{OrderTimeInterface::ROOM_IDS} = [];
             } else {
                 OrderTime::create([
                     OrderTimeInterface::DATE => $value,

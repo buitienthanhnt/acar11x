@@ -7,12 +7,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 // use Illuminate\Database\Eloquent\Concerns\HasTimestamps;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Thanhnt\Ahomeglobal\Database\Factories\HomeFactory;
 use Thanhnt\Ahomeglobal\Models\Types\HomeInterface;
 use Thanhnt\Ahomeglobal\Models\Types\OrderTimeInterface;
-use Thanhnt\Ahomeglobal\Models\Types\RoomInterface;
 
 /**
  * create by cmd: php artisan acar:make-model Home ahomeglobal
@@ -41,7 +39,7 @@ class Home extends Model implements HomeInterface
     }
 
     /**
-     * return list booked time of the home
+     * link to list booked time of the home
      */
     public function orderTimes() : HasMany {
         return $this->hasMany(OrderTime::class, OrderTimeInterface::HOME_ID, self::ID);

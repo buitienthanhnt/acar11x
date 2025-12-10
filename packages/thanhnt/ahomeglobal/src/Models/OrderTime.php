@@ -19,6 +19,7 @@ class OrderTime extends Model implements OrderTimeInterface
     ];
 
     protected $fillable = self::FILLED_FILEDS;
+    protected $hidden = self::HIDDEN_FIELDS;
 
     //
 }

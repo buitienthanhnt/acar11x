@@ -4,7 +4,6 @@ namespace Thanhnt\Ahomeglobal\Api;
 
 use Thanhnt\Ahomeglobal\Models\OrderTime;
 use Thanhnt\Ahomeglobal\Models\Room;
-use Thanhnt\Ahomeglobal\Models\Types\OrderTimeInterface;
 
 final class RoomApi
 {
@@ -30,15 +29,6 @@ final class RoomApi
 	 */
 	public function getRoomDetailNoOrders(int $roomId)
 	{
-		return $this->roomModel->find($roomId);
+		return $this->roomModel->setVisible(['booked_dates'])->find($roomId);
 	}
-
-	public function orderTimes(Room $room) {
-        $orderTime = OrderTime::whereNowOrFuture(OrderTime::DATE)
-								->whereJsonContains(OrderTimeInterface::ROOM_IDS, $room->id)
-								->select(OrderTimeInterface::DATE)
-								->get()
-								->pluck(OrderTimeInterface::DATE);
-		return $orderTime->toArray();
-    }
 }

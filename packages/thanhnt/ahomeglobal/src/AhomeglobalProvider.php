@@ -40,7 +40,8 @@ final class AhomeglobalProvider extends ServiceProvider
 
 		/**
 		 * load migration define 
-		 * make migration: php artisan make:migration create_homes_table --path=packages/thanhnt/ahomeglobal/src/Database/migrations
+		 * make migration: php artisan make:migration create_homes_table --path=packages/thanhnt/ahomeglobal/src/Database/Migrations
+		 * rollback: php artisan migrate:rollback --step=1
 		 */
 		$this->loadMigrationsFrom(__DIR__ . '/Database/Migrations');
 		/**
