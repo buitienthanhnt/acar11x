@@ -10,8 +10,9 @@ use App\Models\Types\PageInterface;
 use App\Models\Types\WriterInterface;
 use Database\Configs\AdminPermission;
 use Illuminate\Support\Facades\Route;
-
-
+use Thanhnt\Ahomeglobal\Controllers\Adminhtml\HomeAdminController;
+use Thanhnt\Ahomeglobal\Controllers\Adminhtml\OrderAdminController;
+use Thanhnt\Ahomeglobal\Controllers\Adminhtml\RoomAdminController;
 
 if (isAdminEnv()) {
     Route::prefix(ADMIN_PREFIX)->middleware(['adminVerify', 'adminPermission'])->group(function () {
@@ -118,6 +119,45 @@ if (isAdminEnv()) {
             Route::get('/home-setup', [DesignController::class, 'pageSetup']);
 
             Route::post('/home-setup', [DesignController::class, 'pageStore']);
+        });
+
+        /**
+         * define admin route for ahomeglobal package
+         */
+        Route::prefix('ahome')->group(function (): void {
+            Route::get('order-delete', [OrderAdminController::class, 'deleteOrders']);
+
+            Route::get('ordertime-delete', [OrderAdminController::class, 'deleteOrderTime']);
+
+            Route::get('home-list', [HomeAdminController::class, 'homes'])->setBindingFields([
+                'route_name' => 'ahome manager',
+                'route_icon' => 'dataset_linked', // https://fonts.google.com/icons => [Icon name]
+                'show' => true,
+                // 'permission' => AdminPermission::ACTION_LIST
+            ]);
+
+            Route::get('home-create', [HomeAdminController::class, 'create']);
+
+            Route::post('home-register', [HomeAdminController::class, 'register']);
+
+            Route::get('home-edit/{id}', [HomeAdminController::class, 'edit']);
+
+            Route::post('home-update/{id}', [HomeAdminController::class, 'update']);
+
+            Route::delete('home-delete/{id}', [HomeAdminController::class, 'delete']);
+
+            Route::get('room-list', [RoomAdminController::class, 'list'])->setBindingFields([
+                'route_name' => 'rooms manager',
+                'route_icon' => 'dataset_linked', // https://fonts.google.com/icons => [Icon name]
+                'show' => true,
+                // 'permission' => AdminPermission::ACTION_LIST
+            ]);;
+
+            Route::get('room-create/{home_id}', [RoomAdminController::class, 'create']);
+
+            Route::post('room-register/{home_id}', [RoomAdminController::class, 'register']);
+
+             Route::delete('room-delete/{id}', [HomeAdminController::class, 'roomDelete']);
         });
     });
 }

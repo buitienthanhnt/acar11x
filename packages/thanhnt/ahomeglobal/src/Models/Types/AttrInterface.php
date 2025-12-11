@@ -10,4 +10,8 @@ interface AttrInterface{
 	const TYPE = 'type';
 	const KEY = 'key';
 	const VALUE = 'value';
+
+	const FILLED_FIELDS = [self::SOURCE_ID, self::TYPE, self::KEY, self::VALUE];
+
+	const HIDDEN_FIELDS = [];
 }

@@ -53,9 +53,10 @@ final class AhomeController extends Controller
 	 */
 	public function listHome()
 	{
+		// dd(Room::paginate()->getCollection()->makeHidden(['booked_dates'])->makeVisible([RoomInterface::HOME_ID])->toArray());
 		return Inertia::render('Ahomeglobal/Screens/HomeList', [
 			"homes" => Home::withWhereHas('rooms')->get(),
-			'rooms' => Room::all()->makeHidden(['booked_dates'])->makeVisible([RoomInterface::HOME_ID]),
+			'rooms' => Room::paginate(9)->makeHidden(['booked_dates'])->makeVisible([RoomInterface::HOME_ID]),
 		]);
 	}
 
@@ -69,19 +70,18 @@ final class AhomeController extends Controller
 	public function homeDetail(\Illuminate\Http\Request $request, $home)
 	{
 		// code...
-		$homeDetail = $this->homeApi->getHomeDetail($home);
 		/**
 		 * please get all order of the room then pass to Js page for disable the day selected.
 		 */
 		if ($request->isMethod('POST')) {
-			$newOrder =$this->orderApi->createNewOrder($request, $homeDetail, );
+			$newOrder = $this->orderApi->createNewOrder($request, $home,);
 			Inertia::share('messages',  'created for order with id: ' . $newOrder->{OrderInterface::ID});
 		}
 
 		return Inertia::render(
 			'Ahomeglobal/Screens/HomeDetail',
 			[
-				'homeDetail' => $homeDetail,
+				'homeDetail' => $this->homeApi->getHomeDetail($home),
 				'roomSelected' => Inertia::defer(function () use ($request) {
 					if (!$request->integer('room')) {
 						return null;

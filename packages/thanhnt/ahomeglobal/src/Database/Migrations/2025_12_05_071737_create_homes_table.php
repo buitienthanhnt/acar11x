@@ -18,6 +18,7 @@ return new class extends Migration
             $table->char(HomeInterface::NAME);
             $table->string(HomeInterface::DESCRIPTION)->nullable();
             $table->string(HomeInterface::DISTRICT)->nullable();
+            $table->string(HomeInterface::IMAGE_PATH)->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

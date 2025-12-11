@@ -2,6 +2,7 @@
 
 namespace Thanhnt\Ahomeglobal\Models;
 
+use App\Models\ShareAction\ImagePathAttrModel;
 use Illuminate\Database\Eloquent\Attributes\UseFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 // use Illuminate\Database\Eloquent\Concerns\HasTimestamps;
@@ -20,8 +21,11 @@ class Home extends Model implements HomeInterface
 {
     use HasFactory;
     use SoftDeletes;
+    use ImagePathAttrModel;
 
     protected $hidden = self::HIDDEN_FIELDS;
+
+    protected $fillable = self::FILLED_FILEDS;
 
     /**
      * links to list rooms of the home
@@ -43,5 +47,9 @@ class Home extends Model implements HomeInterface
      */
     public function orderTimes() : HasMany {
         return $this->hasMany(OrderTime::class, OrderTimeInterface::HOME_ID, self::ID);
+    }
+
+    public function attr() {
+        return $this->hasMany(Attr::class, Attr::SOURCE_ID, self::ID)->where(Attr::TYPE, 'home');
     }
 }

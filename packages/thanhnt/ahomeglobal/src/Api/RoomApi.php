@@ -31,4 +31,8 @@ final class RoomApi
 	{
 		return $this->roomModel->setVisible(['booked_dates'])->find($roomId);
 	}
+
+	public function roomPaginate(int $limit = 12) {
+		return $this->roomModel->paginate($limit);
+	}
 }

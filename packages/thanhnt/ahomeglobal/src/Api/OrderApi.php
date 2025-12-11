@@ -27,7 +27,7 @@ final class OrderApi
 
 	/**
 	 * define function for create new order.
-	 * @param \Thanhnt\Ahomeglobal\Models\Home $home
+	 * @param int $home
 	 * @param mixed|Request $data
 	 * @return \Illuminate\Database\Eloquent\Collection<int, TModel>|TModel
 	 * @throws Exception
@@ -42,7 +42,7 @@ final class OrderApi
 		 * get active room by list date
 		 * has 2 option: 1 dateRange, 2 date list
 		 */
-		$activeRoom = $this->getActiveRoomByDates($dateValues);
+		$activeRoom = $this->getActiveRoomByDates($dateValues, $home);
 		if (!$activeRoom->count()) {
 			throw new Exception('the input date not active');
 		}
@@ -51,7 +51,7 @@ final class OrderApi
 		 * create new order model
 		 */
 		return $this->order->factory()->create([
-			OrderInterface::HOME_ID => $home->{OrderInterface::ID},
+			OrderInterface::HOME_ID => $home,
 			OrderInterface::ROOM_ID => $data->integer('room') ?: $activeRoom->random()->id,
 			OrderInterface::DATE_FROM => $dateValues[0] ?? Carbon::now(),
 			OrderInterface::DATE_TO => end($dateValues) ?? Carbon::now(),

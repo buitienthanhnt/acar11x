@@ -24,7 +24,7 @@ final class AhomeglobalProvider extends ServiceProvider
 	public function boot(): void
 	{
 		// Load views, routes, migrations, publish assets, etc.
-		$this->loadViewsFrom(__DIR__ . '/resources/views', 'ahomelobal');
+		$this->loadViewsFrom(__DIR__ . '/resources/views', 'ahomeglobal');
 		/**
 		 * load router file register
 		 * need define web middleware for router unless the request missing session data. 

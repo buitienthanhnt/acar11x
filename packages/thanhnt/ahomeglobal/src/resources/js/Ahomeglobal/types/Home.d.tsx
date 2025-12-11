@@ -6,7 +6,7 @@ export type HomeItem= {
 	name: string,
 	description?: string,
 	district?: string,
-
+	image_path?: string,
 }
 
 export type HomeDetail = HomeItem & {

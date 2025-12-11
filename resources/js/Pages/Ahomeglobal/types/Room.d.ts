@@ -10,6 +10,8 @@ export type RoomItem = {
 	type: TypeValue,
 	home_id: number,
 	created_at: string,
+	image_path?: string,
+	price: string,
 }
 
 export type RoomDetail = RoomItem & {

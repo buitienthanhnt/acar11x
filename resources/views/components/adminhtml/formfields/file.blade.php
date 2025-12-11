@@ -7,7 +7,7 @@
         required
     @endisset onchange="readURL(this);"
         aria-describedby="{{ $field['key'] . '_Help' }}" name="{{ $field['key'] }}" value="{{ old($field['key']) }}"
-        placeholder="{{ __('attr.' . $field['key']) }}" />
+        placeholder="{{ $field['placeholder'] ??  __('attr.' . $field['key']) }}" />
     <img id="blah" alt="your image" class='p-2 rounded-circle'
         @isset($field['value']) 
             src="{{ $field['value'] }}" width="200px" height="200px" 

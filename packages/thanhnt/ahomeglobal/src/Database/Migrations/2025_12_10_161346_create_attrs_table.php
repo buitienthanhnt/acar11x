@@ -13,7 +13,6 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create(AttrInterface::TABLE_NAME, function (Blueprint $table) {
-            $table->id();
             $table->char(AttrInterface::TYPE);
             $table->integer(AttrInterface::SOURCE_ID);
             $table->char(AttrInterface::KEY);

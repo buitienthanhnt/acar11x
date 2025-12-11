@@ -2,6 +2,7 @@
 
 namespace Thanhnt\Ahomeglobal\Models;
 
+use App\Models\ShareAction\ImagePathAttrModel;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Attributes\UseFactory;
@@ -11,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Thanhnt\Ahomeglobal\Database\Factories\RoomFactory;
+use Thanhnt\Ahomeglobal\Models\Types\AttrInterface;
 use Thanhnt\Ahomeglobal\Models\Types\OrderInterface;
 use Thanhnt\Ahomeglobal\Models\Types\OrderTimeInterface;
 use Thanhnt\Ahomeglobal\Models\Types\RoomInterface;
@@ -20,6 +22,7 @@ class Room extends Model implements RoomInterface
 {
     use HasFactory;
     use SoftDeletes;
+    use ImagePathAttrModel;
 
     protected $hidden = self::HIDDEN_FIELDS;
 
@@ -28,7 +31,7 @@ class Room extends Model implements RoomInterface
      *
      * @var array
      */
-    protected $appends = ['booked_dates'];
+    protected $appends = ['booked_dates', 'price'];
 
     /**
      * link to home of the room
@@ -65,22 +68,35 @@ class Room extends Model implements RoomInterface
         );
     }
 
+    protected function price() : Attribute {
+        return new Attribute(
+            get: fn() => $this->attr()->where(AttrInterface::KEY, RoomInterface::ATTR_PRICE)->first()->value
+        );
+    }
+
+    /**
+     * get room attributes
+     */
+    public function attr(): HasMany
+    {
+        return $this->hasMany(Attr::class, Attr::SOURCE_ID, self::ID)->where(AttrInterface::TYPE, 'room');
+    }
+
     public function type(): Attribute
     {
         return new Attribute(
             get: function (string $value) {
-                switch ($value) {
-                    case 'one':
-                        return 'phong don';
-                        break;
-                    case 'two':
-                        return 'phong doi';
-                        break;
-                    default:
-                        return 'ngau nhien';
-                        break;
+                foreach (RoomInterface::TYPE_VALUE as $_value) {
+                    if ($_value['value'] === $value) {
+                        return $_value['label'];
+                    }
                 }
             }
         );
+    }
+
+    public static function typeOptions()
+    {
+        return RoomInterface::TYPE_VALUE;
     }
 }

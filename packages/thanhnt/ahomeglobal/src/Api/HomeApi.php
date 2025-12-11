@@ -26,4 +26,8 @@ final class HomeApi
 		$home->rooms->setHidden(['booked_dates', ...RoomInterface::HIDDEN_FIELDS]);
 		return $home;
 	}
+
+	public function homePaginate(int $limit = 12){
+		return $this->home->paginate($limit);
+	}
 }

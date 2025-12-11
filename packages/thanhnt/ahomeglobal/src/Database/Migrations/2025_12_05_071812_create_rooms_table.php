@@ -16,10 +16,12 @@ return new class extends Migration
             $table->id();
             $table->char(RoomInterface::TITLE);
             $table->string(RoomInterface::DESCRIPTION)->nullable();
+             $table->char(RoomInterface::TYPE,)->default(RoomInterface::TYPE_VALUE[0]['value']);
             /**
              * enum type for value in list option
              */
-            $table->enum(RoomInterface::TYPE, RoomInterface::TYPE_VALUE)->default(RoomInterface::TYPE_VALUE[0]);
+            // $table->enum(RoomInterface::TYPE, RoomInterface::TYPE_VALUE)->default(RoomInterface::TYPE_VALUE[0]);
+            $table->string(RoomInterface::IMAGE_PATH)->nullable();
             $table->integer(RoomInterface::HOME_ID);
             $table->timestamps();
             $table->softDeletes();
