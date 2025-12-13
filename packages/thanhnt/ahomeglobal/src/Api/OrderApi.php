@@ -147,7 +147,7 @@ final class OrderApi
 	{
 		$rooms =  $this->room->where(
 			fn($builder) =>  $homeId ? $builder->where(OrderTimeInterface::HOME_ID, $homeId) : $builder
-		)->whereNotIn(RoomInterface::ID, $this->getDisableArrayRoomByDates($listDate))->paginate($limit);
+		)->whereNotIn(RoomInterface::ID, $this->getDisableArrayRoomByDates($listDate))->paginate($limit, pageName: 'room_page');
 
 		return $rooms->through(function ($room) {
 			return $room->makeVisible(['booked_dates',])->makeVisible([RoomInterface::HOME_ID]);

@@ -1,5 +1,5 @@
 import { FunctionComponent, useState } from "react";
-import { Deferred, Head, Link, router } from "@inertiajs/react";
+import { Head, Link, router } from "@inertiajs/react";
 import { HomeItem as HomeItemType } from "../types/Home";
 import { RoomItem as RoomItemType } from "../types/Room";
 import { CustomTimeTable, RoomItemGrid } from "../Components";
@@ -8,6 +8,7 @@ import { listDateToArrayString } from "../Helper/DateTimeHelper";
 import { sprintf } from "sprintf-js";
 import Urls from "../netWork/Urls";
 import { PagePaginate } from "../types/Paginate";
+import { Paginate } from "../Components/Custom";
 
 
 const HomeItem = ({ home }: { home: HomeItemType }) => {
@@ -39,30 +40,27 @@ const HomeList: FunctionComponent<Props> = ({ homes, rooms, filters, allFilters 
 			<Head title="home"></Head>
 			<div className="container mx-auto p-4 space-y-4">
 				<div className=" bg-blue-gray-300 min-h-36 rounded-md p-4"></div>
-
 				<div className="grid lg:grid-cols-5 bg-white lg:space-x-4 space-y-2 lg:space-y-0">
 					<div className="col-span-1 lg:col-span-2">
 						<HomeFilter filters={filters} allFilters={allFilters}></HomeFilter>
 					</div>
 					<div className="col-span-1 lg:col-span-3 flex flex-col gap-y-2">
-						<p className="text-lg font-medium">Total: {homes.total}</p>
+						<p className="text-xl font-bold text-purple-800">List of Hotels total: {homes.total}</p>
 						{homes?.data.map(home => <HomeItem home={home as HomeItemType} key={home.id.toString()}></HomeItem>)}
+						<Paginate pageSize={homes.last_page} currentPage={homes.current_page}></Paginate>
 					</div>
 				</div>
 				<div className='h-[1px] bg-black my-2'></div>
-				<Deferred data="rooms" fallback={<div>Loading...</div>}>
 				{rooms && <div className="gap-2">
-					<div>
-						Total: {rooms.total}
-					</div>
-					<h3 className="text-lg font-semibold text-purple-300">List of rooms:</h3>
+					<p className="text-xl font-bold text-purple-800">List of rooms total: {rooms.total}</p>
+					<h3 className="text-lg font-semibold text-purple-300"></h3>
 					<div className="lg:p-4 grid grid-cols-1 md:grid-cols-2 gap-2">
 						{rooms?.data.map(room => <div key={room.id}>
 							<RoomItemGrid room={room as unknown as RoomItemType}></RoomItemGrid>
 						</div>)}
 					</div>
+					<Paginate pageSize={rooms.last_page} currentPage={rooms.current_page} pageName="room_page"></Paginate>
 				</div>}
-				</Deferred>
 			</div>
 		</>
 	)
@@ -76,20 +74,14 @@ const HomeFilter = ({ filters, allFilters }) => {
 			...filters,
 			[type]: item.value  // thêm khóa và giá trị mới cho bộ lọc
 		};
-
-		// if (dateSelected.length) {
-		// 	newFilter['date'] = listDateToArrayString(dateSelected);
-		// }
-
 		/**
 		 * loại trừ khóa khi khóa đó chọn lại lần 2 cùng giá trị(bỏ chọn)
 		 */
 		if (filters?.[type] !== undefined && filters?.[type] === item.value) {
 			delete newFilter[type];
 		}
-
 		// gửi yêu cầu thủ công.
-		router.visit(window.location.href, {
+		router.visit(window.location.pathname, {
 			method: 'post',
 			data: {
 				filters: newFilter,
@@ -104,7 +96,7 @@ const HomeFilter = ({ filters, allFilters }) => {
 
 	const onDateSelect = (value: Date[]) => {
 		// chuyển hướng thủ công.
-		router.visit(window.location.href, {
+		router.visit(window.location.pathname, {
 			method: 'post',
 			data: {
 				filters: {
@@ -116,9 +108,7 @@ const HomeFilter = ({ filters, allFilters }) => {
 		})
 	}
 
-	if (!allFilters) {
-		return null;
-	}
+	if (!allFilters) {return null;}
 
 	return (
 		<div className="flex flex-col gap-x-2 gap-y-3">

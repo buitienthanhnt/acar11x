@@ -1,7 +1,8 @@
 export interface PaginateProp {
 	pageSize: number;
 	currentPage: number;
-	url: string;
+	url?: string;
+	pageName?: string;
 }
 
 type DataType = {

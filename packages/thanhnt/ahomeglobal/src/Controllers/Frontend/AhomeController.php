@@ -55,7 +55,7 @@ final class AhomeController extends Controller
 	{
 		return Inertia::render('Ahomeglobal/Screens/HomeList', [
 			"homes" => $this->homeApi->paginateFilter($request->get('filters')),
-			'rooms' => $this->roomApi->getActiveRoompaginateByDate($request->get('filters')['dates'] ?? [], 4),
+			'rooms' => $this->roomApi->getActiveRoompaginateByDate($request->get('filters')['dates'] ?? [], 6),
 			'allFilters' => $this->roomApi->allFilters(selected: $request->get('filters')),
 			"filters" => $request->get('filters'),
 		]);

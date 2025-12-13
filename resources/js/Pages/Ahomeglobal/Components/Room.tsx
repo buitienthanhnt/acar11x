@@ -1,5 +1,5 @@
 
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 import { RoomItem as RoomItemType } from '../types/Room';
 import { router, useRemember } from '@inertiajs/react';
 import { CustomTimeTable } from '../Components/CustomCalenda';
@@ -22,7 +22,7 @@ const RoomItem = ({ room }: { room: RoomItemType }) => {
 				method: 'get',
 				data: { room: room.id },
 				only: messages ? [] : ['roomSelected'], // clear app props if has flash mesasge.
-				// preserveState: true, // use for remenber old state of page.
+				// preserveState: true, // for remenber old state of page(can save for: dateSelected)
 			})
 		}
 	}

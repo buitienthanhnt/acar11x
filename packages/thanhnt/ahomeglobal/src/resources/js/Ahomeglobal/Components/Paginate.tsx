@@ -1,6 +1,6 @@
 import { Link } from "@inertiajs/react"
 import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/24/solid";
-import { PaginateProp } from "@/type/paginate";
+import { PaginateProp } from "../types/Paginate";
 
 const Paginate = ({ pageSize, currentPage, url = window.location.href, pageName = 'page' }: PaginateProp) => {
 	if (pageSize === 1) { return null; }

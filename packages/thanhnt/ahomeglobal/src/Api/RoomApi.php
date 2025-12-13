@@ -109,6 +109,6 @@ final class RoomApi
 	}
 
 	public function getActiveRoompaginateByDate($listDate, $limit) {
-		return $this->orderApi->getActiveRoomPaginateByDates(listDate: $listDate, limit:4);
+		return $this->orderApi->getActiveRoomPaginateByDates(listDate: $listDate, limit:$limit);
 	}
 }

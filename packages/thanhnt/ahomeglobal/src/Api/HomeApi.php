@@ -39,16 +39,16 @@ final class HomeApi
 	/**
 	 * get list home by filter attribute room
 	 */
-	public function paginateFilter($filterParams = [])
+	public function paginateFilter($filterParams = [], $limit = 6)
 	{
 		if ($filterParams) {
 			$seletedDates = $filterParams['dates'] ?? [];
 			if ($seletedDates) {
-				return $this->orderApi->getActiveHomeByDate($seletedDates, 3);
+				return $this->orderApi->getActiveHomeByDate($seletedDates, $limit);
 			}
-			return Home::withWhereHas('rooms')->paginate(3);
+			return Home::withWhereHas('rooms')->paginate($limit);
 		}
-		return Home::withWhereHas('rooms')->paginate(3);
+		return Home::withWhereHas('rooms')->paginate($limit);
 	}
 
 	protected function filterByCustomAttr() {}
