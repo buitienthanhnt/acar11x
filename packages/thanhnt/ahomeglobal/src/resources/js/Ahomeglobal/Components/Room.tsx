@@ -25,14 +25,21 @@ const RoomItem = ({ room }: { room: RoomItemType }) => {
 			})
 		}
 	}
+
 	return (
-		<p className={`p-4 py-2 bg-deep-purple-300 rounded-md ${booked?.id === room.id ? 'bg-green-400' : ''}`} onClick={() => {
+		<div className={`p-0.5  rounded-md flex gap-x-2 shadow-md ${booked?.id === room.id ? 'bg-green-400' : 'bg-deep-purple-200'}`} onClick={() => {
 			onClickRoom(room);
 		}}>
-			<p className='font-semibold'>
-				Room: {room.title}
-			</p>
-		</p>
+			<div>
+				<img src={room.image_path} className='min-w-32 w-32 aspect-square rounded-md' alt="" />
+			</div>
+			<div>
+				<p className='font-semibold'>Room: {room.title}</p>
+				<p className='text-sm md:text-md font-medium'>{room.description}</p>
+				<p className='text-black font-semibold'>{room.price}$</p>
+				<p>{room.type}</p>
+			</div>
+		</div>
 	)
 }
 
@@ -60,14 +67,25 @@ const RoomTime = ({ allDisable }: { allDisable?: string[] }) => {
 
 	return (
 		<div className='space-y-2 grid grid-col-1 md:grid-cols-3 gap-1 lg:gap-2'>
+			<div className='space-y-1 md:col-span-2'>
+				<CustomTimeTable
+					selected={dateSelected}
+					onChange={setDateSelected}
+					minDate={new Date()}
+					// maxDate={new Date(2025, 11, 19)}
+					disable={[...bookedDate, ...allDisable].map(s => new Date(s))}
+				></CustomTimeTable>
+			</div>
 			<div>
-				<span className='text-xl font-semibold'>Selected room: {booked?.title || 'Random room'}</span>
+				<span className='text-lg font-semibold'>Selected room: {booked?.title || 'Random room'}</span>
 				<div className='col-span-1 flex flex-col space-y-1'>
 					{!!dateSelected.length && <div className='flex justify-between items-center'>
 						<span className='text-xl font-semibold'>Your selected:</span>
-						<span className='bg-orange-400 rounded-full p-2' onClick={() => { setDateSelected([]); }}><XMarkIcon className='size-6 text-white font-extrabold'></XMarkIcon></span>
+						<span className='bg-orange-400 rounded-full p-2' onClick={() => { setDateSelected([]); }}>
+							<XMarkIcon className='size-4 text-white font-extrabold'></XMarkIcon>
+						</span>
 					</div>}
-					<div className='grid grid-cols-3 xl:grid-col-4 gap-1 md:gap-2'>
+					<div className='grid grid-cols-2 gap-1 md:gap-2'>
 						{dateSelected.map((date, index) => {
 							return (
 								<div key={index} className='p-1 bg-blue-400 rounded-md flex justify-center items-center content-center'>
@@ -81,16 +99,6 @@ const RoomTime = ({ allDisable }: { allDisable?: string[] }) => {
 					</Button>}
 				</div>
 			</div>
-			<div className='space-y-1 md:col-span-2'>
-				<CustomTimeTable
-					selected={dateSelected}
-					onChange={setDateSelected}
-					minDate={new Date()}
-					// maxDate={new Date(2025, 11, 19)}
-					disable={[...bookedDate, ...allDisable].map(s => new Date(s))}
-				></CustomTimeTable>
-			</div>
-
 		</div>
 	)
 }

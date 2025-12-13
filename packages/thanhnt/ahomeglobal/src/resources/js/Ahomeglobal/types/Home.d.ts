@@ -1,7 +1,8 @@
+import { AttrInterface } from "./Attr"
 import { OrderTimeInterface } from "./OrderTime"
 import { RoomItem } from "./Room"
 
-export type HomeItem= {
+export type HomeItem = {
 	id: number,
 	name: string,
 	description?: string,
@@ -11,5 +12,6 @@ export type HomeItem= {
 
 export type HomeDetail = HomeItem & {
 	rooms: RoomItem[],
-	order_times: OrderTimeInterface[]
+	order_times: OrderTimeInterface[],
+	attr: AttrInterface[],
 }

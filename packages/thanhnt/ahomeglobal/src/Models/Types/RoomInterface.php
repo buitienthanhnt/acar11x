@@ -40,11 +40,11 @@ interface RoomInterface
 	];
 
 	const CUSTOM_ATTRS = [
-		self::ATTR_PRICE => ['key' => self::ATTR_PRICE, 'type' => FormInterface::TYPE_NUMBER, 'label' => 'Giá phong', 'required' => true, 'placeholder' => 'Giá'],
+		self::ATTR_PRICE => ['key' => self::ATTR_PRICE, 'type' => FormInterface::TYPE_NUMBER, 'label' => 'Giá phòng(1 ngày)', 'required' => true, 'placeholder' => 'Giá'],
 		// self::ATTR_BED => ['key' => self::ATTR_BED, 'type' => FormInterface::TYPE_SELECT, 'label' => 'số giường', 'model' => \Thanhnt\AhomeGlobal\Models\Room::class, 'required' => true,],
 		self::ATTR_PERSON => ['key' => self::ATTR_PERSON, 'type' => FormInterface::TYPE_NUMBER, 'label' => 'số lượng người', 'placeholder' => ''],
 		self::ATTR_RATE => ['key' => self::ATTR_RATE, 'type' => FormInterface::TYPE_NUMBER, 'label' => 'đánh giá', 'placeholder' => ''],
-	];
+	];	
 
 	/**
 	 * khai báo danh sách các thuộc tính được gán hàng loạt.

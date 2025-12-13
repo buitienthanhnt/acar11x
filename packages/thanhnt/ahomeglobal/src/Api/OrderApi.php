@@ -7,9 +7,11 @@ use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Thanhnt\Ahomeglobal\Helper\DateTimeHelper;
+use Thanhnt\Ahomeglobal\Models\Home;
 use Thanhnt\Ahomeglobal\Models\Order;
 use Thanhnt\Ahomeglobal\Models\OrderTime;
 use Thanhnt\Ahomeglobal\Models\Room;
+use Thanhnt\Ahomeglobal\Models\Types\HomeInterface;
 use Thanhnt\Ahomeglobal\Models\Types\OrderInterface;
 use Thanhnt\Ahomeglobal\Models\Types\OrderTimeInterface;
 use Thanhnt\Ahomeglobal\Models\Types\RoomInterface;
@@ -118,9 +120,12 @@ final class OrderApi
 	 * @param int $homeId
 	 * @return array[int]
 	 */
-	public function getDisableArrayRoomByDates($listDate = [], ?int $homeId = null) : array {
-		return $this->getDisableRoomByDates(listDate: $listDate)->pluck([RoomInterface::ID])->toArray();
+	public function getDisableArrayRoomByDates($listDate = [], ?int $homeId = null): array
+	{
+		return $this->getDisableRoomByDates(listDate: $listDate, homeId: $homeId)->pluck([RoomInterface::ID])->toArray();
 	}
+
+
 
 	/**
 	 * get all rooms has pass for list input dates
@@ -133,6 +138,35 @@ final class OrderApi
 		return $this->room->where(
 			fn($builder) =>  $homeId ? $builder->where(OrderTimeInterface::HOME_ID, $homeId) : $builder
 		)->whereNotIn(RoomInterface::ID, $this->getDisableArrayRoomByDates($listDate))->get();
+	}
+
+	/**
+	 * 
+	 */
+	public function getActiveRoomPaginateByDates(array $listDate = [], ?int $homeId = null, int $limit = 12)
+	{
+		$rooms =  $this->room->where(
+			fn($builder) =>  $homeId ? $builder->where(OrderTimeInterface::HOME_ID, $homeId) : $builder
+		)->whereNotIn(RoomInterface::ID, $this->getDisableArrayRoomByDates($listDate))->paginate($limit);
+
+		return $rooms->through(function ($room) {
+			return $room->makeVisible(['booked_dates',])->makeVisible([RoomInterface::HOME_ID]);
+		});
+	}
+
+	public function getActiveHomeIdByDate(array $listDate = [])
+	{
+		return $this->room->whereNotIn(RoomInterface::ID, $this->getDisableArrayRoomByDates($listDate))
+			->select('home_id',)
+			->distinct()
+			->get()
+			->makeHidden(['price', 'booked_dates'])
+			->pluck('home_id');
+	}
+
+	public function getActiveHomeByDate(array $listDate = [], $limit = 12)
+	{
+		return Home::whereIn(HomeInterface::ID, $this->getActiveHomeIdByDate($listDate))->paginate($limit);
 	}
 
 	/**

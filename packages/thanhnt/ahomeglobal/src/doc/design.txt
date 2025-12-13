@@ -58,3 +58,8 @@ id | type | source_id | key |  value
 2    room    1       price      100 
 
 select * from attr where type= home and key=location  and source_id=1 and value
+
+
+ahome_attr_label
+type    |   key    | value |   label 
+room       price       1       100$

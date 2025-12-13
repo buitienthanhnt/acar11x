@@ -76,19 +76,10 @@ const DateItem: FunctionComponent<DateItemProp> = ({ date }) => {
 
 	return (
 		<div
-			className={`p-1 py-2 justify-center items-center flex rounded-xl relative 
-				${listDates[10].getMonth() !== date.getMonth() ? 'opacity-75' : ''}
-				${today.toLocaleDateString() === date.toLocaleDateString() ? 'bg-purple-400' : 'bg-green-200'}
-				${isOutOfDate ? 'opacity-50' : ''}
-				${isDisable ? '!bg-red-500' : ''}
-			`}
+			className={`p-1 py-2 justify-center items-center flex rounded-xl relative ${listDates[10].getMonth() !== date.getMonth() ? 'opacity-75' : ''} ${today.toLocaleDateString() === date.toLocaleDateString() ? 'bg-purple-400' : 'bg-green-200'} ${isOutOfDate ? 'opacity-50' : ''} ${isDisable ? '!bg-red-500' : ''}`}
 			onClick={() => { onClickDate(date) }}
 		>
-			<span
-				className={`font-semibold 
-					${[0, 6].includes(date.getDay()) ? 'text-red-500' : ''}
-					${isDisable ? '!text-black' : ''}
-				`}>
+			<span className={`font-semibold ${[0, 6].includes(date.getDay()) ? 'text-red-500' : ''} ${isDisable ? '!text-black' : ''} `}>
 				{date.getDate()}
 			</span>
 			{selectedString?.includes(date.toLocaleDateString()) &&
@@ -204,7 +195,7 @@ const CustomTimeTable: FunctionComponent<CustomTimeProp> = ({ selected, onChange
 			today: today,
 		}}>
 			<NavigationMonth onNavigate={setFocusDate} forcusDate={focusDate}></NavigationMonth>
-			<div className='bg-white p-1 lg:p-2 grid grid-cols-7 gap-2 rounded-md'>
+			<div className='bg-white p-1 lg:p-2 grid grid-cols-7 gap-1 lg:gap-2 rounded-md'>
 				<div className='bg-blue-gray-300 p-1 justify-center items-center flex rounded-md'>
 					<span>MON</span>
 				</div>

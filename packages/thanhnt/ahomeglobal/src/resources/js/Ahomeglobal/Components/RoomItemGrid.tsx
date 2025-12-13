@@ -15,7 +15,7 @@ const RoomItemGrid: FunctionComponent<Props> = ({ room }) => {
 			className="p-1 bg-blue-200 rounded-md shadow-lg min-h-10 lg:p-2 flex gap-x-2"
 		>
 			<div>
-				<img src={room.image_path} alt="room avata" className="w-48 aspect-square rounded-md" />
+				<img src={room.image_path} alt="room avata" className="w-48 min-w-40 aspect-square rounded-md" />
 			</div>
 			<div >
 				<p className="font-bold text-xl">

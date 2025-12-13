@@ -51,12 +51,13 @@ final class AhomeController extends Controller
 	 * show all of home are woking
 	 * @return \Inertia\Response
 	 */
-	public function listHome()
+	public function listHome(Request $request)
 	{
-		// dd(Room::paginate()->getCollection()->makeHidden(['booked_dates'])->makeVisible([RoomInterface::HOME_ID])->toArray());
 		return Inertia::render('Ahomeglobal/Screens/HomeList', [
-			"homes" => Home::withWhereHas('rooms')->get(),
-			'rooms' => Room::paginate(9)->makeHidden(['booked_dates'])->makeVisible([RoomInterface::HOME_ID]),
+			"homes" => $this->homeApi->paginateFilter($request->get('filters')),
+			'rooms' => $this->roomApi->getActiveRoompaginateByDate($request->get('filters')['dates'] ?? [], 4),
+			'allFilters' => $this->roomApi->allFilters(selected: $request->get('filters')),
+			"filters" => $request->get('filters'),
 		]);
 	}
 
