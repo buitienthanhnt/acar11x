@@ -3,6 +3,7 @@
 namespace Thanhnt\Ahomeglobal\Repository;
 
 use Exception;
+use Thanhnt\Ahomeglobal\Events\HomeSaveEvent;
 use Thanhnt\Ahomeglobal\Helper\ModelHelper;
 use Thanhnt\Ahomeglobal\Models\Attr;
 use Thanhnt\Ahomeglobal\Models\Home;
@@ -27,6 +28,7 @@ final class HomeRepository
 	{
 		$newHome = $this->home->factory()->create($this->modelHelper->massDataAttribute(HomeInterface::FILLED_FILEDS, $data));
 		if ($newHome) {
+			\Illuminate\Support\Facades\Event::dispatch(new HomeSaveEvent($newHome));
 			$this->saveHomeAttr($newHome, $data['attrs'] ?? null);
 		}
 		return $newHome;

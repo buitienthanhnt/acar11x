@@ -1,14 +1,12 @@
 import { FunctionComponent, useState } from "react";
 import { Head, Link, router } from "@inertiajs/react";
-import { HomeItem as HomeItemType } from "../types/Home";
-import { RoomItem as RoomItemType } from "../types/Room";
-import { CustomTimeTable, RoomItemGrid } from "../Components";
-import { DropdownMenu } from "../Components";
-import { listDateToArrayString } from "../Helper/DateTimeHelper";
 import { sprintf } from "sprintf-js";
 import Urls from "../netWork/Urls";
+import { listDateToArrayString } from "../Helper/DateTimeHelper";
+import { HomeItem as HomeItemType } from "../types/Home";
+import { RoomItem as RoomItemType } from "../types/Room";
 import { PagePaginate } from "../types/Paginate";
-import { Paginate } from "../Components/Custom";
+import { DropdownMenu, Paginate, CustomTimeTable, RoomItemGrid } from "../Components";
 
 
 const HomeItem = ({ home }: { home: HomeItemType }) => {
@@ -108,7 +106,7 @@ const HomeFilter = ({ filters, allFilters }) => {
 		})
 	}
 
-	if (!allFilters) {return null;}
+	if (!allFilters) { return null; }
 
 	return (
 		<div className="flex flex-col gap-x-2 gap-y-3">

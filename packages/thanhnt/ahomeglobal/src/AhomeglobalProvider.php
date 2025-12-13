@@ -4,6 +4,7 @@ namespace Thanhnt\Ahomeglobal;
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
+use Thanhnt\Ahomeglobal\Providers\PackageEventServiceProvider;
 
 final class AhomeglobalProvider extends ServiceProvider
 {
@@ -16,6 +17,11 @@ final class AhomeglobalProvider extends ServiceProvider
 		 * merge package define config to global.
 		 */
 		$this->mergeConfigFrom(__DIR__ . '/config/config.php', 'ahomeglobal');
+
+		/**
+		 * load for event service provider.
+		 */
+		$this->app->register(PackageEventServiceProvider::class);
 	}
 
 	/**
@@ -72,7 +78,7 @@ final class AhomeglobalProvider extends ServiceProvider
 		 * php artisan db:seed --class=Thanhnt\\Ahomeglobal\\Database\\Seeders\\OrderSeeder 
 		 */
 		// $this->publishes([
-        //     __DIR__.'/Database/Seeders' => database_path('seeders'),
-        // ], 'ahomeglobal-seeders');
+		//     __DIR__.'/Database/Seeders' => database_path('seeders'),
+		// ], 'ahomeglobal-seeders');
 	}
 }
