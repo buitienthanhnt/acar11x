@@ -1,7 +1,7 @@
 
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 import { RoomItem as RoomItemType } from '../types/Room';
-import { router } from '@inertiajs/react';
+import { router, useRemember } from '@inertiajs/react';
 import { CustomTimeTable } from '../Components/CustomCalenda';
 import { Button, } from '@material-tailwind/react';
 import { XMarkIcon, } from '@heroicons/react/24/solid';
@@ -22,6 +22,7 @@ const RoomItem = ({ room }: { room: RoomItemType }) => {
 				method: 'get',
 				data: { room: room.id },
 				only: messages ? [] : ['roomSelected'], // clear app props if has flash mesasge.
+				// preserveState: true, // for remenber old state of page(can save for: dateSelected)
 			})
 		}
 	}
@@ -47,7 +48,7 @@ const RoomTime = ({ allDisable }: { allDisable?: string[] }) => {
 	const booked = useRoomOrders();
 	const bookedDate = booked?.booked_dates || [];
 
-	const [dateSelected, setDateSelected] = useState<Date[]>([]);
+	const [dateSelected, setDateSelected] = useRemember<Date[]>([], 'Ahomeglobal/HomeDetail');
 
 	const onSubmitOrder = useCallback(() => {
 		const selectedValues = dateSelected.map(d => [

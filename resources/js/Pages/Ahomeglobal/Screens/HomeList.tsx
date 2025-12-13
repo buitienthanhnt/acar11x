@@ -46,7 +46,7 @@ const HomeList: FunctionComponent<Props> = ({ homes, rooms, filters, allFilters 
 					</div>
 					<div className="col-span-1 lg:col-span-3 flex flex-col gap-y-2">
 						<p className="text-lg font-medium">Total: {homes.total}</p>
-						{homes?.data.map(home => <HomeItem home={home} key={home.id.toString()}></HomeItem>)}
+						{homes?.data.map(home => <HomeItem home={home as HomeItemType} key={home.id.toString()}></HomeItem>)}
 					</div>
 				</div>
 				<div className='h-[1px] bg-black my-2'></div>
