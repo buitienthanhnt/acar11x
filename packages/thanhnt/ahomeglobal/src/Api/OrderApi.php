@@ -5,6 +5,7 @@ namespace Thanhnt\Ahomeglobal\Api;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Thanhnt\Ahomeglobal\Helper\DateTimeHelper;
 use Thanhnt\Ahomeglobal\Models\Home;
@@ -44,7 +45,7 @@ final class OrderApi
 		 * get active room by list date
 		 * has 2 option: 1 dateRange, 2 date list
 		 */
-		$activeRoom = $this->getActiveRoomByDates($dateValues, $home);
+		$activeRoom = $this->getActiveRoomByDates($dateValues, $home)->get();
 		if (!$activeRoom->count()) {
 			throw new Exception('the input date not active');
 		}
@@ -131,13 +132,13 @@ final class OrderApi
 	 * get all rooms has pass for list input dates
 	 * @param array[string] $listDate
 	 * @param int $homeId
-	 * @return \Illuminate\Database\Eloquent\Collection
+	 * @return \Illuminate\Database\Eloquent\Builder
 	 */
 	public function getActiveRoomByDates(array $listDate = [], ?int $homeId = null)
 	{
 		return $this->room->where(
 			fn($builder) =>  $homeId ? $builder->where(OrderTimeInterface::HOME_ID, $homeId) : $builder
-		)->whereNotIn(RoomInterface::ID, $this->getDisableArrayRoomByDates($listDate))->get();
+		)->whereNotIn(RoomInterface::ID, $this->getDisableArrayRoomByDates($listDate));
 	}
 
 	/**
@@ -154,6 +155,10 @@ final class OrderApi
 		});
 	}
 
+	/**
+	 * @param string[] $listDate [2025-12-12, 2025-12-13, 2025-12-14,...]
+	 * @return Collection
+	 */
 	public function getActiveHomeIdByDate(array $listDate = [])
 	{
 		return $this->room->whereNotIn(RoomInterface::ID, $this->getDisableArrayRoomByDates($listDate))
@@ -164,6 +169,9 @@ final class OrderApi
 			->pluck('home_id');
 	}
 
+	/**
+	 * 
+	 */
 	public function getActiveHomeByDate(array $listDate = [], $limit = 12)
 	{
 		return Home::whereIn(HomeInterface::ID, $this->getActiveHomeIdByDate($listDate))->paginate($limit);

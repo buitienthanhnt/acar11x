@@ -104,11 +104,52 @@ final class RoomApi
 	 * @param string[] $listDate
 	 * @param int $limit
 	 */
-	public function getActiveRoomByDate($listDate, $limit) {
+	public function getActiveRoomByDate($listDate, $limit)
+	{
 		return $this->orderTime->getActiveRoomByDate($listDate);
 	}
 
-	public function getActiveRoompaginateByDate($listDate, $limit) {
-		return $this->orderApi->getActiveRoomPaginateByDates(listDate: $listDate, limit:$limit);
+	public function paginateRoomWithFilter($filterParams, $limit)
+	{
+		if (!$filterParams) {
+			return Room::paginate($limit, pageName: 'room_page')->through(function ($room) {
+				return $room->makeHidden(['booked_dates',])->makeVisible([RoomInterface::HOME_ID]);
+			});
+		}
+
+		/**
+		 * date filter
+		 */
+		if ($listDate = $filterParams['dates'] ?? null) {
+			$instance = $this->orderApi->getActiveRoomByDates(listDate: $listDate);
+		} else {
+			$instance = Room::query();
+		}
+
+		/**
+		 * filter by custom attribute
+		 */
+		$listFilters = array_intersect_key($filterParams, RoomInterface::CUSTOM_ATTRS);
+		foreach ($listFilters as $key => $value) {
+			switch ($key) {
+				case 'price':
+					$instance->whereHas('attr', function ($query) use ($key, $value) {
+						$query->where(AttrInterface::KEY, $key)->whereBetween(AttrInterface::VALUE, explode('-', $value));
+					});
+					break;
+				default:
+					$instance->whereHas('attr', function ($query) use ($key, $value) {
+						$query->where(AttrInterface::KEY, $key)->where(AttrInterface::VALUE, $value);
+					});
+					break;
+			}
+		}
+		/**
+		 * dùng: [through] để hiển thị: HOME_ID khi dùng paginate phân trang 
+		 * nếu không nó sẽ chỉ trả về danh sách kết quả mà không có các thuộc tính phân trang
+		 */
+		return $instance->paginate($limit, pageName: 'room_page')->through(function ($room) {
+			return $room->makeHidden(['booked_dates',])->makeVisible([RoomInterface::HOME_ID]);
+		});
 	}
 }

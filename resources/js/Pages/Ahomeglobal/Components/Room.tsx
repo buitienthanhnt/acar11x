@@ -6,6 +6,8 @@ import { CustomTimeTable } from '../Components/CustomCalenda';
 import { Button, } from '@material-tailwind/react';
 import { XMarkIcon, } from '@heroicons/react/24/solid';
 import { usePageMessage, useRoomOrders } from '../hooks';
+import { CubeIcon, CurrencyDollarIcon, InformationCircleIcon } from '@heroicons/react/16/solid';
+import { UsersIcon } from '@heroicons/react/16/solid';
 
 const RoomItem = ({ room }: { room: RoomItemType }) => {
 	const booked = useRoomOrders();
@@ -18,7 +20,7 @@ const RoomItem = ({ room }: { room: RoomItemType }) => {
 				method: 'get',
 			});
 		} else {
-			router.visit(window.location.pathname, {
+			router.visit(window.location.href, {
 				method: 'get',
 				data: { room: room.id },
 				only: messages ? [] : ['roomSelected'], // clear app props if has flash mesasge.
@@ -28,17 +30,26 @@ const RoomItem = ({ room }: { room: RoomItemType }) => {
 	}
 
 	return (
-		<div className={`p-0.5  rounded-md flex gap-x-2 shadow-md ${booked?.id === room.id ? 'bg-green-400' : 'bg-deep-purple-200'}`} onClick={() => {
+		<div className={`p-0.5 rounded-md flex gap-x-2 shadow-md ${booked?.id === room.id ? 'bg-green-400' : 'bg-deep-purple-100'}`} onClick={() => {
 			onClickRoom(room);
 		}}>
 			<div>
 				<img src={room.image_path} className='min-w-32 w-32 aspect-square rounded-md' alt="" />
 			</div>
 			<div>
-				<p className='font-semibold'>Room: {room.title}</p>
-				<p className='text-sm md:text-md font-medium'>{room.description}</p>
-				<p className='text-black font-semibold'>{room.price}$</p>
-				<p>{room.type}</p>
+				<p className='font-semibold text-purple-500'>Room: {room.title}</p>
+				<div className='flex items-center gap-x-1'>
+					<CubeIcon className='size-5 text-gray-800'></CubeIcon>
+					<p className='text-black font-semibold text-sm md:text-md'>{room.description}</p>
+				</div>
+				<div className='flex items-center gap-x-1'>
+					<CurrencyDollarIcon className='size-5 text-gray-800'></CurrencyDollarIcon>
+					<p className='text-black font-semibold text-sm md:text-md'>{room.price} 000 VND</p>
+				</div>
+				<div className='flex items-center gap-x-1'>
+					<UsersIcon className='size-5 text-black'></UsersIcon>
+					<p className='font-semibold text-sm md:text-md'>{room.type}</p>
+				</div>
 			</div>
 		</div>
 	)

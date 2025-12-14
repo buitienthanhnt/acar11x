@@ -1,24 +1,37 @@
 import { FunctionComponent, useState } from "react";
-import { Head, Link, router } from "@inertiajs/react";
+import { Head, Link, router, useRemember } from "@inertiajs/react";
 import { sprintf } from "sprintf-js";
 import Urls from "../netWork/Urls";
 import { listDateToArrayString } from "../Helper/DateTimeHelper";
 import { HomeItem as HomeItemType } from "../types/Home";
 import { RoomItem as RoomItemType } from "../types/Room";
 import { PagePaginate } from "../types/Paginate";
-import { DropdownMenu, Paginate, CustomTimeTable, RoomItemGrid } from "../Components";
+import { DropdownMenu, Paginate, CustomTimeTable, RoomItemGrid, HomeMap } from "../Components";
+import { FingerPrintIcon, MapPinIcon, XMarkIcon } from "@heroicons/react/24/solid";
+import { SparklesIcon } from "@heroicons/react/24/solid";
 
 
-const HomeItem = ({ home }: { home: HomeItemType }) => {
+const HomeItem = ({ home, filters }: { home: HomeItemType, filters?: any }) => {
+
 	return (
-		<Link className="bg-green-200 shadow-md p-2 rounded-md flex gap-x-4" href={sprintf(Urls.homeDetail, [home.id])}>
+		<Link className="bg-blue-gray-200 shadow-md p-1 rounded-md flex gap-x-1 md:gap-x-4"
+			queryStringArrayFormat={'brackets'}
+			href={sprintf(Urls.homeDetail, [home.id])} data={filters ? { filters } : undefined}>
 			<div>
-				<img src={home.image_path} alt="avata hotel" className="w-60 rounded-md" />
+				<img src={home.image_path} alt="avata hotel" className="max-w-40 md:max-w-60 rounded-md" />
 			</div>
-			<div className="flex flex-col space-y-2">
-				<h4 className="text-2xl text-blue-700 font-bold ">{home.name}</h4>
-				<p className="text-xl font-semibold">{home.description}</p>
-				<p className="italic text-purple-600 font-semibold">{home.district}</p>
+			<div className="flex flex-col justify-between">
+				<div>
+					<h4 className="text-md lg:text-2xl text-blue-700 font-bold ">{home.name}</h4>
+					<div className="flex gap-x-1 items-center">
+						<SparklesIcon className="size-5 text-gray-800"></SparklesIcon>
+						<p className="text-sm md:text-md lg:text-lg font-semibold">{home.description}</p>
+					</div>
+				</div>
+				<div className="flex">
+					<MapPinIcon className="size-5 text-purple-500"></MapPinIcon>
+					<p className="italic text-purple-600 font-semibold text-sm md:text-md">{home.district}</p>
+				</div>
 			</div>
 		</Link>
 	)
@@ -36,15 +49,16 @@ const HomeList: FunctionComponent<Props> = ({ homes, rooms, filters, allFilters 
 	return (
 		<>
 			<Head title="home"></Head>
-			<div className="container mx-auto p-4 space-y-4">
+			<div className="container mx-auto p-2 space-y-4">
 				<div className=" bg-blue-gray-300 min-h-36 rounded-md p-4"></div>
+				{/* <HomeMap></HomeMap> */}
 				<div className="grid lg:grid-cols-5 bg-white lg:space-x-4 space-y-2 lg:space-y-0">
 					<div className="col-span-1 lg:col-span-2">
 						<HomeFilter filters={filters} allFilters={allFilters}></HomeFilter>
 					</div>
 					<div className="col-span-1 lg:col-span-3 flex flex-col gap-y-2">
 						<p className="text-xl font-bold text-purple-800">List of Hotels total: {homes.total}</p>
-						{homes?.data.map(home => <HomeItem home={home as HomeItemType} key={home.id.toString()}></HomeItem>)}
+						{homes?.data.map(home => <HomeItem home={home as HomeItemType} filters={filters} key={home.id.toString()}></HomeItem>)}
 						<Paginate pageSize={homes.last_page} currentPage={homes.current_page}></Paginate>
 					</div>
 				</div>
@@ -67,6 +81,10 @@ const HomeList: FunctionComponent<Props> = ({ homes, rooms, filters, allFilters 
 const HomeFilter = ({ filters, allFilters }) => {
 	const [dateSelected] = useState<Date[]>(!!filters && filters?.dates ? filters?.dates.map((d: string) => new Date(d)) || [] : []);
 
+	const [formState, setFormState] = useRemember({
+		search: filters?.district || '',
+	}, 'page.search')
+
 	const onFilterSubmit = (type: string, item: { ley: string, value: string }) => {
 		const newFilter = {
 			...filters,
@@ -87,6 +105,7 @@ const HomeFilter = ({ filters, allFilters }) => {
 			},
 			queryStringArrayFormat: 'indices',
 			replace: true,
+			preserveScroll: true,
 			// preserveUrl: true,
 			// forceFormData: true,
 		})
@@ -99,10 +118,26 @@ const HomeFilter = ({ filters, allFilters }) => {
 			data: {
 				filters: {
 					...filters,
-					dates: listDateToArrayString(value),
+					dates: value.length ? listDateToArrayString(value) : undefined,
 				},
 				page: undefined
 			},
+			preserveScroll: true,
+		})
+	}
+
+	const searchLocation = (isClear = false) => {
+		// chuyển hướng thủ công.
+		router.visit(window.location.pathname, {
+			method: 'post',
+			data: {
+				filters: {
+					...filters,
+					district: isClear ? undefined : formState.search,
+				},
+				page: undefined
+			},
+			preserveScroll: true,
 		})
 	}
 
@@ -110,6 +145,19 @@ const HomeFilter = ({ filters, allFilters }) => {
 
 	return (
 		<div className="flex flex-col gap-x-2 gap-y-3">
+			<div className='flex gap-4 items-center'>
+				{!!formState.search && <XMarkIcon width={36} height={36} className='hover:rotate-12 hover:text-orange-800' onClick={() => {
+					searchLocation(true)
+				}}></XMarkIcon>}
+				<input type="text" value={formState.search}
+					onChange={e => setFormState(old => { return { ...old, search: e.target.value } })}
+					placeholder='Search By Location'
+					className='rounded-md w-full md:w-96'
+				/>
+				{formState.search && <div onClick={() => { searchLocation(false) }}>
+					<FingerPrintIcon width={36} height={36} className='hover:scale-110 text-gray-500 hover:text-black'></FingerPrintIcon>
+				</div>}
+			</div>
 			{allFilters.map((filter, index) => {
 				return <DropdownMenu key={index} type={filter.key} label={filter.label} data={filter.data} onChange={onFilterSubmit}></DropdownMenu>
 			})}

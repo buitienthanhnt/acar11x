@@ -52,7 +52,7 @@ const DropdownMenu: FunctionComponent<Props> = (props) => {
 							<Listbox.Option
 								key={item.value}
 								value={item}
-								className="group relative cursor-default py-2 pr-9 pl-3 text-gray-900 select-none data-focus:bg-indigo-600 data-focus:text-white data-focus:outline-hidden"
+								className={`group rounded-md relative cursor-default py-2 pr-9 pl-3 text-gray-900 select-none data-focus:bg-indigo-600 data-focus:text-white data-focus:outline-hidden ${selected?.value === item.value ? 'bg-gray-200' : ''}`}
 							>
 								<div className="flex items-center">
 									{item?.image && <img alt="" src={item.image} className="size-5 shrink-0 rounded-full" />}

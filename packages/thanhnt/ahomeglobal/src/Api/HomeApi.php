@@ -4,8 +4,12 @@ namespace Thanhnt\Ahomeglobal\Api;
 
 use Thanhnt\Ahomeglobal\Models\Attr;
 use Thanhnt\Ahomeglobal\Models\Home;
+use Thanhnt\Ahomeglobal\Models\Room;
 use Thanhnt\Ahomeglobal\Models\Types\AttrInterface;
+use Thanhnt\Ahomeglobal\Models\Types\HomeInterface;
 use Thanhnt\Ahomeglobal\Models\Types\RoomInterface;
+
+use function PHPSTORM_META\map;
 
 final class HomeApi
 {
@@ -37,29 +41,72 @@ final class HomeApi
 	}
 
 	/**
-	 * get list home by filter attribute room
+	 * @return \Illuminate\Database\Eloquent\Builder
 	 */
-	public function paginateFilter($filterParams = [], $limit = 6)
+	protected function getHomeByDistrict(string $district)
 	{
-		if ($filterParams) {
-			$seletedDates = $filterParams['dates'] ?? [];
-			if ($seletedDates) {
-				return $this->orderApi->getActiveHomeByDate($seletedDates, $limit);
-			}
-			return Home::withWhereHas('rooms')->paginate($limit);
-		}
-		return Home::withWhereHas('rooms')->paginate($limit);
+		// $homeList =  Home::whereRaw('district LIKE ? COLLATE utf8mb4_unicode_ci', ['%'.$district.'%']); // mysql
+		$homeList =  Home::whereLike(HomeInterface::DISTRICT, "%$district%");
+		return $homeList;
 	}
 
-	protected function filterByCustomAttr() {}
-
-	public function getFilters()
+	/**
+	 * get list home id filter by Room custom attribute.
+	 */
+	protected function getHomeIdfilterByCustomAttr($filterParams): array
 	{
+		$listFilters = array_intersect_key($filterParams, RoomInterface::CUSTOM_ATTRS);
+		$instance = Room::query()->with('home');
 
-		$roomFilterFields = RoomInterface::CUSTOM_ATTRS;
-		$homeFilterFields = RoomInterface::CUSTOM_ATTRS;
+		foreach ($listFilters as $key => $value) {
+			switch ($key) {
+				case 'price':
+					$instance->whereHas('attr', function ($query) use ($key, $value) {
+						$query->where(AttrInterface::KEY, $key)->whereBetween(AttrInterface::VALUE, explode('-', $value));
+					});
+					break;
+				default:
+					$instance->whereHas('attr', function ($query) use ($key, $value) {
+						$query->where(AttrInterface::KEY, $key)->where(AttrInterface::VALUE, $value);
+					});
+					break;
+			}
+		}
+		return $instance->get()->makeHidden(['booked_dates', 'price'])->pluck('home.id')->unique()->toArray();
+	}
 
-		$roomFilterFieldValues = Attr::where(AttrInterface::KEY, 'room')->groupBy(AttrInterface::KEY)->get();
-		// dd($roomFilterFieldValues->toArray());
+	protected function filterHomeByRate() {}
+
+	/**
+	 * get list home by filter attribute room
+	 */
+	public function paginateHomeWithFilter($filterParams = [], $limit = 6)
+	{
+		if ($filterParams) {
+			/**
+			 * filter home by name
+			 */
+			if ($district = $filterParams['district'] ?? null) {
+				$homeIds = $this->getHomeByDistrict($district)->select('id')->get()->pluck(['id'])->toArray();
+			}
+
+			/**
+			 * filter home by date.
+			 */
+			if ($seletedDates = $filterParams['dates'] ?? null) {
+				$homeIds = isset($homeIds) ? array_intersect($this->orderApi->getActiveHomeIdByDate($seletedDates)->toArray(), $homeIds) : $this->orderApi->getActiveHomeIdByDate($seletedDates)->toArray();
+			}
+
+			/**
+			 * filter by custom attribute of room
+			 */
+			$homeIds = isset($homeIds) ? array_intersect($this->getHomeIdfilterByCustomAttr($filterParams), $homeIds) : $this->getHomeIdfilterByCustomAttr($filterParams);
+
+			return Home::whereIn(HomeInterface::ID, $homeIds ?? [])->withWhereHas('rooms')->paginate($limit);
+		}
+		/**
+		 * return default home list
+		 */
+		return Home::withWhereHas('rooms')->paginate($limit);
 	}
 }
