@@ -2,7 +2,7 @@ import { APIProvider, Map, Marker } from '@vis.gl/react-google-maps';
 
 // https://visgl.github.io/react-google-maps/docs/api-reference/components/marker
 const HomeMap = () => (
-	<APIProvider apiKey={'AIzaSyD1L7S_YeVTo4o-ICHBKr9ylYv-vsdFtj0'}>
+	<APIProvider apiKey={''}>
 		<Map
 			style={{ width: '100%', height: '460px' }}
 			defaultCenter={{ lat: 53.54992, lng: 10.00678 }}
