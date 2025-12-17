@@ -1,5 +1,5 @@
 
-import { FunctionComponent, } from 'react';
+import { FunctionComponent, useCallback, useEffect, } from 'react';
 import { HomeDetail as HomeDetailType } from '../types/Home.d';
 import { RoomDetail, } from '../types/Room';
 import { Head, router, useRemember } from '@inertiajs/react';
@@ -10,6 +10,8 @@ import { RoomItem, RoomTime } from '../Components/Room';
 import { Rating } from "@material-tailwind/react";
 import FlashMessage from '../Components/FlashMessage';
 import Location from '../Components/Location';
+import useMode from '../hooks/useMode';
+import { isDateInRange } from '../Helper/DateTimeHelper';
 
 type Props = {
 	homeDetail: HomeDetailType,
@@ -19,6 +21,7 @@ type Props = {
 const HomeDetail: FunctionComponent<Props> = ({ homeDetail, selectedDates }) => {
 	const messages = usePageMessage();
 	const booked = useRoomOrders();
+	const { isDateRangeMode } = useMode();
 	const bookedDate = booked?.booked_dates || [];
 
 	const rate = homeDetail?.attr.find(i => i.key === 'rate');
@@ -30,6 +33,52 @@ const HomeDetail: FunctionComponent<Props> = ({ homeDetail, selectedDates }) => 
 	const [dateSelected, setDateSelected] = useRemember<Date[]>(selectedDates.map(s => {
 		return (bookedDate.includes(s) || homeDisable.includes(s)) ? undefined : new Date(s);
 	}).filter(function (element) { return element !== undefined; }), 'Ahomeglobal/HomeDetail');
+
+	/**
+	 * check has disable date list in range
+	 */
+	const checkDisableDate = useCallback((dates: Date[] | string[]): boolean => {
+		if (isDateRangeMode) {
+			for (let index = 0; index < homeDisable.length; index++) {
+				if (isDateInRange(
+					new Date(homeDisable[index]),
+					[new Date(dates[0]), new Date(dates[dates.length - 1])])
+				) {
+					return true;
+				}
+			}
+			for (let index = 0; index < bookedDate.length; index++) {
+				if (isDateInRange(
+					new Date(bookedDate[index]),
+					[new Date(dates[0]), new Date(dates[dates.length - 1])]
+				)) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}, [homeDisable, bookedDate, isDateRangeMode])
+
+	useEffect(() => {
+		/**
+		 * clear selected date if has disable date in range
+		 */
+		if (checkDisableDate(selectedDates)) {
+			setDateSelected([]);
+		}
+		return;
+	}, [selectedDates])
+
+	const onChangeDate = useCallback((dates: Date[]) => {
+		/**
+		 * stop if has date in range disable or booked
+		 * optimate later.
+		 */
+		if (checkDisableDate(dates)) {
+			return;
+		}
+		setDateSelected(dates);
+	}, [checkDisableDate])
 
 	if (!homeDetail) {
 		return null;
@@ -76,7 +125,7 @@ const HomeDetail: FunctionComponent<Props> = ({ homeDetail, selectedDates }) => 
 							</div>
 						</div>
 						<div className='col-span-3'>
-							<RoomTime allDisable={homeDisable} dateSelected={dateSelected} setDateSelected={setDateSelected}></RoomTime>
+							<RoomTime allDisable={homeDisable} dateSelected={dateSelected} setDateSelected={onChangeDate}></RoomTime>
 						</div>
 					</div> : (
 						<div className='bg-white flex justify-center items-center rounded-md p-1 lg:p-4'>

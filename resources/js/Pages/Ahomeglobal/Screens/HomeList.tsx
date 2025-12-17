@@ -62,9 +62,9 @@ const HomeList: FunctionComponent<Props> = ({ homes, rooms, filters, allFilters 
 						{homes?.data.map(home => <HomeItem home={home as HomeItemType} selectedDates={filters?.dates} key={home.id.toString()}></HomeItem>)}
 						<Paginate pageSize={homes.last_page} currentPage={homes.current_page}
 							mergeData={{ filters: filters }} linkProps={{
-								method: 'post',
+								method: 'get',
 								preserveScroll: true,
-								// prefetch: ['hover',], // prefecth must be use in GET request only
+								prefetch: ['hover',], // prefecth must be use in GET request only
 							}}></Paginate>
 					</div>
 				</div>
@@ -79,9 +79,9 @@ const HomeList: FunctionComponent<Props> = ({ homes, rooms, filters, allFilters 
 					</div>
 					<Paginate pageSize={rooms.last_page} currentPage={rooms.current_page} pageName="room_page"
 						mergeData={{ filters: filters }} linkProps={{
-							method: 'post',
+							method: 'get',
 							preserveScroll: true,
-							// prefetch: ['hover',], // prefecth must be use in GET request only
+							prefetch: ['hover',], // prefecth must be use in GET request only
 						}}></Paginate>
 				</div>}
 			</div>
@@ -176,6 +176,7 @@ const HomeFilter = ({ filters, allFilters }) => {
 				selected={dateSelected}
 				onChange={onDateSelect}
 				minDate={new Date()}
+				forcus={dateSelected.length ? dateSelected[0] : undefined}
 			></CustomTimeTable>
 		</div>
 	)

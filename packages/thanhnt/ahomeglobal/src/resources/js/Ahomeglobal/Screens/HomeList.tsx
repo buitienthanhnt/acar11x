@@ -17,7 +17,7 @@ const HomeItem = ({ home, selectedDates }: { home: HomeItemType, selectedDates?:
 		<Link className="bg-blue-gray-200 shadow-md p-1 rounded-md flex gap-x-1 md:gap-x-4"
 			queryStringArrayFormat={'brackets'}
 			href={sprintf(Urls.homeDetail, [home.id])}
-			data={{ selectedDates: selectedDates }}>
+			data={{selectedDates: selectedDates}}>
 			<div>
 				<img src={home.image_path} alt="avata hotel" className="max-w-40 md:max-w-60 rounded-md" />
 			</div>
@@ -62,9 +62,9 @@ const HomeList: FunctionComponent<Props> = ({ homes, rooms, filters, allFilters 
 						{homes?.data.map(home => <HomeItem home={home as HomeItemType} selectedDates={filters?.dates} key={home.id.toString()}></HomeItem>)}
 						<Paginate pageSize={homes.last_page} currentPage={homes.current_page}
 							mergeData={{ filters: filters }} linkProps={{
-								method: 'post',
+								method: 'get',
 								preserveScroll: true,
-								// prefetch: ['hover',], prefecth must be use in GET request only
+								prefetch: ['hover',], // prefecth must be use in GET request only
 							}}></Paginate>
 					</div>
 				</div>
@@ -79,9 +79,9 @@ const HomeList: FunctionComponent<Props> = ({ homes, rooms, filters, allFilters 
 					</div>
 					<Paginate pageSize={rooms.last_page} currentPage={rooms.current_page} pageName="room_page"
 						mergeData={{ filters: filters }} linkProps={{
-							method: 'post',
+							method: 'get',
 							preserveScroll: true,
-							// prefetch: ['hover',], prefecth must be use in GET request only
+							prefetch: ['hover',], // prefecth must be use in GET request only
 						}}></Paginate>
 				</div>}
 			</div>
@@ -176,6 +176,7 @@ const HomeFilter = ({ filters, allFilters }) => {
 				selected={dateSelected}
 				onChange={onDateSelect}
 				minDate={new Date()}
+				forcus={dateSelected.length ? dateSelected[0] : undefined}
 			></CustomTimeTable>
 		</div>
 	)

@@ -1,5 +1,7 @@
 import { createContext, FunctionComponent, useCallback, useContext, useMemo, useState } from 'react';
 import { ArrowLeftCircleIcon, ArrowLeftIcon, ArrowRightCircleIcon, ArrowRightIcon, CheckCircleIcon } from '@heroicons/react/24/solid';
+import useMode from '../hooks/useMode';
+import { formatDateToLocals, listDateByRange } from '../Helper/DateTimeHelper';
 
 type NavigationMonthProp = {
 	forcusDate: Date;
@@ -61,7 +63,7 @@ type DateItemProp = {
 }
 
 const DateItem: FunctionComponent<DateItemProp> = ({ date }) => {
-	const { listDates, minDate, maxDate, disableString, onClickDate, selectedString, today, } = useContext(CustomTimeContext);
+	const { listDates, minDate, maxDate, disableString, onClickDate, listDateChoose, today, } = useContext(CustomTimeContext);
 	const isDisable = disableString.includes(date.toLocaleDateString());
 	const isOutOfDate = useMemo(() => {
 		if (minDate && new Date(minDate.getFullYear(), minDate.getMonth(), minDate.getDate()) > date) {
@@ -82,7 +84,7 @@ const DateItem: FunctionComponent<DateItemProp> = ({ date }) => {
 			<span className={`font-semibold ${[0, 6].includes(date.getDay()) ? 'text-red-500' : ''} ${isDisable ? '!text-black' : ''} `}>
 				{date.getDate()}
 			</span>
-			{selectedString?.includes(date.toLocaleDateString()) &&
+			{listDateChoose?.includes(date.toLocaleDateString()) &&
 				<CheckCircleIcon className='size-4 md:size-5 text-blue-500 absolute right-1 top-1'></CheckCircleIcon>
 			}
 		</div>
@@ -95,6 +97,7 @@ const CustomTimeContext = createContext<{
 	today: Date,
 	disableString?: string[],
 	selectedString?: string[],
+	listDateChoose?: string[],
 	minDate?: Date,
 	maxDate?: Date,
 }>({ listDates: [], today: new Date(), onClickDate: () => { }, });
@@ -105,11 +108,13 @@ type CustomTimeProp = {
 	minDate?: Date;
 	maxDate?: Date;
 	disable?: Date[];
+	forcus?: Date;
 };
 
-const CustomTimeTable: FunctionComponent<CustomTimeProp> = ({ selected, onChange, minDate, maxDate, disable }) => {
+const CustomTimeTable: FunctionComponent<CustomTimeProp> = ({ selected, onChange, minDate, maxDate, disable, forcus }) => {
 	const today = new Date();
-	const [focusDate, setFocusDate] = useState(new Date());
+	const { isDateRangeMode } = useMode();
+	const [focusDate, setFocusDate] = useState(forcus || new Date());
 	const selectedString = selected?.map(s => s.toLocaleDateString()) || [];
 	const disableString = disable?.map(s => s.toLocaleDateString()) || [];
 
@@ -165,6 +170,9 @@ const CustomTimeTable: FunctionComponent<CustomTimeProp> = ({ selected, onChange
 			return;
 		}
 
+		/**
+		 * nếu ngày đó bị disable thì không chọn được và nếu ngày đó không thuộc tháng đang hiển thị thì chuyển tháng
+		 */
 		if (disableString.includes(date.toLocaleDateString())) {
 			if (date.getMonth() !== listDates[10].getMonth()) {
 				setFocusDate(date);
@@ -176,13 +184,19 @@ const CustomTimeTable: FunctionComponent<CustomTimeProp> = ({ selected, onChange
 		 * nếu khác tháng thì chuyển lịch sang tháng đó và chưa chọn ngày đó.
 		 */
 		if (date.getMonth() === listDates[10].getMonth()) {
-			onChange(selectedString?.includes(date.toLocaleDateString()) ? [...selected.filter(i => {
-				return i.toLocaleDateString() !== date.toLocaleDateString();
-			})] : [...selected, date]);
+			/**
+			 * if mode === date_range selectedDates only have 2 date.
+			 */
+
+			onChange(selectedString?.includes(date.toLocaleDateString()) ?
+				[...selected.filter(i => {
+					return i.toLocaleDateString() !== date.toLocaleDateString();
+				})] :
+				(!isDateRangeMode ? [...selected, date] : [...selected, date].slice(-2)));
 			return;
 		}
 		setFocusDate(date);
-	}, [listDates, onChange, selectedString])
+	}, [listDates, onChange, selectedString, isDateRangeMode])
 
 	return (
 		<CustomTimeContext.Provider value={{
@@ -190,6 +204,7 @@ const CustomTimeTable: FunctionComponent<CustomTimeProp> = ({ selected, onChange
 			onClickDate: onClickDate,
 			disableString: disableString,
 			selectedString: selectedString,
+			listDateChoose: isDateRangeMode ? formatDateToLocals(listDateByRange([...selected])) : selectedString,
 			minDate: minDate,
 			maxDate: maxDate,
 			today: today,

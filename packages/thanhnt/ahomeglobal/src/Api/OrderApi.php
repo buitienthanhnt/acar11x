@@ -179,12 +179,32 @@ final class OrderApi
 	 * @param string $dateTo   ex: 2025-12-27
 	 * @return \Illuminate\Database\Eloquent\Builder
 	 */
-	public function getActiveRoomByRange(string $dateFrom, string $dateTo)
+	public function getActiveRoomByRange($listDate)
 	{
 		return $this->room->whereNotIn(
 			RoomInterface::ID,
-			$this->getDisableOrderByRange($dateFrom, $dateTo)->pluck([OrderInterface::ROOM_ID])->toArray()
+			$this->getDisableOrderByRange($listDate[0], end($listDate))->pluck([OrderInterface::ROOM_ID])->toArray()
 		);
+	}
+
+	public function getActiveHomeByRange($listDate)
+	{
+		return $this->room->whereIn(RoomInterface::ID, $this->getActiveRoomByRange($listDate)->get()->pluck([RoomInterface::ID])->toArray())
+			->select(OrderTimeInterface::HOME_ID)
+			->distinct()
+			->get()
+			->makeHidden([RoomInterface::BOOKED_DATE, RoomInterface::PRICE,])
+			->pluck(OrderTimeInterface::HOME_ID);
+	}
+
+	function getActiveHomeIdByDates($listDate)
+	{
+		return $this->room->whereNotIn(RoomInterface::ID, $this->getDisableArrayRoomByDates($listDate))
+			->select(OrderTimeInterface::HOME_ID)
+			->distinct()
+			->get()
+			->makeHidden([RoomInterface::BOOKED_DATE, RoomInterface::PRICE,])
+			->pluck(OrderTimeInterface::HOME_ID);
 	}
 
 	/**
@@ -197,8 +217,7 @@ final class OrderApi
 	{
 		return config('ahomeglobal.mode', 'list_date' === 'list_date') ?
 			$this->getActiveRoomByDates($dates, $homeId) : $this->getActiveRoomByRange(
-				$dates[0],
-				end($dates)
+				$dates
 			);
 	}
 
@@ -208,12 +227,10 @@ final class OrderApi
 	 */
 	public function getActiveHomeIdByDate(array $listDate = [])
 	{
-		return $this->room->whereNotIn(RoomInterface::ID, $this->getDisableArrayRoomByDates($listDate))
-			->select(OrderTimeInterface::HOME_ID)
-			->distinct()
-			->get()
-			->makeHidden([RoomInterface::BOOKED_DATE, RoomInterface::PRICE,])
-			->pluck(OrderTimeInterface::HOME_ID);
+		return config('ahomeglobal.mode', 'list_date') !== 'list_date' ?
+			$this->getActiveHomeByRange($listDate)
+			:
+			$this->getActiveHomeIdByDates($listDate);
 	}
 
 	/**
