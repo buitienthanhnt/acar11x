@@ -9,6 +9,7 @@
  * composer global require laravel/installer
  * create project by laravel/installer:  laravel new adoc11x
  */
+
 // 2. create project laravel by composer(has 2 ways for create a project):
 /**
  * composer create-project --prefer-dist laravel/laravel adoc11x
@@ -16,12 +17,14 @@
  * demo for create laravel 11 version project:
  * composer create-project laravel/laravel acar11 "11.*"
  */
+
 // 3. view inof of laravel project:
 /**
  * php artisan about
  * or view verion
  * php artisan --version
  */
+
 // 4. laravel env config value:
 /**
  * use Illuminate\Support\Facades\App;

@@ -20,6 +20,12 @@ class Order extends Model implements OrderInterface
     use SoftDeletes;
 
     /**
+     * define table name(thường thì laravel sẽ lấy tên số nhiều của model làm tên bảng)
+     * trường hợp tên bảng không theo quy ước thì khai báo ở đây
+     */
+    protected $table = self::TABLE_NAME;
+
+    /**
      * khai báo chuyển đổi kiểu dữ liệu
      */
     protected $casts = [

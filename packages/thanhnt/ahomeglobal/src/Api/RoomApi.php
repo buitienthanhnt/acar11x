@@ -20,100 +20,117 @@ final class RoomApi
 	}
 
 	/**
+	 * get room detail by id with list order
 	 * @param int $roomId
 	 * @return \Thanhnt\Ahomeglobal\Models\Room|null
 	 */
 	public function getRoomDetail(int $roomId)
 	{
-		return $this->roomModel->with('orders')->find($roomId);
+		return $this->roomModel->with(RoomInterface::ORDERS)->find($roomId);
 	}
 
 	/**
+	 * return room model without booked_date
 	 * @param int $roomId
 	 * @return \Thanhnt\Ahomeglobal\Models\Room|null
 	 */
 	public function getRoomDetailNoOrders(int $roomId)
 	{
-		return $this->roomModel->setVisible(['booked_dates'])->find($roomId);
+		return $this->roomModel->setVisible([RoomInterface::BOOKED_DATE])->find($roomId);
 	}
 
+	/**
+	 * get room paginate
+	 * @return \Illuminate\Pagination\LengthAwarePaginator
+	 */
 	public function roomPaginate(int $limit = 12)
 	{
 		return $this->roomModel->paginate($limit);
 	}
 
 	/**
+	 * support filter room by custom attribute
+	 * and filter home by date and district
 	 * @param array $selected
-	 * @return array
+	 * @return array{value: string, label: string, selected: bool}[]
 	 */
 	public function allFilters($selected = [])
 	{
-		$roomFilterFields = RoomInterface::CUSTOM_ATTRS;
-		$homeFilterFields = RoomInterface::CUSTOM_ATTRS;
-		/**
-		 * get key and group district value on all_values
-		 */
-		$attrs = Attr::where(AttrInterface::TYPE, 'room')->select('key', DB::raw("GROUP_CONCAT(DISTINCT value) as all_values"))->groupBy('key')->get();
-		foreach ($roomFilterFields as &$value) {
+		try {
+
+			$roomFilterFields = RoomInterface::CUSTOM_ATTRS;
+			$homeFilterFields = RoomInterface::CUSTOM_ATTRS;
 			/**
-			 * format for price range(manual)
+			 * get key and group district value on all_values
 			 */
-			if ($value['key'] === 'price') {
-				$listValue = explode(',', $attrs->filter(function ($val) use ($value) {
-					return $val->key === $value['key'];
-				})->first()->all_values);
-				sort($listValue);
-				$min = $listValue[0];
-				$max = end($listValue);
-				$range = ($max - $min) / 4;
-
+			$attrs = Attr::where(AttrInterface::TYPE, 'room')->select(
+				AttrInterface::KEY,
+				DB::raw("GROUP_CONCAT(DISTINCT value) as all_values")
+			)->groupBy(AttrInterface::KEY)->get();
+			foreach ($roomFilterFields as &$value) {
 				/**
-				 * explode for 4 sub range
+				 * format for price range(manual)
 				 */
-				$options = [];
-				for ($i = 0; $i < 4; $i++) {
-					$_value = floor($min + $range * $i) . '-' . floor($min + $range * ($i + 1));
-					$label = floor($min + $range * $i) . '$ -' . floor($min + $range * ($i + 1)) . '$';
+				if ($value['key'] === 'price') {
+					$listValue = explode(',', $attrs->filter(function ($val) use ($value) {
+						return $val->key === $value['key'];
+					})->first()->all_values);
+					sort($listValue);
+					$min = $listValue[0];
+					$max = end($listValue);
+					$range = ($max - $min) / 4;
 
-					$options[] = [
-						'value' => $_value,
-						'label' => $label,
-						'selected' => ($selected[$value['key']] ?? null) === $_value,
-					];
+					/**
+					 * explode for 4 sub range
+					 */
+					$options = [];
+					for ($i = 0; $i < 4; $i++) {
+						$_value = floor($min + $range * $i) . '-' . floor($min + $range * ($i + 1));
+						$label = floor($min + $range * $i) . '$ -' . floor($min + $range * ($i + 1)) . '$';
+
+						$options[] = [
+							'value' => $_value,
+							'label' => $label,
+							'selected' => ($selected[$value['key']] ?? null) === $_value,
+						];
+					}
+					$value['data'] = $options;
+				} else {
+					/**
+					 * format auto filter room custom attribute
+					 */
+					$value['data'] = array_map(function ($val) use ($value, $selected) {
+						return [
+							'value' => $val,
+							'label' => $val,
+							'selected' => $val === ($selected[$value['key']] ?? null),
+						];
+					}, explode(',', $attrs->filter(function ($val) use ($value) {
+						return $val->key === $value['key'];
+					})->first()->all_values));
 				}
-				$value['data'] = $options;
-			} else {
-				/**
-				 * format auto filter room custom attribute
-				 */
-				$value['data'] = array_map(function ($val) use ($value, $selected) {
-					return [
-						'value' => $val,
-						'label' => $val,
-						'selected' => $val === ($selected[$value['key']] ?? null),
-					];
-				}, explode(',', $attrs->filter(function ($val) use ($value) {
-					return $val->key === $value['key'];
-				})->first()->all_values));
 			}
+			return array_values($roomFilterFields);
+		} catch (\Throwable $th) {
+			//throw $th;
 		}
-		return array_values($roomFilterFields);
+		return [];
 	}
 
 	/**
-	 * @param string[] $listDate
+	 * paginate room with filter params
+	 * @param array $filterParams
 	 * @param int $limit
+	 * @return \Illuminate\Pagination\LengthAwarePaginator
 	 */
-	public function getActiveRoomByDate($listDate, $limit)
-	{
-		return $this->orderTime->getActiveRoomByDate($listDate);
-	}
-
 	public function paginateRoomWithFilter($filterParams, $limit)
 	{
+		/**
+		 * no filter params
+		 */
 		if (!$filterParams) {
 			return Room::paginate($limit, pageName: 'room_page')->through(function ($room) {
-				return $room->makeHidden(['booked_dates',])->makeVisible([RoomInterface::HOME_ID]);
+				return $room->makeHidden([RoomInterface::BOOKED_DATE,])->makeVisible([RoomInterface::HOME_ID]);
 			});
 		}
 
@@ -149,7 +166,7 @@ final class RoomApi
 		 * nếu không nó sẽ chỉ trả về danh sách kết quả mà không có các thuộc tính phân trang
 		 */
 		return $instance->paginate($limit, pageName: 'room_page')->through(function ($room) {
-			return $room->makeHidden(['booked_dates',])->makeVisible([RoomInterface::HOME_ID]);
+			return $room->makeHidden([RoomInterface::BOOKED_DATE,])->makeVisible([RoomInterface::HOME_ID]);
 		});
 	}
 }

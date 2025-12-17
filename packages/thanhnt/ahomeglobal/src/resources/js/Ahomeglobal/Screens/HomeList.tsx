@@ -11,12 +11,13 @@ import { FingerPrintIcon, MapPinIcon, XMarkIcon } from "@heroicons/react/24/soli
 import { SparklesIcon } from "@heroicons/react/24/solid";
 
 
-const HomeItem = ({ home, filters }: { home: HomeItemType, filters?: any }) => {
+const HomeItem = ({ home, selectedDates }: { home: HomeItemType, selectedDates?: any }) => {
 
 	return (
 		<Link className="bg-blue-gray-200 shadow-md p-1 rounded-md flex gap-x-1 md:gap-x-4"
 			queryStringArrayFormat={'brackets'}
-			href={sprintf(Urls.homeDetail, [home.id])} data={filters ? { filters } : undefined}>
+			href={sprintf(Urls.homeDetail, [home.id])}
+			data={{ selectedDates: selectedDates }}>
 			<div>
 				<img src={home.image_path} alt="avata hotel" className="max-w-40 md:max-w-60 rounded-md" />
 			</div>
@@ -58,8 +59,13 @@ const HomeList: FunctionComponent<Props> = ({ homes, rooms, filters, allFilters 
 					</div>
 					<div className="col-span-1 lg:col-span-3 flex flex-col gap-y-2">
 						<p className="text-xl font-bold text-purple-800">List of Hotels total: {homes.total}</p>
-						{homes?.data.map(home => <HomeItem home={home as HomeItemType} filters={filters} key={home.id.toString()}></HomeItem>)}
-						<Paginate pageSize={homes.last_page} currentPage={homes.current_page}></Paginate>
+						{homes?.data.map(home => <HomeItem home={home as HomeItemType} selectedDates={filters?.dates} key={home.id.toString()}></HomeItem>)}
+						<Paginate pageSize={homes.last_page} currentPage={homes.current_page}
+							mergeData={{ filters: filters }} linkProps={{
+								method: 'post',
+								preserveScroll: true,
+								// prefetch: ['hover',], prefecth must be use in GET request only
+							}}></Paginate>
 					</div>
 				</div>
 				<div className='h-[1px] bg-black my-2'></div>
@@ -68,10 +74,15 @@ const HomeList: FunctionComponent<Props> = ({ homes, rooms, filters, allFilters 
 					<h3 className="text-lg font-semibold text-purple-300"></h3>
 					<div className="lg:p-4 grid grid-cols-1 md:grid-cols-2 gap-2">
 						{rooms?.data.map(room => <div key={room.id}>
-							<RoomItemGrid room={room as unknown as RoomItemType}></RoomItemGrid>
+							<RoomItemGrid room={room as unknown as RoomItemType} selectedDates={filters?.dates}></RoomItemGrid>
 						</div>)}
 					</div>
-					<Paginate pageSize={rooms.last_page} currentPage={rooms.current_page} pageName="room_page"></Paginate>
+					<Paginate pageSize={rooms.last_page} currentPage={rooms.current_page} pageName="room_page"
+						mergeData={{ filters: filters }} linkProps={{
+							method: 'post',
+							preserveScroll: true,
+							// prefetch: ['hover',], prefecth must be use in GET request only
+						}}></Paginate>
 				</div>}
 			</div>
 		</>

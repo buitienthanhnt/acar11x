@@ -8,9 +8,9 @@ use Thanhnt\Ahomeglobal\Models\Types\AttrInterface;
 
 class Attr extends Model implements AttrInterface
 {
-    protected $table = self::TABLE_NAME;
-
     use SoftDeletes;
-    protected $fillable = self::FILLED_FIELDS;
-    
+
+    // define table name)
+    protected $table = self::TABLE_NAME;
+    protected $fillable = self::FILLED_FIELDS; 
 }

@@ -7,11 +7,12 @@ import { CubeIcon, CurrencyDollarIcon, UsersIcon } from "@heroicons/react/24/sol
 
 type Props = {
 	room: RoomItem;
+	selectedDates?: any;
 }
 
-const RoomItemGrid: FunctionComponent<Props> = ({ room }) => {
+const RoomItemGrid: FunctionComponent<Props> = ({ room, selectedDates }) => {
 	return (
-		<Link href={sprintf(Urls.homeDetail, [room.home_id])} data={{ room: room.id }}
+		<Link href={sprintf(Urls.homeDetail, [room.home_id])} data={{ room: room.id, selectedDates: selectedDates }}
 			className="p-1 h-full bg-blue-gray-100 rounded-md shadow-lg min-h-10 flex gap-x-2 hover:bg-blue-gray-200"
 		>
 			<div>

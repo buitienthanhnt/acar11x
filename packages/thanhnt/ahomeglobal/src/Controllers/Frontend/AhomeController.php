@@ -30,31 +30,13 @@ final class AhomeController extends Controller
 	}
 
 	/**
-	 * show home of ahomeglobal frontend package
-	 * @return \Inertia\Response
-	 */
-	public function home()
-	{
-		return Inertia::render('Ahomeglobal/Screens/Ahome',);
-	}
-
-	/**
-	 * create new Home by factory
-	 * @return \Illuminate\Database\Eloquent\Collection<int, TModel>|TModel
-	 */
-	public function createHome()
-	{
-		return Home::factory()->create();
-	}
-
-	/**
 	 * show all of home are woking
 	 * @return \Inertia\Response
 	 */
-	public function listHome(Request $request)
+	public function homePage(Request $request)
 	{
 		return Inertia::render('Ahomeglobal/Screens/HomeList', [
-			"homes" => $this->homeApi->paginateHomeWithFilter($request->get('filters')),
+			"homes" => $this->homeApi->paginateHomeWithFilter($request->get('filters'), limit: 3),
 			'rooms' => $this->roomApi->paginateRoomWithFilter($request->get('filters'), 6),
 			'allFilters' => $this->roomApi->allFilters(selected: $request->get('filters')),
 			"filters" => $request->get('filters'),
@@ -62,9 +44,6 @@ final class AhomeController extends Controller
 	}
 
 	/**
-	 * js library for calendar time
-	 * https://www.npmjs.com/package/react-calendar
-	 * https://www.npmjs.com/package/react-calendar-timeline
 	 * @param int $home
 	 * @return \Inertia\Response
 	 */
@@ -90,6 +69,7 @@ final class AhomeController extends Controller
 					$room = $this->roomApi->getRoomDetailNoOrders($request->integer('room'));
 					return $room;
 				}),
+				'selectedDates' => $request->get('selectedDates', []), // pass selected dates from query string(can be from homelist filter or home detail selected dates)
 			],
 		);
 		return $home;
@@ -117,27 +97,17 @@ final class AhomeController extends Controller
 		return $orders;
 	}
 
+	/**
+	 * get active room.
+	 */
 	public function activeRoom(Request $request)
 	{
-		$listDate = ['2025-12-13', '2025-12-14', '2025-12-15'];
-		// $noOrder = OrderTime::whereNotIn(OrderTimeInterface::DATE, $listDate)->get();
-		$rangeDate = ['2025-12-26', '2025-12-31'];
-		// $conflicRooms = Order::where('date_from' , '>=', $rangeDate[0])->where('date_from', '<=', $rangeDate[1])->orWhere(function (Builder $query) use($rangeDate){
-		// 	$query->where('date_to', '>=' ,$rangeDate[0])->where('date_to', '=<', $rangeDate[1]);
-		// })->orWhere(function (Builder $query)use($rangeDate) {
-		// 	$query->where('date_from', '<=',$rangeDate[0])->where('date_to', '>=', $rangeDate[1]);
-		// })->get()->makeVisible([OrderInterface::ROOM_ID, OrderInterface::HOME_ID])->pluck(['room_id'])->toArray();
-
-		$listActives = $this->orderApi->activeRoomByRange($rangeDate[0], $rangeDate[1]); // Room::whereNotIn('id', $conflicRooms)->get()->makeHidden(['booked_dates'])->toArray();
-		dd($listActives->toArray());
 		/**
-		 * tim cac phong da dat trong khoang thoi gian nay:
+		 * list dates has sort min to max
+		 * auto filter by mode date_range or list date
 		 */
-		$listBookedRooms = OrderTime::whereIn(OrderTimeInterface::DATE, $listDate)->get()->flatMap(function ($room) {
-			return $room->room_ids;
-		})->unique();
-
-		$listActiveRoom = Room::whereNotIn('id', $listBookedRooms)->with('home')->get();
-		return $listActiveRoom;
+		$dates = ['2025-12-13', '2025-12-14', '2025-12-15'];
+		$listActives = $this->orderApi->getActiveRoom($dates); // Room::whereNotIn('id', $conflicRooms)->get()->makeHidden(['booked_dates'])->toArray();
+		dd($listActives->toArray());
 	}
 }

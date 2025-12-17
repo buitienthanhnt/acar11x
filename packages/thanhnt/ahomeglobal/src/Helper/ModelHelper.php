@@ -28,7 +28,10 @@ final class ModelHelper
 	}
 
 	/**
-	 * 
+	 * format form fields attribute with data(add value to foem fields).
+	 * @param array $fileds [[ 'name' => 'title', 'type' => 'text', ...], [...], ...]
+	 * @param array{[string]: [string]} $data [key => value, ...]
+	 * @return array
 	 */
 	public function formAttribute(array $fields, array $data): array
 	{

@@ -6,7 +6,7 @@ final class DateTimeHelper
 {
 	/**
 	 * sort array string date time for asc|desc
-	 * @param array $dateArray
+	 * @param string[] $dateArray [2025-12-12, 2025-12-15, ....]
 	 * @param string $type
 	 * @return string[]
 	 */

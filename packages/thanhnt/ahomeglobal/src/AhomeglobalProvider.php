@@ -39,6 +39,7 @@ final class AhomeglobalProvider extends ServiceProvider
 			\Illuminate\Session\Middleware\StartSession::class,
 			\App\Http\Middleware\HandleInertiaRequests::class,
 			\Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets::class,
+			\Thanhnt\Ahomeglobal\Middleware\MergeInertiaConfig::class,
 		])->group(function () {
 			$this->loadRoutesFrom(__DIR__ . '/routes/adminhtml.php');
 			$this->loadRoutesFrom(__DIR__ . '/routes/front.php');

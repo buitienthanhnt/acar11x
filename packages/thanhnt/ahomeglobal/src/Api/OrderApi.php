@@ -7,12 +7,11 @@ use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Thanhnt\Ahomeglobal\Helper\DateTimeHelper;
-use Thanhnt\Ahomeglobal\Models\Home;
 use Thanhnt\Ahomeglobal\Models\Order;
 use Thanhnt\Ahomeglobal\Models\OrderTime;
 use Thanhnt\Ahomeglobal\Models\Room;
-use Thanhnt\Ahomeglobal\Models\Types\HomeInterface;
 use Thanhnt\Ahomeglobal\Models\Types\OrderInterface;
 use Thanhnt\Ahomeglobal\Models\Types\OrderTimeInterface;
 use Thanhnt\Ahomeglobal\Models\Types\RoomInterface;
@@ -45,7 +44,7 @@ final class OrderApi
 		 * get active room by list date
 		 * has 2 option: 1 dateRange, 2 date list
 		 */
-		$activeRoom = $this->getActiveRoomByDates($dateValues, $home)->get();
+		$activeRoom = $this->getActiveRoom($dateValues, $home)->get()->makeHidden([RoomInterface::BOOKED_DATE, RoomInterface::PRICE]);
 		if (!$activeRoom->count()) {
 			throw new Exception('the input date not active');
 		}
@@ -66,10 +65,32 @@ final class OrderApi
 	 * get list orders has order time in input range(support for use datetime range now only support array date)
 	 * @param string $dateFrom ex: 2025-12-20
 	 * @param string $dateTo   ex: 2025-12-27
-	 * @return \Illuminate\Database\Eloquent\Collection
+	 * @return \Illuminate\Database\Eloquent\Collection<Order>
 	 */
 	public function getDisableOrderByRange(string $dateFrom, string $dateTo)
 	{
+		/**
+		 * mode: date_range and not support room qty, order_qty.
+		 */
+		if (config('ahomeglobal.qty_mode', false)) {
+			return $this->order->where(function (Builder $query) use ($dateFrom, $dateTo) {
+				$query->where(OrderInterface::DATE_FROM, '>=', $dateFrom)->where(OrderInterface::DATE_FROM, '<=', $dateTo);
+			})
+				->orWhere(function (Builder $query) use ($dateFrom, $dateTo) {
+					$query->where(OrderInterface::DATE_TO, '>=', $dateFrom)->where(OrderInterface::DATE_TO, '<=', $dateTo);
+				})->orWhere(function (Builder $query) use ($dateFrom, $dateTo) {
+					$query->where(OrderInterface::DATE_FROM, '<=', $dateFrom)->where(OrderInterface::DATE_TO, '>=', $dateTo);
+				})
+				->get()
+				->makeVisible([OrderInterface::ROOM_ID, OrderInterface::HOME_ID]);
+		}
+		/**
+		 * mode: date_range and all room has count=1
+		 * get all orders in date range
+		 * count number of room booked in list search
+		 * then filter if order sum qty of room >= room count (meaning room is full booked in this date range)
+		 * so return the filter list
+		 */
 		return $this->order->where(function (Builder $query) use ($dateFrom, $dateTo) {
 			$query->where(OrderInterface::DATE_FROM, '>=', $dateFrom)->where(OrderInterface::DATE_FROM, '<=', $dateTo);
 		})
@@ -78,45 +99,58 @@ final class OrderApi
 			})->orWhere(function (Builder $query) use ($dateFrom, $dateTo) {
 				$query->where(OrderInterface::DATE_FROM, '<=', $dateFrom)->where(OrderInterface::DATE_TO, '>=', $dateTo);
 			})
+			->with(OrderInterface::ROOM)
+			->select('*', DB::raw("SUM(qty) as count"))
+			->groupBy(OrderInterface::ROOM_ID)
 			->get()
-			->makeVisible([OrderInterface::ROOM_ID, OrderInterface::HOME_ID]);
+			->makeVisible([OrderInterface::ROOM_ID, OrderInterface::HOME_ID])
+			->filter(function ($order) {
+				return $order->count >=  $order->room->count;
+			});
 	}
 
 	/**
-	 * get active room by input date range(support for use datetime range now only support array date)
-	 * @param string $dateFrom ex: 2025-12-20
-	 * @param string $dateTo   ex: 2025-12-27
-	 * @return \Illuminate\Database\Eloquent\Collection
-	 */
-	public function activeRoomByRange(string $dateFrom, string $dateTo)
-	{
-		/**
-		 * not need: booked_dates
-		 */
-		return $this->room->whereNotIn(
-			RoomInterface::ID,
-			$this->getDisableOrderByRange($dateFrom, $dateTo)
-				->pluck([OrderInterface::ROOM_ID])->toArray()
-		)->get()->makeHidden(['booked_dates']);
-	}
-
-	/**
-	 * @param array[string] $listDate
+	 * @param string[] $listDate
 	 * @param int $homeId
 	 * @return \Illuminate\Database\Eloquent\Collection
 	 */
 	public function getDisableRoomByDates($listDate = [], ?int $homeId = null)
 	{
-		$listBookedDate = $this->orderTime->whereIn(OrderTimeInterface::DATE, $listDate)->where(
-			fn($builder) =>  $homeId ? $builder->where(OrderTimeInterface::HOME_ID, $homeId) : $builder
-		)->get()
-			->flatMap(function ($orderTime) {
-				return $orderTime->{OrderTimeInterface::ROOM_IDS};
-			})->unique();
-		return $this->room->whereIn(RoomInterface::ID, $listBookedDate->toArray())->get();
+		$inActiveRoom = [];
+		if (config('ahomeglobal.qty_mode', false)) {
+			/**
+			 * mode: list_date and not support room qty, order_qty.
+			 */
+			$inActiveRoom = $this->orderTime->whereIn(OrderTimeInterface::DATE, $listDate)->where(
+				fn($builder) =>  $homeId ? $builder->where(OrderTimeInterface::HOME_ID, $homeId) : $builder
+			)->get()
+				->flatMap(function ($orderTime) {
+					return $orderTime->{OrderTimeInterface::ROOM_IDS};
+				})->unique()->toArray();
+		} else {
+			/**
+			 * mode: list_date and support room qty, order_qty.
+			 */
+			foreach ($listDate as $date) {
+				$orders = $this->order->where(
+					fn($builder) =>  $homeId ? $builder->where(OrderTimeInterface::HOME_ID, $homeId) : $builder
+				)->whereJsonContains(OrderInterface::SELECTED_TIME, $date)
+					->select('*', DB::raw("SUM(qty) as count"))
+					->groupBy(OrderInterface::ROOM_ID)
+					->with(OrderInterface::ROOM)
+					->get()
+					->makeVisible([OrderInterface::ROOM_ID, OrderInterface::HOME_ID])
+					->filter(function ($order) {
+						return $order->count >=  $order->room->count;
+					});
+				$inActiveRoom = [...$orders->pluck([OrderInterface::ROOM_ID])->toArray(), ...$inActiveRoom];
+			}
+		}
+		return $this->room->whereIn(RoomInterface::ID, $inActiveRoom)->get()->makeHidden([RoomInterface::BOOKED_DATE]);
 	}
 
 	/**
+	 * get array room id has pass for list input dates
 	 * @param array[string] $listDate
 	 * @param int $homeId
 	 * @return array[int]
@@ -125,8 +159,6 @@ final class OrderApi
 	{
 		return $this->getDisableRoomByDates(listDate: $listDate, homeId: $homeId)->pluck([RoomInterface::ID])->toArray();
 	}
-
-
 
 	/**
 	 * get all rooms has pass for list input dates
@@ -142,17 +174,32 @@ final class OrderApi
 	}
 
 	/**
-	 * 
+	 * get active room by input date range(support for use datetime range now only support array date)
+	 * @param string $dateFrom ex: 2025-12-20
+	 * @param string $dateTo   ex: 2025-12-27
+	 * @return \Illuminate\Database\Eloquent\Builder
 	 */
-	public function getActiveRoomPaginateByDates(array $listDate = [], ?int $homeId = null, int $limit = 12)
+	public function getActiveRoomByRange(string $dateFrom, string $dateTo)
 	{
-		$rooms =  $this->room->where(
-			fn($builder) =>  $homeId ? $builder->where(OrderTimeInterface::HOME_ID, $homeId) : $builder
-		)->whereNotIn(RoomInterface::ID, $this->getDisableArrayRoomByDates($listDate))->paginate($limit, pageName: 'room_page');
+		return $this->room->whereNotIn(
+			RoomInterface::ID,
+			$this->getDisableOrderByRange($dateFrom, $dateTo)->pluck([OrderInterface::ROOM_ID])->toArray()
+		);
+	}
 
-		return $rooms->through(function ($room) {
-			return $room->makeVisible(['booked_dates',])->makeVisible([RoomInterface::HOME_ID]);
-		});
+	/**
+	 * getActive room with auto check mode
+	 * @param string[] $dates  ex:[2025-12-06, 2025-12-11, ...]
+	 * @param int|null $homeId
+	 * @return \Illuminate\Database\Eloquent\Builder
+	 */
+	function getActiveRoom(array $dates, ?int $homeId = null)
+	{
+		return config('ahomeglobal.mode', 'list_date' === 'list_date') ?
+			$this->getActiveRoomByDates($dates, $homeId) : $this->getActiveRoomByRange(
+				$dates[0],
+				end($dates)
+			);
 	}
 
 	/**
@@ -162,19 +209,11 @@ final class OrderApi
 	public function getActiveHomeIdByDate(array $listDate = [])
 	{
 		return $this->room->whereNotIn(RoomInterface::ID, $this->getDisableArrayRoomByDates($listDate))
-			->select('home_id',)
+			->select(OrderTimeInterface::HOME_ID)
 			->distinct()
 			->get()
-			->makeHidden(['price', 'booked_dates'])
-			->pluck('home_id');
-	}
-
-	/**
-	 * 
-	 */
-	public function getActiveHomeByDate(array $listDate = [], $limit = 12)
-	{
-		return Home::whereIn(HomeInterface::ID, $this->getActiveHomeIdByDate($listDate))->paginate($limit);
+			->makeHidden([RoomInterface::BOOKED_DATE, RoomInterface::PRICE,])
+			->pluck(OrderTimeInterface::HOME_ID);
 	}
 
 	/**

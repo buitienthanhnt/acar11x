@@ -12,7 +12,7 @@ trait ImageHelper
 	 * @param \Illuminate\Http\UploadedFile $uploadFile
 	 * @param string $dirPath (optional)
 	 * @param string $fileName (optional)
-	 * @return [storage_path => string,public_path => string,image_url => string]|null
+	 * @return array{storage_path: string, public_path: string, image_url: string}|null
 	 */
 	public function uploadImage($uploadFile, $dirPath = '', $fileName = '')
 	{
@@ -68,7 +68,7 @@ trait ImageHelper
 	/**
 	 * upload multi files.
 	 * @param \Illuminate\Http\UploadedFile[] $uploadFiles
-	 * @return mixed|null
+	 * @return array{storage_path: string, public_path: string, image_url: string}[]|null
 	 */
 	public function UploadImages($uploadFiles = [], $dirPath = '')
 	{

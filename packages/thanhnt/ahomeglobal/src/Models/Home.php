@@ -29,7 +29,7 @@ class Home extends Model implements HomeInterface
 
     /**
      * links to list rooms of the home
-     * @return Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function rooms() : HasMany {
         return $this->hasMany(Room::class, Room::HOME_ID, self::ID);
@@ -49,7 +49,10 @@ class Home extends Model implements HomeInterface
         return $this->hasMany(OrderTime::class, OrderTimeInterface::HOME_ID, self::ID);
     }
 
-    public function attr() {
+    /**
+     * link to list attrribute(Attr model) of the home
+     */
+    public function attr(): HasMany {
         return $this->hasMany(Attr::class, Attr::SOURCE_ID, self::ID)->where(Attr::TYPE, 'home');
     }
 }

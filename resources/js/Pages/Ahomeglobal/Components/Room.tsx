@@ -8,8 +8,9 @@ import { XMarkIcon, } from '@heroicons/react/24/solid';
 import { usePageMessage, useRoomOrders } from '../hooks';
 import { CubeIcon, CurrencyDollarIcon, InformationCircleIcon } from '@heroicons/react/16/solid';
 import { UsersIcon } from '@heroicons/react/16/solid';
+import { listDateToArrayString } from '../Helper/DateTimeHelper';
 
-const RoomItem = ({ room }: { room: RoomItemType }) => {
+const RoomItem = ({ room, dateSelected}: { room: RoomItemType, dateSelected?: Date[]}) => {
 	const booked = useRoomOrders();
 	const messages = usePageMessage();
 
@@ -22,8 +23,8 @@ const RoomItem = ({ room }: { room: RoomItemType }) => {
 		} else {
 			router.visit(window.location.href, {
 				method: 'get',
-				data: { room: room.id },
-				only: messages ? [] : ['roomSelected'], // clear app props if has flash mesasge.
+				data: { room: room.id, selectedDates: dateSelected ? listDateToArrayString(dateSelected) : undefined},
+				only: messages ? [] : ['roomSelected', 'selectedDates'], // clear app props if has flash mesasge.
 				// preserveState: true, // for remenber old state of page(can save for: dateSelected)
 			})
 		}
@@ -55,11 +56,14 @@ const RoomItem = ({ room }: { room: RoomItemType }) => {
 	)
 }
 
-const RoomTime = ({ allDisable }: { allDisable?: string[] }) => {
+type RoomTimeProps = {
+	allDisable?: string[],
+	dateSelected?: Date[],
+	setDateSelected: (dates: Date[]) => void,
+}
+const RoomTime = ({ allDisable, dateSelected, setDateSelected }: RoomTimeProps) => {
 	const booked = useRoomOrders();
 	const bookedDate = booked?.booked_dates || [];
-
-	const [dateSelected, setDateSelected] = useRemember<Date[]>([], 'Ahomeglobal/HomeDetail');
 
 	const onSubmitOrder = useCallback(() => {
 		const selectedValues = dateSelected.map(d => [

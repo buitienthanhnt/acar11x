@@ -62,9 +62,7 @@ class HandleInertiaRequests extends Middleware
          */
         return [
             ...parent::share($request),
-            // 'auth' => [
-            //     'user' => $request->user(),
-            // ],
+            // 'auth' => ['user' => $request->user(),],
             'topMenu' => $topMenu,
             'responseData' => Session::get('responseData'), // include for response data form.
             'messages' => Session::get('messages', null),

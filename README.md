@@ -2,7 +2,10 @@
 new project use laravel 11x
 
 
-# for: gitignore exclude file permissions run cmd: 
+# for: gitignore exclude file permissions(bỏ kiểm tra thay đổi các quyền trong git để không bị tính vào commit) run cmd: 
+# b1:
+# cd project
+# b2:
 # git config core.fileMode false 
 
 

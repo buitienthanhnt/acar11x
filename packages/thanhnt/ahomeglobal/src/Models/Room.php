@@ -31,7 +31,7 @@ class Room extends Model implements RoomInterface
      *
      * @var array
      */
-    protected $appends = ['booked_dates', 'price'];
+    protected $appends = [self::BOOKED_DATE, self::PRICE];
 
     /**
      * link to home of the room
@@ -95,6 +95,9 @@ class Room extends Model implements RoomInterface
         );
     }
 
+    /**
+     * @return array{value: string, label: string}[]
+     */
     public static function typeOptions()
     {
         return RoomInterface::TYPE_VALUE;

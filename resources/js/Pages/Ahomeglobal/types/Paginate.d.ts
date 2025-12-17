@@ -3,6 +3,8 @@ export interface PaginateProp {
 	currentPage: number;
 	url?: string;
 	pageName?: string;
+	linkProps?: { [key: string]: any;};
+	mergeData?: { [key: string]: any;}
 }
 
 type DataType = {

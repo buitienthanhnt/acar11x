@@ -2,10 +2,10 @@
 import { FunctionComponent, } from 'react';
 import { HomeDetail as HomeDetailType } from '../types/Home.d';
 import { RoomDetail, } from '../types/Room';
-import { Head, router } from '@inertiajs/react';
+import { Head, router, useRemember } from '@inertiajs/react';
 import { HomeIcon, MapPinIcon, SparklesIcon } from '@heroicons/react/24/solid';
 import Urls from '../netWork/Urls';
-import { usePageMessage } from '../hooks';
+import { usePageMessage, useRoomOrders } from '../hooks';
 import { RoomItem, RoomTime } from '../Components/Room';
 import { Rating } from "@material-tailwind/react";
 import FlashMessage from '../Components/FlashMessage';
@@ -14,15 +14,22 @@ import Location from '../Components/Location';
 type Props = {
 	homeDetail: HomeDetailType,
 	roomSelected: RoomDetail,
+	selectedDates: string[],
 }
-const HomeDetail: FunctionComponent<Props> = ({ homeDetail, }) => {
+const HomeDetail: FunctionComponent<Props> = ({ homeDetail, selectedDates}) => {
 	const messages = usePageMessage();
+	const booked = useRoomOrders();
+	const bookedDate = booked?.booked_dates || [];
 
 	const rate = homeDetail?.attr.find(i => i.key === 'rate');
 	const location = homeDetail?.attr.find(i => i.key === 'location');
 	const homeDisable = homeDetail.order_times.map(t => {
 		return t?.room_ids.length === homeDetail?.rooms.length ? t.date : undefined;
 	}).filter(item => item !== undefined);
+
+		const [dateSelected, setDateSelected] = useRemember<Date[]>(selectedDates.map(s => {
+			return (bookedDate.includes(s) || homeDisable.includes(s)) ? undefined : new Date(s);
+		}).filter(function (element) { return element !== undefined; }), 'Ahomeglobal/HomeDetail');
 
 	if (!homeDetail) {
 		return null;
@@ -65,11 +72,11 @@ const HomeDetail: FunctionComponent<Props> = ({ homeDetail, }) => {
 						<div className='col-span-2 rounded-md space-y-2'>
 							<p className='text-xl font-semibold '>List rooms of the hotel:</p>
 							<div className='flex flex-col gap-y-2'>
-								{homeDetail.rooms.map(room => <RoomItem room={room} key={room.id.toString()}></RoomItem>)}
+								{homeDetail.rooms.map(room => <RoomItem room={room} key={room.id.toString()} dateSelected={dateSelected}></RoomItem>)}
 							</div>
 						</div>
 						<div className='col-span-3'>
-							<RoomTime allDisable={homeDisable}></RoomTime>
+							<RoomTime allDisable={homeDisable} dateSelected={dateSelected} setDateSelected={setDateSelected}></RoomTime>
 						</div>
 					</div> : (
 						<div className='bg-white flex justify-center items-center rounded-md p-1 lg:p-4'>

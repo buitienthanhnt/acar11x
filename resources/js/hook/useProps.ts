@@ -3,10 +3,6 @@ import { usePage } from "@inertiajs/react"
 
 const useProps = ()=>{
 	const {props} = usePage() as BasePageProp;
-
-	console.log(props);
-	
-
 	return {...props,};
 }
 

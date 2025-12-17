@@ -6,4 +6,7 @@
 return [
 	"app-name" => 'ahome global',
 	"description" => "app for book hotel quick",
+	"version" => "1.0.0",
+	"mode" => "list_date", // date_range | list_date
+	"qty_mode" => false, // true: support qty for room booking | false: not support
 ];

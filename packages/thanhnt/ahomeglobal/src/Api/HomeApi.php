@@ -31,16 +31,22 @@ final class HomeApi
 		/**
 		 * set hidden for: booked_dates attribute(not need in homeDetail)
 		 */
-		$home->rooms->setHidden(['booked_dates', ...RoomInterface::HIDDEN_FIELDS]);
+		$home->rooms->setHidden([RoomInterface::BOOKED_DATE, ...RoomInterface::HIDDEN_FIELDS]);
 		return $home;
 	}
 
+	/**
+	 * get home paginate without filter
+	 * @param int $limit
+	 * @return \Illuminate\Pagination\LengthAwarePaginator
+	 */
 	public function homePaginate(int $limit = 12)
 	{
 		return $this->home->paginate($limit);
 	}
 
 	/**
+	 * @param string $district
 	 * @return \Illuminate\Database\Eloquent\Builder
 	 */
 	protected function getHomeByDistrict(string $district)
@@ -52,33 +58,38 @@ final class HomeApi
 
 	/**
 	 * get list home id filter by Room custom attribute.
+	 * @param array{[string]: string}[] $filterParams
+	 * @return int[]
 	 */
 	protected function getHomeIdfilterByCustomAttr($filterParams): array
 	{
 		$listFilters = array_intersect_key($filterParams, RoomInterface::CUSTOM_ATTRS);
-		$instance = Room::query()->with('home');
+		$instance = Room::query()->with(RoomInterface::HOME);
 
 		foreach ($listFilters as $key => $value) {
 			switch ($key) {
 				case 'price':
-					$instance->whereHas('attr', function ($query) use ($key, $value) {
+					$instance->whereHas(RoomInterface::ATTR, function ($query) use ($key, $value) {
 						$query->where(AttrInterface::KEY, $key)->whereBetween(AttrInterface::VALUE, explode('-', $value));
 					});
 					break;
 				default:
-					$instance->whereHas('attr', function ($query) use ($key, $value) {
+					$instance->whereHas(RoomInterface::ATTR, function ($query) use ($key, $value) {
 						$query->where(AttrInterface::KEY, $key)->where(AttrInterface::VALUE, $value);
 					});
 					break;
 			}
 		}
-		return $instance->get()->makeHidden(['booked_dates', 'price'])->pluck('home.id')->unique()->toArray();
+		return $instance->get()->makeHidden([RoomInterface::BOOKED_DATE, RoomInterface::PRICE])->pluck('home.id')->unique()->toArray();
 	}
 
 	protected function filterHomeByRate() {}
 
 	/**
-	 * get list home by filter attribute room
+	 * get list home by filter attribute room paginate
+	 * @param array $filterParams
+	 * @param int $limit
+	 * @return \Illuminate\Pagination\LengthAwarePaginator
 	 */
 	public function paginateHomeWithFilter($filterParams = [], $limit = 6)
 	{
