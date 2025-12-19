@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 use Thanhnt\Ahomeglobal\Helper\DateTimeHelper;
 use Thanhnt\Ahomeglobal\Models\Order;
 use Thanhnt\Ahomeglobal\Models\OrderTime;
@@ -39,7 +40,7 @@ final class OrderApi
 		/**
 		 * sort list input date from request 
 		 */
-		$dateValues = $this->dateTimeHelper->sortArrayDateString($data->array('values'));
+		$dateValues = $this->dateTimeHelper->sortArrayDateString($data->array('dateSelected'));
 		/**
 		 * get active room by list date
 		 * has 2 option: 1 dateRange, 2 date list
@@ -50,15 +51,72 @@ final class OrderApi
 		}
 
 		/**
-		 * create new order model
+		 * setup selected room and order detail.
 		 */
-		return $this->order->factory()->create([
+		$selectedRoom = $data->integer('room') ? Room::find($data->integer('room')) : $activeRoom->random();
+		$orderData = [
 			OrderInterface::HOME_ID => $home,
-			OrderInterface::ROOM_ID => $data->integer('room') ?: $activeRoom->random()->id,
+			OrderInterface::ROOM_ID => $selectedRoom->id,
 			OrderInterface::DATE_FROM => $dateValues[0] ?? Carbon::now(),
 			OrderInterface::DATE_TO => end($dateValues) ?? Carbon::now(),
 			OrderInterface::SELECTED_TIME => $dateValues,
-		]);
+			OrderInterface::TOTAL_PRICE => $this->dateCount($dateValues) * $selectedRoom->price,
+		];
+
+		$this->addToCart($orderData);
+		return;
+
+		/**
+		 * create new order model
+		 */
+		return $this->order->factory()->create($orderData);
+	}
+
+	/**
+	 * get count of selected date.
+	 * @param string[]
+	 * @return int
+	 */
+	public function dateCount(array $dates)
+	{
+		if (!config('ahomeglobal.mode') === 'list_date') {
+			return count($dates);
+		} else {
+			$startDate = Carbon::parse($dates[0]);
+			$endDate = Carbon::parse(end($dates));
+			/**
+			 * Calculate the difference in days
+			 * Đếm số ngày giữa 2 giá trị đầu cuối
+			 * Cách Tính ngày bao gồm:
+			 * Tính theo đêm ngày đầu tiên và đêm ngày cuối cùng(tính theo đêm tất cả các ngày chọn)
+			 * Ví dụ: [2025-12-18, 2025-12-19]: Bao gồm đêm ngày 18(12h-18 -> 12h-19) và đêm ngày 19(12h-19 -> 12h-20)
+			 * Ví dụ: [2025-12-18]: Chỉ chọn 1 ngày thì là đêm ngày 18(12h-18 -> 12h-19) 
+			 */
+			return abs($startDate->diffInDays($endDate)) + 1;
+		}
+		return;
+	}
+
+	/**
+	 * save cart data to session
+	 * @param array $cart
+	 */
+	public function addToCart(array $cart)
+	{
+		if (empty($cart)) {
+			return false;
+		}
+		Session::put('cart', $cart);
+		return true;
+	}
+
+	/**
+	 * get cart data
+	 * @return array
+	 */
+	public function getCart()
+	{
+		return Session::get('cart');
 	}
 
 	/**

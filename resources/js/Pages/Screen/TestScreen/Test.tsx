@@ -10,6 +10,11 @@ const Test = () => {
 
 	return (
 		<div className="bg-white p-2 gap-2 flex rounded-md">
+			<Link href={'/ahome/homes'}>
+				<Button variant="outlined" type="button" onClick={() => console.log('click')}>
+					Ahome global
+				</Button></Link>
+
 			<span className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded"
 				onClick={toMergeScreen}>test merge prop
 			</span>
@@ -25,6 +30,8 @@ const Test = () => {
 			<Button variant="outlined" type="button" onClick={() => console.log('click')}>
 				Material Tailwind Button
 			</Button>
+
+
 		</div>
 	)
 }

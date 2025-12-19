@@ -12,13 +12,14 @@ import FlashMessage from '../Components/FlashMessage';
 import Location from '../Components/Location';
 import useMode from '../hooks/useMode';
 import { isDateInRange } from '../Helper/DateTimeHelper';
+import { PageLayout } from '../Layouts';
 
 type Props = {
 	homeDetail: HomeDetailType,
 	roomSelected: RoomDetail,
 	selectedDates: string[],
 }
-const HomeDetail: FunctionComponent<Props> = ({ homeDetail, selectedDates }) => {
+const HomeDetail: FunctionComponent<Props> = ({ homeDetail, selectedDates, roomSelected }) => {
 	const messages = usePageMessage();
 	const booked = useRoomOrders();
 	const { isDateRangeMode } = useMode();
@@ -80,22 +81,26 @@ const HomeDetail: FunctionComponent<Props> = ({ homeDetail, selectedDates }) => 
 		setDateSelected(dates);
 	}, [checkDisableDate])
 
+	const onCheckout = useCallback(() => {
+		console.log('on checkout selected values');
+
+		router.post(Urls.checkout, {
+			dateSelected: dateSelected,
+			home: homeDetail.id,
+			room: roomSelected?.id,
+		})
+	}, [dateSelected, homeDetail, roomSelected])
+
 	if (!homeDetail) {
 		return null;
 	}
 
 	return (
-		<>
+		<PageLayout>
 			<Head>
 				<title>{homeDetail.name}</title>
 			</Head>
-			<div className='container mx-auto p-2 rounded-md min-h-screen space-y-2 py-4'>
-				<div className='bg-gray-100 p-4 flex space-x-3 rounded-md items-center ' onClick={() => {
-					router.get(Urls.homeList);
-				}}>
-					<HomeIcon className='font-semibold text-blue-400 text-2xl size-8'></HomeIcon>
-					<h2 className='font-semibold text-blue-400 text-2xl'>Ahome Global</h2>
-				</div>
+			<div className='space-y-1 my-1'>
 				<div className='flex flex-col gap-y-2 bg-gray-100 p-1 md:p-2 rounded-md'>
 					<p className='text-2xl font-bold text-black'>Hotel: {homeDetail.name}</p>
 					<div className='flex space-x-1'>
@@ -125,21 +130,21 @@ const HomeDetail: FunctionComponent<Props> = ({ homeDetail, selectedDates }) => 
 							</div>
 						</div>
 						<div className='col-span-3'>
-							<RoomTime allDisable={homeDisable} dateSelected={dateSelected} setDateSelected={onChangeDate}></RoomTime>
+							<RoomTime allDisable={homeDisable} dateSelected={dateSelected} setDateSelected={onChangeDate} onCheckout={onCheckout}></RoomTime>
 						</div>
 					</div> : (
 						<div className='bg-white flex justify-center items-center rounded-md p-1 lg:p-4'>
 							<p className='font-semibold text-xl text-red-500 italic'>the hotel not active!</p>
 						</div>
 					)}
-				{location && <div className='grid grid-cols-1 lg:grid-cols-2 bg-gray-100 rounded-md'>
+				{location && <div className='grid grid-cols-1 bg-gradient-to-r from-blue-gray-600 to-blue-gray-500 lg:grid-cols-2 rounded-md'>
 					<div className='col-span-1 lg:visible'></div>
 					<Location
 						style='w-[420px] h-[360px] border p-1'
 						url={location.value}></Location>
 				</div>}
 			</div>
-		</>
+		</PageLayout>
 	);
 }
 

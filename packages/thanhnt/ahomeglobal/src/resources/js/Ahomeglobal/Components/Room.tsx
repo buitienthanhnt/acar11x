@@ -7,6 +7,7 @@ import { Button, } from '@material-tailwind/react';
 import { XMarkIcon, CubeIcon, CurrencyDollarIcon, UsersIcon } from '@heroicons/react/24/solid';
 import { usePageMessage, useRoomOrders, useMode } from '../hooks';
 import { listDateToArrayString } from '../Helper/DateTimeHelper';
+import Urls from '../netWork/Urls';
 
 const RoomItem = ({ room, dateSelected }: { room: RoomItemType, dateSelected?: Date[] }) => {
   const booked = useRoomOrders();
@@ -58,8 +59,9 @@ type RoomTimeProps = {
   allDisable?: string[],
   dateSelected?: Date[],
   setDateSelected: (dates: Date[]) => void,
+  onCheckout: ()=> void,
 }
-const RoomTime = ({ allDisable, dateSelected, setDateSelected }: RoomTimeProps) => {
+const RoomTime = ({ allDisable, dateSelected, setDateSelected, onCheckout }: RoomTimeProps) => {
   const booked = useRoomOrders();
   const bookedDate = booked?.booked_dates || [];
 
@@ -101,7 +103,7 @@ const RoomTime = ({ allDisable, dateSelected, setDateSelected }: RoomTimeProps) 
             </span>
           </div>}
           <SelectedInfo dateSelected={dateSelected || []}></SelectedInfo>
-          {!!dateSelected.length && <Button placeholder={'view selected'} onClick={onSubmitOrder}>
+          {!!dateSelected.length && <Button placeholder={'view selected'} onClick={onCheckout}>
             <span>Order the selected</span>
           </Button>}
         </div>
@@ -110,7 +112,7 @@ const RoomTime = ({ allDisable, dateSelected, setDateSelected }: RoomTimeProps) 
   )
 }
 
-const SelectedInfo = ({ dateSelected }: { dateSelected: Date[] }) => {
+export const SelectedInfo = ({ dateSelected }: { dateSelected: Date[] }) => {
   const { isDateRangeMode } = useMode();
 
   if (dateSelected.length === 0) {

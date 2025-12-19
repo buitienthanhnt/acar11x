@@ -7,6 +7,13 @@ const convertLocalDate = (date: string | Date): string => {
 	return (currentDate.getMonth() + 1) + '/' + (currentDate.getDate() < 10 ? '0' + currentDate.getDate() : currentDate.getDate()) + '/' + currentDate.getFullYear()
 }
 
+const convertStringServerToDates = (dates: string[]): Date[]=>{
+	if (!dates) {
+		return [];
+	}
+	return dates.map(d => new Date(d));
+}
+
 /**
  * server format -> local format
  * format date from "YYYY-MM-DD"(server format) to local: "mm/dd/YYYY"(client use for calenda string)
@@ -76,5 +83,6 @@ export {
 	sortStringDatesAsc,
 	listDateByRange,
 	formatDateToLocals,
-	isDateInRange
+	isDateInRange,
+	convertStringServerToDates
 };

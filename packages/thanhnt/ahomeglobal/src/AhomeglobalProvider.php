@@ -73,6 +73,14 @@ final class AhomeglobalProvider extends ServiceProvider
 		], 'ahomeglobal-inertiajs');
 
 		/**
+		 * publish assets to public folder
+		 * php artisan vendor:publish --tag=ahomeglobal-assets
+		 */
+		$this->publishes([
+			__DIR__ . '/resources/public' => public_path('ahome'),
+		], 'ahomeglobal-assets');
+
+		/**
 		 * publish Database seeders to seeders global
 		 * php artisan vendor:publish --tag=ahomeglobal-seeders
 		 * Hiện tại không cần xử lý đoạn pushlish này vì có thể gọi trực tiếp class Seeder.

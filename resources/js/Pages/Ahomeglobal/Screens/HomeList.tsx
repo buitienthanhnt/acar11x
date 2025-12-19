@@ -9,6 +9,7 @@ import { PagePaginate } from "../types/Paginate";
 import { DropdownMenu, Paginate, CustomTimeTable, RoomItemGrid, HomeMap } from "../Components";
 import { FingerPrintIcon, MapPinIcon, XMarkIcon } from "@heroicons/react/24/solid";
 import { SparklesIcon } from "@heroicons/react/24/solid";
+import { PageLayout } from "../Layouts";
 
 
 const HomeItem = ({ home, selectedDates }: { home: HomeItemType, selectedDates?: any }) => {
@@ -48,17 +49,17 @@ type Props = {
 const HomeList: FunctionComponent<Props> = ({ homes, rooms, filters, allFilters }) => {
 
 	return (
-		<>
+		<PageLayout>
 			<Head title="home"></Head>
-			<div className="container mx-auto p-2 space-y-4">
-				<div className=" bg-blue-gray-300 min-h-36 rounded-md p-4"></div>
+			<div className="space-y-1">
+				<div className="min-h-36 md:min-h-64 rounded-md p-4 bg-[url('/ahome/assets/img-1.jpg')] bg-cover bg-center"></div>
 				{/* <HomeMap></HomeMap> */}
-				<div className="grid lg:grid-cols-5 bg-white lg:space-x-4 space-y-2 lg:space-y-0">
+				<div className="grid lg:grid-cols-5 lg:space-x-4 space-y-2 lg:space-y-0">
 					<div className="col-span-1 lg:col-span-2">
 						<HomeFilter filters={filters} allFilters={allFilters}></HomeFilter>
 					</div>
 					<div className="col-span-1 lg:col-span-3 flex flex-col gap-y-2">
-						<p className="text-xl font-bold text-purple-800">List of Hotels total: {homes.total}</p>
+						<p className="text-xl font-bold text-purple-800">Danh sách địa chỉ đề xuất: {homes.total}</p>
 						{homes?.data.map(home => <HomeItem home={home as HomeItemType} selectedDates={filters?.dates} key={home.id.toString()}></HomeItem>)}
 						<Paginate pageSize={homes.last_page} currentPage={homes.current_page}
 							mergeData={{ filters: filters }} linkProps={{
@@ -70,7 +71,7 @@ const HomeList: FunctionComponent<Props> = ({ homes, rooms, filters, allFilters 
 				</div>
 				<div className='h-[1px] bg-black my-2'></div>
 				{rooms && <div className="gap-2">
-					<p className="text-xl font-bold text-purple-800">List of rooms total: {rooms.total}</p>
+					<p className="text-xl font-bold text-purple-800">Danh sách phòng nghỉ đề xuất: {rooms.total}</p>
 					<h3 className="text-lg font-semibold text-purple-300"></h3>
 					<div className="lg:p-4 grid grid-cols-1 md:grid-cols-2 gap-2">
 						{rooms?.data.map(room => <div key={room.id}>
@@ -85,7 +86,7 @@ const HomeList: FunctionComponent<Props> = ({ homes, rooms, filters, allFilters 
 						}}></Paginate>
 				</div>}
 			</div>
-		</>
+		</PageLayout>
 	)
 }
 

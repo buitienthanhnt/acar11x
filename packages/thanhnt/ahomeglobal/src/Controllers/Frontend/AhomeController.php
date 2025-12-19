@@ -36,7 +36,7 @@ final class AhomeController extends Controller
 	public function homePage(Request $request)
 	{
 		return Inertia::render('Ahomeglobal/Screens/HomeList', [
-			"homes" => $this->homeApi->paginateHomeWithFilter($request->get('filters'), limit: 3),
+			"homes" => $this->homeApi->paginateHomeWithFilter($request->get('filters'), limit: 8),
 			'rooms' => $this->roomApi->paginateRoomWithFilter($request->get('filters'), 6),
 			'allFilters' => $this->roomApi->allFilters(selected: $request->get('filters')),
 			"filters" => $request->get('filters'),
@@ -53,11 +53,6 @@ final class AhomeController extends Controller
 		/**
 		 * please get all order of the room then pass to Js page for disable the day selected.
 		 */
-		if ($request->isMethod('POST')) {
-			$newOrder = $this->orderApi->createNewOrder($request, $home,);
-			Inertia::share('messages',  'created for order with id: ' . $newOrder->{OrderInterface::ID});
-		}
-
 		return Inertia::render(
 			'Ahomeglobal/Screens/HomeDetail',
 			[
@@ -73,6 +68,43 @@ final class AhomeController extends Controller
 			],
 		);
 		return $home;
+	}
+
+	/**
+	 * checkout page
+	 * @return \Inertia\Response
+	 */
+	public function checkout(Request $request)
+	{
+		if ($request->isMethod('POST')) {
+			if ($request->input('action') === 'order-info') {
+				session()->put('cart.order_info', [
+					'name' => $request->input('name'),
+					'email' => $request->input('email'),
+					'phone' => $request->input('phone'),
+				]);
+			} else {
+				$this->orderApi->createNewOrder($request, $request->input('home'),);
+				Inertia::share('messages',  'added for order in cart');
+			}
+		}
+
+		$cart = $this->orderApi->getCart();
+		if (empty($cart)) {
+			return redirect('/');
+		}
+
+		$this->orderApi->dateCount(config('ahomeglobal.mode') === 'list_date' ? $cart[OrderInterface::SELECTED_TIME] :
+			[$cart[OrderInterface::DATE_FROM], $cart[OrderInterface::DATE_TO]]);
+
+		return Inertia::render('Ahomeglobal/Screens/Checkout', [
+			'dateSelected' => config('ahomeglobal.mode') === 'list_date' ? $cart[OrderInterface::SELECTED_TIME] :
+				[$cart[OrderInterface::DATE_FROM], $cart[OrderInterface::DATE_TO]],
+			'home' => $cart[OrderInterface::HOME_ID] ? $this->homeApi->getHomeDetail($cart[OrderInterface::HOME_ID]) : null,
+			'room' => $cart[OrderInterface::ROOM_ID] ? $this->roomApi->getRoomDetailNoOrders($cart[OrderInterface::ROOM_ID]) : null,
+			'totalPrice' => $cart[OrderInterface::TOTAL_PRICE] ?? 0,
+			'orderInfo' => $cart['order_info'] ?? [],
+		]);
 	}
 
 	/**

@@ -1,0 +1,75 @@
+import { FunctionComponent, useCallback, useState } from "react"
+import { Button, Radio } from "@material-tailwind/react";
+import { useForm } from "@inertiajs/react";
+
+const paymentList = [
+	{
+		type: 'bank',
+		label: 'Chuyển khoản ngân hàng',
+		content: 'Chuyển khoản ngân hàng',
+		checked: true,
+	},
+	{
+		type: 'check',
+		label: 'Thanh toán tại quầy',
+		content: 'Chúng tôi sẽ liên hệ qua điện thoại xác nhận với quý khách hàng trong 60 phút sau khi xác nhận thanh toán',
+	}
+];
+
+type Props = {
+	onSuccess: (response: any) => void;
+	onError: (error: any) => void
+}
+
+const PaymentInfo: FunctionComponent<any> = ({ onSuccess, onError }) => {
+
+	const { post, data, setData, processing, errors, reset, setError, wasSuccessful, } = useForm({
+		paymentMethod: null,
+		action: 'set-payment',
+	})
+
+	const onSubmit = useCallback(() => {
+		console.log('====================================');
+		console.log(data);
+		console.log('====================================');
+	}, [data])
+
+	return (
+		<div className="flex justify-center md:grid-cols-2 w-full rounded-md p-1 ">
+			<div className='w-full sm:max-w-lg p-4 shadow-md overflow-hidden rounded-md border-2 flex flex-col gap-y-4'>
+				<span className="text-xl font-semibold">Thông tin thanh toán:</span>
+				{paymentList.map((item, index) => {
+					return (
+						<div key={index.toString()} className="flex bg-white p-2 rounded-md shadow-md gap-x-2 items-center">
+							<Radio name="type" checked={item.type === data.paymentMethod} readOnly onClick={() => {
+								setData('paymentMethod', item.type);
+							}} />
+							<div>
+								<p className="text-md font-medium text-blue-500">{item.label}</p>
+								{item.type === data.paymentMethod && <p>{item.content}</p>}
+							</div>
+						</div>
+					)
+				})}
+				<div className="flex justify-end">
+					<Button variant="gradient" onClick={onSubmit}>
+						checkout
+					</Button>
+				</div>
+			</div>
+
+		</div>
+	)
+}
+
+const CheckPayment = () => {
+	return (
+		<div>
+
+		</div>
+	)
+}
+
+
+
+export default PaymentInfo

@@ -7,7 +7,7 @@ const Paginate = ({ pageSize, currentPage, url = window.location.href, pageName 
 
 	if (pageSize < 6) {
 		return (
-			<div className="justify-center content-center flex p-4 gap-x-2">
+			<div className="justify-center content-center flex p-4 gap-x-2 rounded-md">
 				{(() => {
 					const listPage = [];
 					for (let index = 1; index <= pageSize; index++) {
@@ -18,7 +18,7 @@ const Paginate = ({ pageSize, currentPage, url = window.location.href, pageName 
 								[pageName]: index,
 							}}>
 							<span
-								className={`p-2 px-4 bg-green-500 rounded-[20px] ${currentPage === index ? 'text-white' : ''} justify-center content-center text-xl font-bold hover:text-orange-500`}
+								className={`${currentPage === index ? 'text-white' : ''} bg-green-500 p-2 px-4 rounded-full text-md md:text-xl font-bold hover:text-orange-500`}
 							>{index}</span>
 						</Link>)
 					}
