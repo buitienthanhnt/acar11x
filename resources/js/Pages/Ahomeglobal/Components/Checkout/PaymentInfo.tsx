@@ -1,6 +1,14 @@
-import { FunctionComponent, useCallback, useState } from "react"
+import { FunctionComponent, isValidElement, ReactElement, useCallback, useState } from "react"
 import { Button, Radio } from "@material-tailwind/react";
 import { useForm } from "@inertiajs/react";
+import Paypal from "./PaymentMethod/Paypal";
+
+type PaymentItem = {
+	type: string;
+	label: string;
+	checked?: boolean;
+	content: string | ReactElement
+};
 
 const paymentList = [
 	{
@@ -13,7 +21,12 @@ const paymentList = [
 		type: 'check',
 		label: 'Thanh toán tại quầy',
 		content: 'Chúng tôi sẽ liên hệ qua điện thoại xác nhận với quý khách hàng trong 60 phút sau khi xác nhận thanh toán',
-	}
+	},
+	{
+		type: 'paypal',
+		label: 'Thanh toan online qua paypal',
+		content: <Paypal />,
+	},
 ];
 
 type Props = {
@@ -44,9 +57,11 @@ const PaymentInfo: FunctionComponent<any> = ({ onSuccess, onError }) => {
 							<Radio name="type" checked={item.type === data.paymentMethod} readOnly onClick={() => {
 								setData('paymentMethod', item.type);
 							}} />
-							<div>
+							<div className="w-full">
 								<p className="text-md font-medium text-blue-500">{item.label}</p>
-								{item.type === data.paymentMethod && <p>{item.content}</p>}
+								{item.type === data.paymentMethod && (
+									isValidElement(item.content) ? item.content : <p>{item.content}</p>
+								)}
 							</div>
 						</div>
 					)

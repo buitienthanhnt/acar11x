@@ -1,0 +1,264 @@
+PaypalServerSdkLib\Models\Order {#678 // app/Http/Controllers/PayPalTestController.php:63
+  -createTime: null
+  -updateTime: null
+  -id: "7Y216747KM792683K"
+  -paymentSource: 
+PaypalServerSdkLib\Models
+\
+PaymentSourceResponse
+ {#697
+    -card: null
+    -paypal: 
+PaypalServerSdkLib\Models
+\
+PaypalWalletResponse
+ {#712
+      -emailAddress: "sb-ltnpg48264032@personal.example.com"
+      -accountId: "F57WHNF868FF6"
+      -accountStatus: "VERIFIED"
+      -name: 
+PaypalServerSdkLib\Models
+\
+Name
+ {#711
+        -givenName: "John"
+        -surname: "Doe"
+      }
+      -phoneType: null
+      -phoneNumber: null
+      -birthDate: null
+      -businessName: null
+      -taxInfo: null
+      -address: 
+PaypalServerSdkLib\Models
+\
+Address
+ {#699
+        -addressLine1: null
+        -addressLine2: null
+        -adminArea2: null
+        -adminArea1: null
+        -postalCode: null
+        -countryCode: "US"
+      }
+      -attributes: null
+      -storedCredential: null
+      -experienceStatus: null
+    }
+    -bancontact: null
+    -blik: null
+    -eps: null
+    -giropay: null
+    -ideal: null
+    -mybank: null
+    -p24: null
+    -sofort: null
+    -trustly: null
+    -applePay: null
+    -googlePay: null
+    -venmo: null
+  }
+  -intent: null
+  -payer: 
+PaypalServerSdkLib\Models
+\
+Payer
+ {#733
+    -emailAddress: "sb-ltnpg48264032@personal.example.com"
+    -payerId: "F57WHNF868FF6"
+    -name: 
+PaypalServerSdkLib\Models
+\
+Name
+ {#738
+      -givenName: "John"
+      -surname: "Doe"
+    }
+    -phone: null
+    -birthDate: null
+    -taxInfo: null
+    -address: 
+PaypalServerSdkLib\Models
+\
+Address
+ {#730
+      -addressLine1: null
+      -addressLine2: null
+      -adminArea2: null
+      -adminArea1: null
+      -postalCode: null
+      -countryCode: "US"
+    }
+  }
+  -purchaseUnits: array:1 [
+    0 => 
+PaypalServerSdkLib\Models
+\
+PurchaseUnit
+ {#715
+      -referenceId: "default"
+      -amount: null
+      -payee: null
+      -paymentInstruction: null
+      -description: null
+      -customId: null
+      -invoiceId: null
+      -id: null
+      -softDescriptor: null
+      -items: null
+      -shipping: 
+PaypalServerSdkLib\Models
+\
+ShippingWithTrackingDetails
+ {#691
+        -trackers: null
+        -name: 
+PaypalServerSdkLib\Models
+\
+ShippingName
+ {#718
+          -fullName: "John Doe"
+        }
+        -emailAddress: null
+        -phoneNumber: null
+        -type: null
+        -options: null
+        -address: 
+PaypalServerSdkLib\Models
+\
+Address
+ {#727
+          -addressLine1: "1 Main St"
+          -addressLine2: null
+          -adminArea2: "San Jose"
+          -adminArea1: "CA"
+          -postalCode: "95131"
+          -countryCode: "US"
+        }
+      }
+      -supplementaryData: null
+      -payments: 
+PaypalServerSdkLib\Models
+\
+PaymentCollection
+ {#737
+        -authorizations: null
+        -captures: array:1 [
+          0 => 
+PaypalServerSdkLib\Models
+\
+OrdersCapture
+ {#729
+            -status: "COMPLETED"
+            -statusDetails: null
+            -id: "4XL94690AG3830828"
+            -amount: 
+PaypalServerSdkLib\Models
+\
+Money
+ {#686
+              -currencyCode: "USD"
+              -value: "10.00"
+            }
+            -invoiceId: null
+            -customId: null
+            -networkTransactionReference: null
+            -sellerProtection: 
+PaypalServerSdkLib\Models
+\
+SellerProtection
+ {#744
+              -status: "ELIGIBLE"
+              -disputeCategories: array:2 [
+                0 => "ITEM_NOT_RECEIVED"
+                1 => "UNAUTHORIZED_TRANSACTION"
+              ]
+            }
+            -finalCapture: true
+            -sellerReceivableBreakdown: 
+PaypalServerSdkLib\Models
+\
+SellerReceivableBreakdown
+ {#645
+              -grossAmount: 
+PaypalServerSdkLib\Models
+\
+Money
+ {#703
+                -currencyCode: "USD"
+                -value: "10.00"
+              }
+              -paypalFee: 
+PaypalServerSdkLib\Models
+\
+Money
+ {#731
+                -currencyCode: "USD"
+                -value: "0.84"
+              }
+              -paypalFeeInReceivableCurrency: null
+              -netAmount: 
+PaypalServerSdkLib\Models
+\
+Money
+ {#714
+                -currencyCode: "USD"
+                -value: "9.16"
+              }
+              -receivableAmount: null
+              -exchangeRate: null
+              -platformFees: null
+            }
+            -disbursementMode: "INSTANT"
+            -links: array:3 [
+              0 => 
+PaypalServerSdkLib\Models
+\
+LinkDescription
+ {#709
+                -href: "https://api.sandbox.paypal.com/v2/payments/captures/4XL94690AG3830828"
+                -rel: "self"
+                -method: "GET"
+              }
+              1 => 
+PaypalServerSdkLib\Models
+\
+LinkDescription
+ {#761
+                -href: "https://api.sandbox.paypal.com/v2/payments/captures/4XL94690AG3830828/refund"
+                -rel: "refund"
+                -method: "POST"
+              }
+              2 => 
+PaypalServerSdkLib\Models
+\
+LinkDescription
+ {#762
+                -href: "https://api.sandbox.paypal.com/v2/checkout/orders/7Y216747KM792683K"
+                -rel: "up"
+                -method: "GET"
+              }
+            ]
+            -processorResponse: null
+            -createTime: "2025-12-19T16:27:27Z"
+            -updateTime: "2025-12-19T16:27:27Z"
+          }
+        ]
+        -refunds: null
+      }
+      -mostRecentErrors: null
+    }
+  ]
+  -status: "COMPLETED"
+  -links: array:1 [
+    0 => 
+PaypalServerSdkLib\Models
+\
+LinkDescription
+ {#716
+      -href: "https://api.sandbox.paypal.com/v2/checkout/orders/7Y216747KM792683K"
+      -rel: "self"
+      -method: "GET"
+    }
+  ]
+}

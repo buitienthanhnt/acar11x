@@ -12,7 +12,7 @@ Route::prefix('ahome')->group(function () {
 
 	Route::any('homes', [AhomeController::class, 'homePage']);
 
-	Route::any('home-detail/{home}', [AhomeController::class, 'homeDetail']);
+	Route::any('home-detail/{home}', [AhomeController::class, 'homeDetail'])->name('home.detail');
 
 	Route::get('rooms/{home?}', [AhomeController::class, 'listRoom']);
 
@@ -30,6 +30,8 @@ Route::prefix('ahome')->group(function () {
 });
 
 Route::any('checkout', [AhomeController::class, 'checkout'])->name('checkout');
+
+Route::any('order-success', [AhomeController::class, 'orderSuccess'])->name('order.success');
 
 Route::get('account-create', [AuthController::class, 'createAccount']);
 

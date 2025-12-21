@@ -5,7 +5,9 @@ namespace Thanhnt\Ahomeglobal\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
+use Thanhnt\Ahomeglobal\Api\CartApi;
 use Thanhnt\Ahomeglobal\Api\HomeApi;
 use Thanhnt\Ahomeglobal\Api\RoomApi;
 use Thanhnt\Ahomeglobal\Helper\DateTimeHelper;
@@ -24,6 +26,7 @@ final class AhomeController extends Controller
 		protected HomeApi $homeApi,
 		protected RoomApi $roomApi,
 		protected OrderApi $orderApi,
+		protected CartApi $cartApi,
 		protected DateTimeHelper $dateTimeHelper,
 	) {
 		// throw new \Exception('Not implemented');
@@ -72,30 +75,41 @@ final class AhomeController extends Controller
 
 	/**
 	 * checkout page
-	 * @return \Inertia\Response
+	 * @return \Inertia\Response|Redirect
 	 */
 	public function checkout(Request $request)
 	{
+		/**
+		 * post action
+		 */
 		if ($request->isMethod('POST')) {
-			if ($request->input('action') === 'order-info') {
-				session()->put('cart.order_info', [
+			if ($request->input('action') === 'customer-info') {
+				/**
+				 * update cart customer info
+				 */
+				$this->cartApi->updateCartCustomer([
 					'name' => $request->input('name'),
 					'email' => $request->input('email'),
 					'phone' => $request->input('phone'),
 				]);
 			} else {
-				$this->orderApi->createNewOrder($request, $request->input('home'),);
-				Inertia::share('messages',  'added for order in cart');
+				/**
+				 * add cart to session.
+				 */
+				if ($this->cartApi->addCart(
+					$request->input('dateSelected'),
+					$request->input('home'),
+					$request->input('room'),
+				)) {
+					Inertia::share('messages',  'added for order in cart');
+				}
 			}
 		}
 
-		$cart = $this->orderApi->getCart();
+		$cart = $this->cartApi->getCart();
 		if (empty($cart)) {
-			return redirect('/');
+			return redirect()->back()->with('error', 'Cart is empty');
 		}
-
-		$this->orderApi->dateCount(config('ahomeglobal.mode') === 'list_date' ? $cart[OrderInterface::SELECTED_TIME] :
-			[$cart[OrderInterface::DATE_FROM], $cart[OrderInterface::DATE_TO]]);
 
 		return Inertia::render('Ahomeglobal/Screens/Checkout', [
 			'dateSelected' => config('ahomeglobal.mode') === 'list_date' ? $cart[OrderInterface::SELECTED_TIME] :
@@ -103,8 +117,14 @@ final class AhomeController extends Controller
 			'home' => $cart[OrderInterface::HOME_ID] ? $this->homeApi->getHomeDetail($cart[OrderInterface::HOME_ID]) : null,
 			'room' => $cart[OrderInterface::ROOM_ID] ? $this->roomApi->getRoomDetailNoOrders($cart[OrderInterface::ROOM_ID]) : null,
 			'totalPrice' => $cart[OrderInterface::TOTAL_PRICE] ?? 0,
-			'orderInfo' => $cart['order_info'] ?? [],
+			'customer_info' => $cart['customer_info'] ?? null,
+			'step' => $request->get('step', 'customer-info'),
 		]);
+	}
+
+	public function orderSuccess()
+	{
+		return Inertia::render('Ahomeglobal/Screens/CheckoutSuccess');
 	}
 
 	/**

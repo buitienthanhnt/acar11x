@@ -30,9 +30,10 @@ export function NavbarDark() {
 				</Link>
 				<div className="ml-auto flex gap-1 md:mr-4">
 					{/* <IconButton variant="text" color="white"><Cog6ToothIcon className="h-6 w-6" /></IconButton> */}
-					<IconButton variant="text" color="white">
-						<BellIcon className="h-6 w-6" />
-					</IconButton>
+					<Link href='/checkout'>
+						<IconButton variant="text" color="white">
+							<BellIcon className="h-6 w-6" />
+						</IconButton></Link>
 					{!user ?
 						<Link href={'/ahome/login'}>
 							<IconButton variant="text" color="white">

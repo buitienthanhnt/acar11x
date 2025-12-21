@@ -3,8 +3,8 @@
 namespace Thanhnt\Ahomeglobal\Providers;
 
 use Illuminate\Foundation\Support\Providers\EventServiceProvider;
+use Thanhnt\Ahomeglobal\Events\CartSaveEvent;
 use Thanhnt\Ahomeglobal\Events\HomeSaveEvent;
-use Thanhnt\Ahomeglobal\Listeners\HomeSaveListener;
 
 final class PackageEventServiceProvider extends EventServiceProvider
 {
@@ -15,8 +15,11 @@ final class PackageEventServiceProvider extends EventServiceProvider
 	 */
 	protected $listen = [
 		HomeSaveEvent::class => [
-			HomeSaveListener::class,
+			\Thanhnt\Ahomeglobal\Listeners\HomeSaveListener::class,
 		],
+		CartSaveEvent::class => [
+			\Thanhnt\Ahomeglobal\Listeners\CartSaveListener::class
+		]
 	];
 
 	/**

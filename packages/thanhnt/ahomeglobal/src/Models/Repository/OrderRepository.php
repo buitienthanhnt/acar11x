@@ -1,6 +1,6 @@
 <?php
 
-namespace Thanhnt\Ahomeglobal\Api;
+namespace Thanhnt\Ahomeglobal\Models\Repository;
 
 use Carbon\Carbon;
 use Exception;
@@ -17,7 +17,7 @@ use Thanhnt\Ahomeglobal\Models\Types\OrderInterface;
 use Thanhnt\Ahomeglobal\Models\Types\OrderTimeInterface;
 use Thanhnt\Ahomeglobal\Models\Types\RoomInterface;
 
-final class OrderApi
+final class OrderRepository
 {
 	public function __construct(
 		protected Order $order,
@@ -29,9 +29,54 @@ final class OrderApi
 	}
 
 	/**
-	 * create new order
+	 * define function for create new order.
+	 * @param string[] $dateValues
+	 * @param int $home
+	 * @param int $room
+	 * @return array{expect_order: array{home_id: integer, room_id: integer, date_from: string, date_to: string, selected_time: string[], total_price: float}, expect_room: mixed}|null
+	 * @throws Exception
 	 */
-	public function createNewOrder($data,) {}
+	public function getExpectOrder($dateValues, $home = null, $room = null)
+	{
+		/**
+		 * sort list input date from request 
+		 */
+		$dateValues = $this->dateTimeHelper->sortArrayDateString($dateValues);
+
+		/**
+		 * get active room by list date, if home exist then get active room by home
+		 * has 2 option: 1 dateRange, 2 date list
+		 */
+		$activeRoom = $this->getActiveRoom($dateValues, $home)->get()->makeHidden([RoomInterface::BOOKED_DATE, RoomInterface::PRICE]);
+		if (!$activeRoom->count()) {
+			return null;
+			throw new Exception('the input date or home not active');
+		}
+
+		/**
+		 * check room exist
+		 */
+		if ($room && !in_array($room, $activeRoom->pluck(RoomInterface::ID)->toArray())) {
+			return null;
+			throw new Exception('the input room not active');
+		}
+
+		/**
+		 * setup selected room and order detail.
+		 */
+		$selectedRoom = $room ? Room::find($room) : $activeRoom->random();
+		return [
+			'expect_order' => [
+				OrderInterface::HOME_ID => $home,
+				OrderInterface::ROOM_ID => $selectedRoom->id,
+				OrderInterface::DATE_FROM => $dateValues[0] ?? Carbon::now(),
+				OrderInterface::DATE_TO => end($dateValues) ?? Carbon::now(),
+				OrderInterface::SELECTED_TIME => $dateValues,
+				OrderInterface::TOTAL_PRICE => $this->dateCount($dateValues) * $selectedRoom->price,
+			],
+			'expect_room' => $selectedRoom,
+		];
+	}
 
 	/**
 	 * get count of selected date.

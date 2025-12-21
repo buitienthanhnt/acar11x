@@ -13,5 +13,6 @@ class VerifyCsrfToken
         'add-source',
         'test/*',
         '/adminhtml/design/home-setup',
+        '/paypal',
     ];
 }

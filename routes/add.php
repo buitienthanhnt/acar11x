@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Frontend\CommentController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\PayPalTestController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Route;
@@ -45,6 +46,21 @@ Route::prefix('comment')->group(function (): void {
 
 Route::post('add-source', [\App\Http\Controllers\HomeController::class, 'addSource']);
 
-Route::get('search/{query?}', [\App\Http\Controllers\TestController::class, 'remenberState'])->name('search'); //->where(['query' => '[a-z]+']);;
+Route::get('search/{query?}', [\App\Http\Controllers\TestController::class, 'remenberState'])->name('search'); //->where(['query' => '[a-z]+']);
+
+Route::prefix('paypal')->group(function (): void {
+	Route::get('paypal/status', [PayPalTestController::class, 'status']);
+
+	Route::any('cancel', [PayPalTestController::class, 'cancel']);
+
+	Route::any('create', [PayPalTestController::class, 'index'])->name('paypal.checkout');
+
+	Route::any('update', [PayPalTestController::class, 'updateOrder']);
+
+	Route::any('detail', [PayPalTestController::class, 'orderDetail']);
+
+	Route::any('capture', [PayPalTestController::class, 'capture']);
 
 
+	Route::any('approved', [PayPalTestController::class, 'approved']); // patchOrder
+});
