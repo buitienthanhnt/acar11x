@@ -11,7 +11,7 @@ import { Rating } from "@material-tailwind/react";
 import FlashMessage from '../Components/FlashMessage';
 import Location from '../Components/Location';
 import useMode from '../hooks/useMode';
-import { isDateInRange } from '../Helper/DateTimeHelper';
+import { isDateInRange, listDateToArrayString } from '../Helper/DateTimeHelper';
 import { PageLayout } from '../Layouts';
 
 type Props = {
@@ -82,10 +82,8 @@ const HomeDetail: FunctionComponent<Props> = ({ homeDetail, selectedDates, roomS
 	}, [checkDisableDate])
 
 	const onCheckout = useCallback(() => {
-		console.log('on checkout selected values');
-
 		router.post(Urls.checkout, {
-			dateSelected: dateSelected,
+			dateSelected: listDateToArrayString(dateSelected),
 			home: homeDetail.id,
 			room: roomSelected?.id,
 		})

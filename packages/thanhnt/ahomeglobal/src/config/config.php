@@ -9,5 +9,6 @@ return [
 	"version" => "1.0.0",
 	"mode" => "list_date", // date_range | list_date(default)
 	"qty_mode" => false, // true: support qty for room booking | false: not support
-	"currency_code" => "USD",   // USD | VND | EUR
+	"currency_code" => "VND",   // USD | VND | EUR
+	"exchange_vnd" => 26331,
 ];

@@ -8,7 +8,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Services\PayPalService as PayPalSvc;
+use App\Services\StripeService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Thanhnt\Ahomeglobal\Api\CartApi;
 
@@ -16,14 +18,17 @@ class PayPalTestController extends Controller
 {
 
     private $paypalSvc;
+    protected $stripeService;
     protected $cartApi;
 
     public function __construct(
         PayPalSvc $paypalSvc,
         CartApi $cartApi,
+        StripeService $stripeService,
     ) {
         $this->paypalSvc = $paypalSvc;
         $this->cartApi = $cartApi;
+        $this->stripeService = $stripeService;
     }
 
 
@@ -83,17 +88,12 @@ class PayPalTestController extends Controller
         }
     }
 
-    public function status()
-    {
-        return 'success order request';
-    }
-
     public function orderDetail(Request $request)
     {
         $apiResponse = $this->paypalSvc->getOrder($request->get('order_id'));
         if ($apiResponse->isSuccess()) {
             $order = $apiResponse->getResult();
-            dd($order);
+            dd($order->getLinks());
         } else {
             $errors = $apiResponse->getResult();
             var_dump($errors);
@@ -104,20 +104,9 @@ class PayPalTestController extends Controller
         var_dump($apiResponse->getHeaders());
     }
 
-    protected function approved(Request $request)
-    {
-        dd($this->paypalSvc->approvedOrder($request->get('order_id'))->getResult());
-    }
-
     public function capture(Request $request)
     {
         dd($this->paypalSvc->captureOrder($request->get('order_id'))->getResult());
-    }
-
-    public function cancel(Request $request)
-    {
-        return 'cancel paypal';
-        // return $this->paypalSvc->captureOrder($request->get('order_id'));
     }
 
     public function paymentList()
@@ -135,5 +124,26 @@ class PayPalTestController extends Controller
         // $paymentDetails = $this->paypalSvc->getPaymentDetails($paymentId);
 
         // dd($paymentDetails);
+    }
+
+    public function payment(Request $request)
+    {
+        if (!Auth::user()) {
+            Auth::loginUsingId(1);
+        }
+
+        /**
+         * add cart for stripe product dashboard(exist in stripe manager dashboard)
+         * @var \Laravel\Cashier\Checkout $response
+         */
+        $response = ($request->user()->checkout(['price_1SggVPECZlJBo2W8YedyHXGD'], [
+            'success_url' => route('home'),
+            'cancel_url' => route('home'),
+        ]));
+        return $response->toJson();
+    }
+
+    public function stripeCharge()  {
+        return$this->stripeService->stripeCharge();
     }
 }

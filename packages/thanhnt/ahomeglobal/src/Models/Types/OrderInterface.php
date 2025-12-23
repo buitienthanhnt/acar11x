@@ -1,7 +1,9 @@
 <?php
+
 namespace Thanhnt\Ahomeglobal\Models\Types;
 
-interface OrderInterface{
+interface OrderInterface
+{
 	const TABLE_NAME = 'orders';
 
 	const ID = 'id';
@@ -14,7 +16,9 @@ interface OrderInterface{
 	const TOTAL_PRICE = 'total_price';
 	const STATUS = 'status'; // complete, success, cancel,
 
-	const HIDDEN_FIELDS = ['created_at', 'updated_at', 'deleted_at', self::HOME_ID, self::ROOM_ID, ];
+	const HIDDEN_FIELDS = ['created_at', 'updated_at', 'deleted_at', self::HOME_ID, self::ROOM_ID,];
+
+	const FILLED_FILEDS = [self::ROOM_ID, self::HOME_ID, self::DATE_FROM, self::DATE_TO, self::SELECTED_TIME, self::QTY, self::TOTAL_PRICE, self::QTY, self::STATUS,];
 
 	/**
 	 * define relation names

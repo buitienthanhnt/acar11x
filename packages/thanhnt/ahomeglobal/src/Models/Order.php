@@ -32,7 +32,15 @@ class Order extends Model implements OrderInterface
         self::SELECTED_TIME => 'array',  // Casts the 'SELECTED_TIME' column to an array
     ];
 
+    /**
+     * define hidden fields
+     */
     protected $hidden = self::HIDDEN_FIELDS;
+
+    /**
+     * define for mass assignment
+     */
+    protected $fillable = self::FILLED_FILEDS;
 
     /**
      * link the order to room

@@ -24,6 +24,6 @@
  * 	},
  * }
  * customer_info: array{name: string, email: string, phone: string}
- * on_order: array{token: string, id: string,}
+ * on_payment_order: array{token: string, id: string,}
  * $cartData
  */

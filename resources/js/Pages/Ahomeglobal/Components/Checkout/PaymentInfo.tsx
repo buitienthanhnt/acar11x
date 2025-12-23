@@ -2,6 +2,7 @@ import { FunctionComponent, isValidElement, ReactElement, useCallback, useState 
 import { Button, Radio } from "@material-tailwind/react";
 import { useForm } from "@inertiajs/react";
 import Paypal from "./PaymentMethod/Paypal";
+import Stripe from './PaymentMethod/Stripe';
 
 type PaymentItem = {
 	type: string;
@@ -26,6 +27,11 @@ const paymentList = [
 		type: 'paypal',
 		label: 'Thanh toan online qua paypal',
 		content: <Paypal />,
+	},
+	{
+		type: 'stripe',
+		label: 'Thanh toan online qua stripe',
+		content: <Stripe />,
 	},
 ];
 

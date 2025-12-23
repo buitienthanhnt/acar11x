@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use Thanhnt\Ahomeglobal\Controllers\Frontend\CheckoutController;
 
 Route::get('/', [HomeController::class, 'home'])->name('home');
 
@@ -49,9 +50,6 @@ Route::post('add-source', [\App\Http\Controllers\HomeController::class, 'addSour
 Route::get('search/{query?}', [\App\Http\Controllers\TestController::class, 'remenberState'])->name('search'); //->where(['query' => '[a-z]+']);
 
 Route::prefix('paypal')->group(function (): void {
-	Route::get('paypal/status', [PayPalTestController::class, 'status']);
-
-	Route::any('cancel', [PayPalTestController::class, 'cancel']);
 
 	Route::any('create', [PayPalTestController::class, 'index'])->name('paypal.checkout');
 
@@ -59,8 +57,28 @@ Route::prefix('paypal')->group(function (): void {
 
 	Route::any('detail', [PayPalTestController::class, 'orderDetail']);
 
-	Route::any('capture', [PayPalTestController::class, 'capture']);
+	// Route::any('capture', [PayPalTestController::class, 'capture']);
+	// Route::any('approved', [PayPalTestController::class, 'approved']); // patchOrder
+});
 
+Route::prefix('stripe')->group(function () {
+	Route::get('create-product', [
+		PayPalTestController::class,
+		'addStripeProduct'
+	]);
 
-	Route::any('approved', [PayPalTestController::class, 'approved']); // patchOrder
+	Route::get('payment', [
+		PayPalTestController::class,
+		'payment'
+	]);
+
+	Route::get('guest-payment', [
+		PayPalTestController::class,
+		'stripeGuestCart'
+	]);
+	// stripeCharge
+	Route::get('charge', [
+		PayPalTestController::class,
+		'stripeCharge'
+	]);
 });

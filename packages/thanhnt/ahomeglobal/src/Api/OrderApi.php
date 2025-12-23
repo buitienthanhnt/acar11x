@@ -3,16 +3,18 @@
 namespace Thanhnt\Ahomeglobal\Api;
 
 use Carbon\Carbon;
-use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Session;
+use Thanhnt\Ahomeglobal\Models\OrderDetail;
 use Thanhnt\Ahomeglobal\Helper\DateTimeHelper;
+use Thanhnt\Ahomeglobal\Helper\ModelHelper;
+use Thanhnt\Ahomeglobal\Models\ExpectOrder;
 use Thanhnt\Ahomeglobal\Models\Order;
 use Thanhnt\Ahomeglobal\Models\OrderTime;
 use Thanhnt\Ahomeglobal\Models\Room;
+use Thanhnt\Ahomeglobal\Models\Types\ExpectOrderInterface;
+use Thanhnt\Ahomeglobal\Models\Types\OrderDetailInterface;
 use Thanhnt\Ahomeglobal\Models\Types\OrderInterface;
 use Thanhnt\Ahomeglobal\Models\Types\OrderTimeInterface;
 use Thanhnt\Ahomeglobal\Models\Types\RoomInterface;
@@ -21,17 +23,125 @@ final class OrderApi
 {
 	public function __construct(
 		protected Order $order,
+		protected ExpectOrder $expectOrder,
 		protected OrderTime $orderTime,
 		protected Room $room,
 		protected DateTimeHelper $dateTimeHelper,
+		protected ModelHelper $modelHelper,
 	) {
 		// throw new \Exception('Not implemented');
 	}
 
 	/**
 	 * create new order
+	 * @param array $data ex input cart data
+	 * @return \Illuminate\Database\Eloquent\Collection<int, TModel>|TModel
+	 * return: Thanhnt\Ahomeglobal\Models\Order
 	 */
-	public function createNewOrder($data,) {}
+	public function saveOrder($data)
+	{
+		/**
+		 * save order detail
+		 */
+
+		/**
+		 * create new order
+		 */
+		$newOrder = $this->order->factory()->create($this->modelHelper->massDataAttribute(OrderInterface::FILLED_FILEDS, $data));
+		if ($newOrder) {
+			$this->saveOrderDetail($newOrder->id, $data);
+		}
+		return $newOrder;
+	}
+
+	/**
+	 * @param string $expectOrderId
+	 */
+	public function saveOrderByExpect(string $expectOrderId)
+	{
+		$expectOrder = ExpectOrder::find($expectOrderId);
+		if ($expectOrder) {
+			return $this->order->factory()->create($expectOrder->makeHidden([
+				ExpectOrderInterface::ID,
+				'created_at',
+				'updated_at',
+				'deleted_at'
+			])->toArray());
+		}
+	}
+
+	/**
+	 * @param int $orderId
+	 * @param array{home_id: integer, room_id: integer, date_from: string, date_to: string, selected_time: array[string], total_price: float, currency_code: string, item: array{name: string, description: string, price: float, quantity: string, category: string, image_url: string, url: string, unit_amount: array{currency_code: string, value: float}}, customer_info: array{name: string, email: string, phone: string}, on_payment_order: array{token: string, id: string,}, on_payment: string|null, expect_order: string}|null $cartParams
+	 */
+	public function saveOrderDetail($orderId, array $data)
+	{
+		$orderDetailData = $this->formatCartToOrderDetail($data);
+		return OrderDetail::create([
+			OrderDetailInterface::ORDER_ID => $orderId,
+			...$orderDetailData,
+		]);
+	}
+
+	/**
+	 * @param array{home_id: integer, room_id: integer, date_from: string, date_to: string, selected_time: array[string], total_price: float, currency_code: string, item: array{name: string, description: string, price: float, quantity: string, category: string, image_url: string, url: string, unit_amount: array{currency_code: string, value: float}}, customer_info: array{name: string, email: string, phone: string}, on_payment_order: array{token: string, id: string,}, on_payment: string|null, expect_order: string}|null $cartParams
+	 */
+	public function formatCartToOrderDetail($cartParams)
+	{
+		return [
+			OrderDetailInterface::EMAIL => $cartParams['customer_info']['email'],
+			OrderDetailInterface::PHONE => $cartParams['customer_info']['phone'],
+			OrderDetailInterface::NAME => $cartParams['customer_info']['name'], // info
+			OrderDetailInterface::CURRENCY => $cartParams['currency_code'],
+			OrderDetailInterface::TOTAL_PRICE => $cartParams['total_price'],
+			OrderDetailInterface::QUANTITY => $cartParams['qty'] ?? 1,
+			OrderDetailInterface::PRICE => $cartParams['item']['price'],
+			OrderDetailInterface::PAYMENT_METHOD => $cartParams['on_payment'],
+		];
+	}
+
+	/**
+	 * @param array{home_id: integer, room_id: integer, date_from: string, date_to: string, selected_time: array[string], total_price: float, currency_code: string, item: array{name: string, description: string, price: float, quantity: string, category: string, image_url: string, url: string, unit_amount: array{currency_code: string, value: float}}, customer_info: array{name: string, email: string, phone: string}, on_order: array{token: string, id: string,}, expect_order: string} $cartParams
+	 * @return array{home_id: integer, room_id: integer, date_from: string, date_to: string, selected_time: string[], total_price: float, qty: integer}
+	 */
+	public function formatCartToOrder($cartParams)
+	{
+		return [
+			OrderInterface::HOME_ID => $cartParams['home_id'],
+			OrderInterface::ROOM_ID => $cartParams['room_id'],
+			OrderInterface::DATE_FROM => $cartParams['date_from'],
+			OrderInterface::DATE_TO => $cartParams['date_to'],
+			OrderInterface::SELECTED_TIME => $cartParams['selected_time'],
+			OrderInterface::TOTAL_PRICE => $cartParams['total_price'],
+			OrderInterface::QTY => $cartParams['qty'] ?? 1,
+		];
+	}
+
+	/**
+	 * create new expect order(expect same as order however have different id)
+	 * @param array $data
+	 * @return ExpectOrder
+	 */
+	public function createExpectOrderByCart($cartData)
+	{
+
+		$expectData = $this->modelHelper->massDataAttribute(ExpectOrderInterface::FILLED_FILEDS, $cartData);
+		$expectData[ExpectOrderInterface::STATUS] = 'created';
+		return $this->expectOrder->factory()->create($expectData);
+	}
+
+	/**
+	 * @param string $id
+	 * @param array $cartData
+	 * @return ExpectOrder
+	 */
+	public function updateExpectOrderByCart(string $id, $cartData)
+	{
+		return ExpectOrder::updateOrCreate(
+			['id' => $id],
+			$this->modelHelper->massDataAttribute(ExpectOrderInterface::FILLED_FILEDS, $cartData),
+		);
+	}
 
 	/**
 	 * get count of selected date.
@@ -56,28 +166,6 @@ final class OrderApi
 			return abs($startDate->diffInDays($endDate)) + 1;
 		}
 		return;
-	}
-
-	/**
-	 * save cart data to session
-	 * @param array $cart
-	 */
-	public function addToCart(array $cart)
-	{
-		if (empty($cart)) {
-			return false;
-		}
-		Session::put('cart', $cart);
-		return true;
-	}
-
-	/**
-	 * get cart data
-	 * @return array
-	 */
-	public function getCart()
-	{
-		return Session::get('cart');
 	}
 
 	/**

@@ -27,3 +27,6 @@
 
 
 # dùng ssr(server side rendering) đang bị lỗi tương thích mô-đun (CommonJS so với ESM) khi dùng thư viện: @material-tailwind/react chưa xử lý được.
+
+
+# blob:https video: https://www.youtube.com/watch?v=WqBs_msUOXY

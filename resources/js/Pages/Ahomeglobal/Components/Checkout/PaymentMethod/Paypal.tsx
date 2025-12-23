@@ -1,5 +1,6 @@
-import { router } from '@inertiajs/react';
-import { Button } from '@material-tailwind/react';
+import { useForm } from '@inertiajs/react';
+import { Button, Spinner } from '@material-tailwind/react';
+import AwaitProcess from './AwaitProcess';
 
 /**
  * Paypal component
@@ -11,8 +12,12 @@ import { Button } from '@material-tailwind/react';
 
 const Paypal = () => {
 
+	const { post, data, processing } = useForm(
+		{ paymentMethod: 'paypal', }
+	);
+
 	const handlePaypalCheckout = () => {
-		router.visit('/paypal/create');
+		post(route('checkout.payment'));
 	}
 
 	return (
@@ -29,6 +34,11 @@ const Paypal = () => {
 					alt="paypal"
 				/>
 			</Button>
+			<AwaitProcess
+				open={processing}
+				headerContent="await loading for payment process"
+				bodyContent={<Spinner className="h-12 w-12" />}>
+			</AwaitProcess>
 		</div>
 	)
 }

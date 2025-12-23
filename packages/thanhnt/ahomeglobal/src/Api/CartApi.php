@@ -28,7 +28,7 @@ final class CartApi
 	}
 
 	/**
-	 * @return array{home_id: integer, room_id: integer, date_from: string, date_to: string, selected_time: array[string], total_price: float, currency_code: string, item: array{name: string, description: string, price: float, quantity: string, category: string, image_url: string, url: string, unit_amount: array{currency_code: string, value: float}}, customer_info: array{name: string, email: string, phone: string}, on_order: array{token: string, id: string,}}|null
+	 * @return array{home_id: integer, room_id: integer, date_from: string, date_to: string, selected_time: array[string], total_price: float, currency_code: string, item: array{name: string, description: string, price: float, quantity: string, category: string, image_url: string, url: string, unit_amount: array{currency_code: string, value: float}}, customer_info: array{name: string, email: string, phone: string}, on_payment_order: array{token: string, id: string,}, on_payment: string|null, expect_order: string}|null
 	 */
 	public function getCart()
 	{
@@ -37,18 +37,16 @@ final class CartApi
 
 	/**
 	 * define function for create new order.
-	 * @param string[] $dateValues
-	 * @param int $home
-	 * @param int $room
+	 * @param array{dateValues: string[], home?: integer, room?: integer, qty?: integer} $params
 	 * @return array|null
 	 * @throws Exception
 	 */
-	public function addCart($dateValues, $home = null, $room = null)
+	public function addCart($params)
 	{
 		/**
 		 * get expect order can be add to cart.
 		 */
-		$expectOrderData = $this->orderRepository->getExpectOrder($dateValues, $home, $room);
+		$expectOrderData = $this->orderRepository->getExpectOrder($params['dateValues'], $params['home'], $params['room'] ?? null);
 		if (!$expectOrderData) {
 			throw new Exception('the input date or home or room not active');
 			return null;
@@ -66,7 +64,7 @@ final class CartApi
 		$currency_code = config('ahomeglobal.currency_code');
 
 		/**
-		 * @var array{home_id: integer, room_id: integer, date_from: string, date_to: string, selected_time: array[string], total_price: float, currency_code: string, item: array{name: string, description: string, price: float, quantity: string, category: string, image_url: string, url: string, unit_amount: array{currency_code: string, value: float}}, customer_info: array{name: string, email: string, phone: string}, on_order: array{token: string, id: string,}} $cartData
+		 * @var array{home_id: integer, room_id: integer, date_from: string, date_to: string, selected_time: array[string], total_price: float, currency_code: string, item: array{name: string, description: string, price: float, quantity: string, category: string, image_url: string, url: string, unit_amount: array{currency_code: string, value: float}}, customer_info: array{name: string, email: string, phone: string}, on_payment_order: array{token: string, id: string,}, on_payment: string|null, on_payment: string|null} $cartData
 		 */
 		$cartData = [
 			...$expect_order,
@@ -74,18 +72,34 @@ final class CartApi
 			"item" => [
 				"name" => $expert_room->{RoomInterface::TITLE},
 				"description" => $expert_room->{RoomInterface::DESCRIPTION},
-				"price" => $expert_room->price,
-				"quantity" => $this->orderRepository->dateCount($dateValues), // date selected count(need for caculate total price)
+				"price" => $expert_room->price * 1000,
+				"quantity" => $this->orderRepository->dateCount($params['dateValues']), // date selected count(need for caculate total price)
 				"image_url" => "https://amuaglobal.icu/storage/files/upload/nguoi-sinh-thang-am-lich-nay-co-the-xoay-chuyen-cuoc-doi-thanh-dat-nhu-y-hinh-4.jpg", //$expert_room->{RoomInterface::IMAGE_PATH},
-				"url" => route('home.detail', ['home' => $home, 'room' => $expert_room->{RoomInterface::ID}]),
+				"url" => route('home.detail', ['home' => $params['home'], 'room' => $expert_room->{RoomInterface::ID}]),
 				'unit_amount' => [ // <--- THIS OBJECT IS REQUIRED
 					'currency_code' => $currency_code,
-					'value' => $expert_room->price,
+					'value' => $expert_room->price * 1000,  // price setup = 150(k vnd) so price * 1000 to vnd
 				],
 			],
 			"customer_info" => null, // array{name: string, email: string, phone: string}
-			"on_payment_order" => null,      // array{token: string, id: string,}
+			"on_payment_order" => null,      // array{token: string, id: string,}  ()
+			'on_payment' => null,            // paypal|stripe 
+			'expect_order' => null,
+			'qty' => $params['qty'] ?? 1,
 		];
+
+		/**
+		 * keep some old cart data if exist
+		 */
+		if ($currentCart = $this->getCart()) {
+			$cartData = [
+				...$cartData,
+				'customer_info' => $currentCart['customer_info'],
+				"on_payment_order" => $currentCart['on_payment_order'],
+				"on_payment" => $currentCart['on_payment'],
+				"expect_order" => $currentCart['expect_order'],
+			];
+		}
 
 		/**
 		 * add data to session
@@ -96,7 +110,7 @@ final class CartApi
 
 
 	/**
-	 * @param array{home_id: integer, room_id: integer, date_from: string, date_to: string, selected_time: array[string], total_price: float, currency_code: string, item: array{name: string, description: string, price: float, quantity: string, category: string, image_url: string, url: string, unit_amount: array{currency_code: string, value: float}}, customer_info: array{name: string, email: string, phone: string}, on_order: array{token: string, id: string,}} $params
+	 * @param array{home_id: integer, room_id: integer, date_from: string, date_to: string, selected_time: array[string], total_price: float, currency_code: string, item: array{name: string, description: string, price: float, quantity: string, category: string, image_url: string, url: string, unit_amount: array{currency_code: string, value: float}}, customer_info: array{name: string, email: string, phone: string}, on_payment_order: array{token: string, id: string,}, on_payment: string|null} $params
 	 * @return array{amount: array{currency_code: string, value: float, breakdown: array{item_total: array{currency_code: string, value: float,}}}, items: array{}}
 	 */
 	public function formatCartToPaypalParam(array $params)
@@ -106,12 +120,12 @@ final class CartApi
 			"purchase_units" => [
 				[
 					"amount" => [
-						"currency_code" => $params['currency_code'],
-						"value" => $params['total_price'],
+						"currency_code" => 'USD' ?: $params['currency_code'],
+						"value" => number_format($item['price'] / config('ahomeglobal.exchange_vnd'), 2) * $item['quantity'],
 						"breakdown" =>  [
 							"item_total" =>  [
-								"currency_code" => $params['currency_code'],
-								"value" => $params['total_price'],
+								"currency_code" => 'USD' ?: $params['currency_code'],
+								"value" => number_format($item['price'] / config('ahomeglobal.exchange_vnd'), 2) * $item['quantity'],
 							],
 						]
 					],
@@ -120,8 +134,8 @@ final class CartApi
 							"name" => $item['name'],
 							"description" => $item['description'],
 							"unit_amount" => [ // require_field
-								"currency_code" => $params['currency_code'],
-								"value" => $item['price'],
+								"currency_code" => 'USD' ?: $params['currency_code'],
+								"value" => number_format($item['price'] / config('ahomeglobal.exchange_vnd'), 2),
 							],
 							"quantity" => $item['quantity'],
 							"image_url" => $item['image_url'],
@@ -158,8 +172,10 @@ final class CartApi
 	 */
 	public function updateCartCustomer($customerInfo)
 	{
-		if ($this->getCart()) {
-			$this->session->put(self::CART_KEY . '.customer_info', $customerInfo);
+		if ($cart = $this->getCart()) {
+			if ($cart['customer_info'] !== $customerInfo) {
+				$this->session->put(self::CART_KEY . '.customer_info', $customerInfo);
+			}
 			return;
 		}
 		throw new Exception("cart data not found", 1);
@@ -194,5 +210,46 @@ final class CartApi
 			return;
 		}
 		throw new Exception("cart data not found", 1);
+	}
+
+	public function updateCart($cartData)
+	{
+		if ($this->getCart()) {
+			/**
+			 * put session is update
+			 */
+			$this->session->put(self::CART_KEY, $cartData);
+			return;
+		}
+		throw new Exception("cart data not found", 1);
+	}
+
+	/**
+	 * update cart by path
+	 * @param string $key  ex expect_order
+	 * @param mixed $value
+	 * @return void
+	 */
+	public function updateByKey(string $key, $value)
+	{
+		if ($this->getCart()) {
+			/**
+			 * put session is update
+			 */
+			$this->session->put(self::CART_KEY . '.' . $key, $value);
+			return;
+		}
+	}
+
+	/**
+	 * @param mixed $value
+	 * @return void
+	 */
+	public function addCartValue($value)
+	{
+		/**
+		 * push session id add to array value
+		 */
+		session()->push(self::CART_KEY, $value);
 	}
 }

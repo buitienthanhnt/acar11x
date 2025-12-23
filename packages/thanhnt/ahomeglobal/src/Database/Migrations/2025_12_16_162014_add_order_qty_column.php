@@ -17,7 +17,6 @@ return new class extends Migration
         if (!Schema::hasColumn(OrderInterface::TABLE_NAME, OrderInterface::QTY)) {
             Schema::table(OrderInterface::TABLE_NAME, function (Blueprint $table) {
                 $table->integer(OrderInterface::QTY)->default(1)->after(OrderInterface::SELECTED_TIME);
-                $table->integer(OrderInterface::TOTAL_PRICE,)->default(0)->after(OrderInterface::QTY);
             });
         }
     }
@@ -30,7 +29,6 @@ return new class extends Migration
         if (Schema::hasColumn(OrderInterface::TABLE_NAME, OrderInterface::QTY)) {
             Schema::table(OrderInterface::TABLE_NAME, function (Blueprint $table) {
                 $table->dropColumn(OrderInterface::QTY);
-                $table->dropColumn(OrderInterface::TOTAL_PRICE);
             });
         }
     }

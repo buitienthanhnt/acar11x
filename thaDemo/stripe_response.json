@@ -1,0 +1,130 @@
+{
+	"id": "cs_test_a1mmuCrhOydcpGI1b1Fyb3K1xEyckMLSULAs6LDRhvMhZU5vIIK6O6MVGb",
+	"object": "checkout.session",
+	"adaptive_pricing": {
+		"enabled": true
+	},
+	"after_expiration": null,
+	"allow_promotion_codes": null,
+	"amount_subtotal": 600,
+	"amount_total": 600,
+	"automatic_tax": {
+		"enabled": false,
+		"liability": null,
+		"provider": null,
+		"status": null
+	},
+	"billing_address_collection": null,
+	"branding_settings": {
+		"background_color": "#ffffff",
+		"border_style": "rounded",
+		"button_color": "#0074d4",
+		"display_name": "",
+		"font_family": "default",
+		"icon": null,
+		"logo": null
+	},
+	"cancel_url": "http://acar11x.dev",
+	"client_reference_id": null,
+	"client_secret": null,
+	"collected_information": {
+		"business_name": null,
+		"individual_name": null,
+		"shipping_details": null
+	},
+	"consent": null,
+	"consent_collection": null,
+	"created": 1766300840,
+	"currency": "usd",
+	"currency_conversion": null,
+	"custom_fields": [],
+	"custom_text": {
+		"after_submit": null,
+		"shipping_address": null,
+		"submit": null,
+		"terms_of_service_acceptance": null
+	},
+	"customer": "cus_TdyOoTIESuWhnc",
+	"customer_account": null,
+	"customer_creation": null,
+	"customer_details": {
+		"address": null,
+		"business_name": null,
+		"email": "tha@gmail.com",
+		"individual_name": null,
+		"name": null,
+		"phone": null,
+		"tax_exempt": "none",
+		"tax_ids": null
+	},
+	"customer_email": null,
+	"discounts": [],
+	"expires_at": 1766387240,
+	"invoice": null,
+	"invoice_creation": {
+		"enabled": false,
+		"invoice_data": {
+			"account_tax_ids": null,
+			"custom_fields": null,
+			"description": null,
+			"footer": null,
+			"issuer": null,
+			"metadata": [],
+			"rendering_options": null
+		}
+	},
+	"livemode": false,
+	"locale": null,
+	"metadata": [],
+	"mode": "payment",
+	"origin_context": null,
+	"payment_intent": null,
+	"payment_link": null,
+	"payment_method_collection": "if_required",
+	"payment_method_configuration_details": {
+		"id": "pmc_1SgHLTECZlJBo2W8uJGIdPIg",
+		"parent": null
+	},
+	"payment_method_options": {
+		"card": {
+			"request_three_d_secure": "automatic"
+		}
+	},
+	"payment_method_types": [
+		"card",
+		"klarna",
+		"link",
+		"cashapp",
+		"amazon_pay",
+		"crypto"
+	],
+	"payment_status": "unpaid",
+	"permissions": null,
+	"phone_number_collection": {
+		"enabled": false
+	},
+	"recovered_from": null,
+	"saved_payment_method_options": {
+		"allow_redisplay_filters": [
+			"always"
+		],
+		"payment_method_remove": "disabled",
+		"payment_method_save": null
+	},
+	"setup_intent": null,
+	"shipping_address_collection": null,
+	"shipping_cost": null,
+	"shipping_options": [],
+	"status": "open",
+	"submit_type": null,
+	"subscription": null,
+	"success_url": "http://acar11x.dev",
+	"total_details": {
+		"amount_discount": 0,
+		"amount_shipping": 0,
+		"amount_tax": 0
+	},
+	"ui_mode": "hosted",
+	"url": "https://checkout.stripe.com/c/pay/cs_test_a1mmuCrhOydcpGI1b1Fyb3K1xEyckMLSULAs6LDRhvMhZU5vIIK6O6MVGb#fidnandhYHdWcXxpYCc%2FJ2FgY2RwaXEnKSdkdWxOYHwnPyd1blpxYHZxWjA0VmJNTnNARl9pT0dqN1I9V0dhZ3RhZElAdFFoSWFcZnxoUWtUZn00XTxVVFR2UV1nRGlQUTJmMTRzbjVxbURTcnNodFVkNmBMUkdvUkFxVGlfX1BzbH1nNTVhUE9qaGJzbCcpJ2N3amhWYHdzYHcnP3F3cGApJ2dkZm5id2pwa2FGamlqdyc%2FJyZjY2NjY2MnKSdpZHxqcHFRfHVgJz8ndmxrYmlgWmxxYGgnKSdga2RnaWBVaWRmYG1qaWFgd3YnP3F3cGB4JSUl",
+	"wallet_options": null
+}

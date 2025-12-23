@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Thanhnt\Ahomeglobal\Controllers\Frontend\AhomeController;
 use Thanhnt\Ahomeglobal\Controllers\Frontend\AuthController;
+use Thanhnt\Ahomeglobal\Controllers\Frontend\CheckoutController;
 
 Route::prefix('ahome')->group(function () {
 	/**
@@ -29,9 +30,21 @@ Route::prefix('ahome')->group(function () {
 	});
 });
 
+/**
+ * checkout page about 2 step order-info and order-payment
+ * show cart-info, set order-info
+ */
 Route::any('checkout', [AhomeController::class, 'checkout'])->name('checkout');
 
-Route::any('order-success', [AhomeController::class, 'orderSuccess'])->name('order.success');
+/**
+ * checkout by payment paypal, stripe
+ */
+Route::post('checkout-payment', [CheckoutController::class, 'paymentOrder'])->name('checkout.payment');
+
+/**
+ * order success after payment examp: paypal,stripe
+ */
+Route::any('checkout-success', [CheckoutController::class, 'checkoutSuccess'])->name('checkout.success');
 
 Route::get('account-create', [AuthController::class, 'createAccount']);
 

@@ -97,9 +97,12 @@ final class AhomeController extends Controller
 				 * add cart to session.
 				 */
 				if ($this->cartApi->addCart(
-					$request->input('dateSelected'),
-					$request->input('home'),
-					$request->input('room'),
+					[
+						'dateValues' => $request->input('dateSelected'),
+						'home' => $request->input('home'),
+						'room' => $request->input('room'),
+						'qty' => $request->input('qty', 1),
+					]
 				)) {
 					Inertia::share('messages',  'added for order in cart');
 				}
@@ -120,11 +123,6 @@ final class AhomeController extends Controller
 			'customer_info' => $cart['customer_info'] ?? null,
 			'step' => $request->get('step', 'customer-info'),
 		]);
-	}
-
-	public function orderSuccess()
-	{
-		return Inertia::render('Ahomeglobal/Screens/CheckoutSuccess');
 	}
 
 	/**

@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use Illuminate\Http\Request;
 use PaypalServerSdkLib\PaypalServerSdkClientBuilder;
 use PaypalServerSdkLib\Environment;
 use PaypalServerSdkLib\Authentication\ClientCredentialsAuthCredentialsBuilder;
@@ -23,14 +22,17 @@ use PaypalServerSdkLib\Models\Builders\PaypalWalletExperienceContextBuilder;
 use PaypalServerSdkLib\Models\Builders\PurchaseUnitRequestBuilder;
 use PaypalServerSdkLib\Models\PatchOp;
 use Psr\Log\LogLevel;
+use Thanhnt\Ahomeglobal\Api\CartApi;
+use Thanhnt\Ahomeglobal\Api\OrderApi;
 
 class PayPalService
 {
-    private $ordersController;
     private $client;
 
-    public function __construct()
-    {
+    public function __construct(
+        protected CartApi $cartApi,
+        protected OrderApi $orderApi,
+    ) {
         // Đọc các cài đặt trong file config
         $paypalConfigs = config('paypal');
 
@@ -53,37 +55,75 @@ class PayPalService
     }
 
     /**
-     * create order
-     * @param array{amount: array{currency_code: string, value: string, breakdown: array{item_total: array{currency_code: string, value: string}}, items: array} $data
+     * @param array{home_id: integer, room_id: integer, date_from: string, date_to: string, selected_time: array[string], total_price: float, currency_code: string, item: array{name: string, description: string, price: float, quantity: string, category: string, image_url: string, url: string, unit_amount: array{currency_code: string, value: float}}, customer_info: array{name: string, email: string, phone: string}, on_payment_order: array{token: string, id: string,}, on_payment: string|null, expect_order?: string} $cartParams
+     * @return \PaypalServerSdkLib\Http\ApiResponse
      */
-    public function createOrder(array $params = [])
+    public function checkout($cartParams)
     {
+        /**
+         * has exist old order
+         */
+        if ($cartParams['on_payment'] && isset($cartParams['on_payment_order']['token'])) {
+            return $this->updateOrder($cartParams['on_payment_order']['token'], $cartParams);
+        }
+        /**
+         * action for create order
+         */
+        return $this->createOrder($cartParams);
+    }
+
+    /**
+     * create order
+     * @param array $cartParams
+     * @return \PaypalServerSdkLib\Http\ApiResponse
+     */
+    public function createOrder(array $cartParams = [])
+    {
+        $params =  $this->cartApi->formatCartToPaypalParam($cartParams);
         /**
          * setup payment request(not require and setup here)
          * $orderRequest->setPaymentSource($paymetSource);
          */
+        /**
+         * create expect order to compare in checkout-success page.
+         */
+        $expectOrder = $this->orderApi->createExpectOrderByCart($cartParams);
 
         /**
          * setup order request data.
          */
-        $collect = $this->formatCollect($params);
+        $collect = $this->formatCollect($params, $expectOrder);
 
         try {
             $response = $this->client->getOrdersController()->createOrder($collect);
+            if ($response->isSuccess()) {
+                /**
+                 * update cart session for payement info
+                 */
+                $this->cartApi->updateByKey('on_payment_order.token', $response->getResult()->getId());
+                $this->cartApi->updateByKey('expect_order', $expectOrder->id);
+                $this->cartApi->updateByKey('on_payment', 'paypal');
+            }
+
             /**
              * create approve order in approve_order table in database
              */
             return $response;
         } catch (\Exception $e) {
+            $expectOrder->forceDelete();
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
 
     /**
      * the test action request done!.
+     * @param string $order_id
+     * @param array{home_id: integer, room_id: integer, date_from: string, date_to: string, selected_time: array[string], total_price: float, currency_code: string, item: array{name: string, description: string, price: float, quantity: string, category: string, image_url: string, url: string, unit_amount: array{currency_code: string, value: float}}, customer_info: array{name: string, email: string, phone: string}, on_payment_order: array{token: string, id: string,}, on_payment: string|null, expect_order?: string} $cartParams
+     * @return \PaypalServerSdkLib\Http\ApiResponse
      */
-    public function updateOrder(string $order_id, array $params)
+    public function updateOrder(string $order_id, array $cartParams)
     {
+        $params =  $this->cartApi->formatCartToPaypalParam($cartParams);
         /**
          * setup for repalce update amount
          */
@@ -107,11 +147,14 @@ class PayPalService
         ];
 
         try {
-            $response = $this->client->getOrdersController()->patchOrder($collect);
+            $this->client->getOrdersController()->patchOrder($collect);
+            $exOrder = $this->orderApi->updateExpectOrderByCart($cartParams['expect_order'], $cartParams);
+            $this->cartApi->updateByKey('expect_order', $exOrder->id);
+
             /**
              * create approve order in approve_order table in database
              */
-            return $response;
+            return $this->getOrder($order_id);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
@@ -150,6 +193,8 @@ class PayPalService
      */
     protected function createPurchaseUnit(array $data = [])
     {
+        $product = $data['items'][0];
+
         /**
          * create amount with breakdown(tổng giá: gồm giá tổng các thành phần như sản phẩm, vận chuyển, ...)
          * cái này được coi như là amount main()
@@ -197,7 +242,7 @@ class PayPalService
             $amountWithBreakdown
         )->build();
         $purchaseUnits->setItems($this->formatItems($data['items'], $data));
-
+     
         return $purchaseUnits;
     }
 
@@ -241,57 +286,25 @@ class PayPalService
         return $itemsData;;
     }
 
+    /**
+     * getOrder data.
+     * @param string $orderId
+     * @return \PaypalServerSdkLib\Http\ApiResponse
+     */
     public function getOrder(string $orderId)
     {
         $collect = [
             'id' => $orderId
         ];
-        return $apiResponse = $this->client->getOrdersController()->getOrder($collect);
+        return $this->client->getOrdersController()->getOrder($collect);
     }
 
     /**
-     * Capture Order
-     * order status after checkout payment process
+     * @param array{home_id: integer, room_id: integer, date_from: string, date_to: string, selected_time: array[string], total_price: float, currency_code: string, item: array{name: string, description: string, price: float, quantity: string, category: string, image_url: string, url: string, unit_amount: array{currency_code: string, value: float}}, customer_info: array{name: string, email: string, phone: string}, on_payment_order: array{token: string, id: string,}, on_payment: string|null, expect_order?: string} $params
+     * @param ExpectOrder|null $expectOrder
+     * @return array
      */
-    public function captureOrder($orderId)
-    {
-        $collect = [
-            'id' => $orderId,
-            'prefer' => 'return=minimal'
-        ];
-        return $this->client->getOrdersController()->captureOrder($collect);
-    }
-
-    public function approvedOrder($orderId)
-    {
-        $collect = [
-            'id' => $orderId,
-            'body' => [
-                PatchBuilder::init(
-                    PatchOp::ADD
-                )->build()
-            ]
-        ];
-        return $apiResponse = $this->client->getOrdersController()->patchOrder($collect);
-    }
-
-    // 2. Capture Order
-    // public function captureOrder($orderId)
-    // {
-    //     try {
-    //         $response = $this->ordersController->ordersCapture($orderId);
-    //         $capture = $response->result;
-
-    //         // TODO: Update your database with the transaction ID
-    //         // $capture->id
-
-    //         return response()->json($capture);
-    //     } catch (\Exception $e) {
-    //         return response()->json(['error' => $e->getMessage()], 500);
-    //     }
-    // }
-
-    public function formatCollect($params)
+    public function formatCollect($params, $expectOrder = null)
     {
         // https://developer.paypal.com/serversdk/php/api-endpoints/orders/create-order
         // test paypal button
@@ -315,9 +328,10 @@ class PayPalService
          * set order context.
          */
         $orderRequest->setApplicationContext($this->createOrderContext([
-            'returnUrl' => route('order.success'),
+            'returnUrl' => $expectOrder ? route('checkout.success', ['expect_order' => $expectOrder->id]) : route('checkout.success'),
             'cancelUrl' => route('checkout', ['step' => 'payment']),
         ]));
+
         /**
          * setup payment request(not require and setup here)
          * $orderRequest->setPaymentSource($paymetSource);
@@ -331,5 +345,18 @@ class PayPalService
             'prefer' => 'return=minimal'
         ];
         return $collect;
+    }
+
+    /**
+     * Capture Order
+     * order status after checkout payment process
+     */
+    public function captureOrder($orderId)
+    {
+        $collect = [
+            'id' => $orderId,
+            'prefer' => 'return=minimal'
+        ];
+        return $this->client->getOrdersController()->captureOrder($collect);
     }
 }
