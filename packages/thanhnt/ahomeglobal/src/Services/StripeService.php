@@ -54,24 +54,20 @@ final class StripeService
 	 */
 	public function createCartItem($params, $absolute = false)
 	{
-		$cartItemData = $this->formatLineItem($params);
 		/**
 		 * should create new expert order
 		 * then
 		 * pass increment id of order to cart, and save to session, pass to checkout url.
 		 */
 		$expectOrder = $this->orderApi->createExpectOrderByCart($params);
+		/**
+		 * set expect order id to session
+		 */
+		$this->cartApi->updateExpectOrder($expectOrder->id);
+
+		$cartItemData = $this->formatLineItem($params);
 		// https://www.youtube.com/watch?v=J13Xe939Bh8
 		try {
-			/**
-			 * setup success_url
-			 */
-			if (config('ahomeglobal.payment.stripe.ui_mode') === 'hosted') {
-				$cartItemData['success_url'] = route('checkout.success', ['expect_order' => $expectOrder->id]);
-			} else if (config('ahomeglobal.payment.stripe.ui_mode') === 'custom') {
-				$cartItemData['return_url'] = route('checkout.success', ['expect_order' => $expectOrder->id]);
-			}
-
 			/**
 			 * add product to cart and return checkout object has url_checkout link
 			 * https://docs.stripe.com/payments/checkout
@@ -83,13 +79,13 @@ final class StripeService
 			 * update cart session expect_order if create api success.
 			 */
 			$this->cartApi->updateByKey('on_payment_order.id', $checkout_session->id);
-			$this->cartApi->updateByKey('expect_order', $expectOrder->id);
 			return $checkout_session;
 		} catch (ErrorException $e) {
 			/**
 			 * if error, delete expert order
 			 */
 			ExpectOrder::forceDestroy($expectOrder->id);
+			$this->cartApi->clearExpectOrder();
 			return null;
 		}
 	}
@@ -111,13 +107,7 @@ final class StripeService
 				$currentSession->expire();
 			}
 			$cartItemData = $this->formatLineItem($cartParams);
-			/**
-			 * setup success_url
-			 */
-			if (config('ahomeglobal.payment.stripe.ui_mode') === 'hosted') {
-				$cartItemData['success_url'] = route('checkout.success', ['expect_order' => $cartParams['expect_order']]);
-			}
-
+			
 			/**
 			 * add product to cart and return checkout object has url_checkout link
 			 * https://docs.stripe.com/payments/checkout
@@ -129,8 +119,8 @@ final class StripeService
 			 * allways update if exist expect order
 			 * then update too cart session expect_order
 			 */
-			$exOrder = $this->orderApi->updateExpectOrderByCart($cartParams['expect_order'], $cartParams);
-			$this->cartApi->updateByKey('expect_order', $exOrder->id);
+			$exOrder = $this->orderApi->updateExpectOrderByCart($this->cartApi->getExpectOrder(), $cartParams);
+			$this->cartApi->updateExpectOrder($exOrder->id);
 			$this->cartApi->updateByKey('on_payment_order.id', $exOrder->id);
 
 			return $checkout_session;
@@ -247,12 +237,12 @@ final class StripeService
 			 * pay onpage checkout
 			 */
 			$formatData['ui_mode'] = 'custom';
-			$formatData['return_url'] = route('checkout.success', ['expect_order' => $cartParams['expect_order'] ?? null]);
+			$formatData['return_url'] = route('checkout.success', ['expect_order' => $this->cartApi->getExpectOrder()]);
 		} elseif (config('ahomeglobal.payment.stripe.ui_mode') === 'hosted') {
 			/**
 			 * default pay out redirect checkout page stripe
 			 */
-			$formatData['success_url'] =  route('checkout.success', ['expect_order' => $cartParams['expect_order'] ?? null]);
+			$formatData['success_url'] =  route('checkout.success', ['expect_order' => $this->cartApi->getExpectOrder()]);
 			$formatData['cancel_url'] = route('checkout', ['step' => 'payment']);
 		}
 

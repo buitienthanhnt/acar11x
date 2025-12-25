@@ -48,6 +48,7 @@ final class OrderRepository
 		 * has 2 option: 1 dateRange, 2 date list
 		 */
 		$activeRoom = $this->getActiveRoom($dateValues, $home)->get()->makeHidden([RoomInterface::BOOKED_DATE, RoomInterface::PRICE]);
+		// dd($activeRoom);
 		if (!$activeRoom->count()) {
 			return null;
 			throw new Exception('the input date or home not active');
@@ -72,7 +73,7 @@ final class OrderRepository
 				OrderInterface::DATE_FROM => $dateValues[0] ?? Carbon::now(),
 				OrderInterface::DATE_TO => end($dateValues) ?? Carbon::now(),
 				OrderInterface::SELECTED_TIME => $dateValues,
-				OrderInterface::TOTAL_PRICE => $this->dateCount($dateValues) * $selectedRoom->price,
+				OrderInterface::TOTAL_PRICE => $this->dateCount($dateValues) * $selectedRoom->price * 1000, // kvnd to vnd
 			],
 			'expect_room' => $selectedRoom,
 		];

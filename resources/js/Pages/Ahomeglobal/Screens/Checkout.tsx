@@ -1,9 +1,8 @@
 import { Head } from "@inertiajs/react";
 import { PageLayout } from "../Layouts";
 import React, { createContext, FunctionComponent, useEffect, useMemo } from "react";
-import { Stepper, Step, Button, Typography, } from "@material-tailwind/react";
+import { Stepper, Step, Typography, } from "@material-tailwind/react";
 import {
-	CogIcon,
 	UserIcon,
 	BuildingLibraryIcon,
 } from "@heroicons/react/24/outline";
@@ -26,14 +25,14 @@ const steps = [
 		position: 0,
 		key: 'customer-info',
 		component: <CustomerInfo onSuccess={() => { }} onError={() => { }}></CustomerInfo>,
-		label: 'customer info',
+		label: 'Thông tin khách hàng',
 		icon: <UserIcon className="h-5 w-5" />,
 	},
 	{
 		position: 1,
 		key: 'payment',
 		component: <PaymentInfo></PaymentInfo>,
-		label: 'payment info',
+		label: 'Thanh toán',
 		icon: <BuildingLibraryIcon className="h-5 w-5" />
 	},
 ]
@@ -54,14 +53,8 @@ const CheckoutContext = createContext<CheckoutProps>({
 
 const Checkout: FunctionComponent<Props> = ({ dateSelected, home, room, totalPrice, step, customer_info }: Props) => {
 	const [activeStep, setActiveStep] = React.useState(0);
-	const [isLastStep, setIsLastStep] = React.useState(false);
-	const [isFirstStep, setIsFirstStep] = React.useState(false);
-
-	const handleNext = () => !isLastStep && setActiveStep((cur) => cur + 1);
-	const handlePrev = () => !isFirstStep && setActiveStep((cur) => cur - 1);
 
 	useEffect(() => {
-		console.log('----->', step, customer_info);
 		if (step) {
 			const stepSelected = steps.find(s => s.key === step);
 			if (stepSelected && customer_info) {
@@ -83,7 +76,7 @@ const Checkout: FunctionComponent<Props> = ({ dateSelected, home, room, totalPri
 	return (
 		<PageLayout>
 			<Head>
-				<title>Checkout</title>
+				<title>Thanh toán</title>
 			</Head>
 			<CheckoutContext.Provider value={{
 				dateSelected: dateSelected,
@@ -96,13 +89,13 @@ const Checkout: FunctionComponent<Props> = ({ dateSelected, home, room, totalPri
 						<div className="flex flex-col gap-y-10">
 							<div className="w-full justify-center flex">
 								<div className="w-10/12 md:w-8/12">
+									{/* @ts-ignore */}
 									<Stepper
 										activeStep={activeStep}
-										isLastStep={(value) => setIsLastStep(value)}
-										isFirstStep={(value) => setIsFirstStep(value)}
 									>
 										{steps.map(step => {
 											return (
+												// @ts-ignore
 												<Step key={step.key}
 													onClick={() => {
 														if (step.position < selectedStep.position) {
@@ -113,6 +106,7 @@ const Checkout: FunctionComponent<Props> = ({ dateSelected, home, room, totalPri
 													{step.icon}
 													{
 														activeStep === step.position && <div className="absolute -bottom-[2rem] w-max text-center">
+															{/* @ts-ignore */}
 															<Typography
 																variant="h6"
 																color={activeStep === step.position ? "black" : "gray"}
@@ -137,15 +131,6 @@ const Checkout: FunctionComponent<Props> = ({ dateSelected, home, room, totalPri
 								})}
 							</div>
 						</div>
-
-						{/* <div className="mt-32 flex justify-between">
-						<Button onClick={handlePrev} disabled={isFirstStep}>
-							Prev
-						</Button>
-						<Button onClick={handleNext} disabled={isLastStep}>
-							Next
-						</Button>
-					</div> */}
 					</div>
 				</div>
 			</CheckoutContext.Provider>

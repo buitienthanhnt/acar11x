@@ -15,6 +15,7 @@ interface OrderInterface
 	const QTY = 'qty';
 	const TOTAL_PRICE = 'total_price';
 	const STATUS = 'status'; // complete, success, cancel,
+	const INCREMENT_ID = 'increment_id';
 
 	const HIDDEN_FIELDS = ['created_at', 'updated_at', 'deleted_at', self::HOME_ID, self::ROOM_ID,];
 
@@ -26,4 +27,5 @@ interface OrderInterface
 	 */
 	const ROOM = 'room'; // relation order belong to room
 	const HOME = 'home'; // relation order belong to home
+	const DETAIL = 'detail'; // relation order to order detail
 }

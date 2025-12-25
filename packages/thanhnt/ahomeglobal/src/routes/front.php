@@ -34,7 +34,7 @@ Route::prefix('ahome')->group(function () {
  * checkout page about 2 step order-info and order-payment
  * show cart-info, set order-info
  */
-Route::any('checkout', [AhomeController::class, 'checkout'])->name('checkout');
+Route::any('checkout', [CheckoutController::class, 'checkout'])->name('checkout');
 
 /**
  * checkout by payment paypal, stripe

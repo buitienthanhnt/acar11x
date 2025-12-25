@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Attributes\UseFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Thanhnt\Ahomeglobal\Database\Factories\OrderFactory;
 use Thanhnt\Ahomeglobal\Models\Types\OrderInterface;
@@ -58,5 +59,12 @@ class Order extends Model implements OrderInterface
     public function home(): BelongsTo
     {
         return $this->belongsTo(Home::class, self::HOME_ID, Home::ID);
+    }
+
+    /**
+     * link the order to order detail
+     */
+    public function detail() : HasOne {
+        return $this->hasOne(OrderDetail::class, OrderDetail::ORDER_ID, self::ID);
     }
 }

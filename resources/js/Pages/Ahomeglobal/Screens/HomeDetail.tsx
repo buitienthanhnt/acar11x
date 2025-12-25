@@ -100,16 +100,17 @@ const HomeDetail: FunctionComponent<Props> = ({ homeDetail, selectedDates, roomS
 			</Head>
 			<div className='space-y-1 my-1'>
 				<div className='flex flex-col gap-y-2 bg-gray-100 p-1 md:p-2 rounded-md'>
-					<p className='text-2xl font-bold text-black'>Hotel: {homeDetail.name}</p>
+					<p className='text-2xl font-bold text-black'>Nơi lưu trú: {homeDetail.name}</p>
 					<div className='flex space-x-1'>
 						<MapPinIcon className="size-5 text-gray-800"></MapPinIcon>
-						<p className='text-lg font-semibold '>District: {homeDetail.district}</p>
+						<p className='text-lg font-semibold '>Địa chỉ: {homeDetail.district}</p>
 					</div>
 					<div className='flex space-x-1'>
 						<SparklesIcon className="size-5 text-gray-800"></SparklesIcon>
-						<p className='text-md font-semibold text-green-400'>Description: {homeDetail.description}</p>
+						<p className='text-md font-semibold text-green-400'>Mô tả: {homeDetail.description}</p>
 					</div>
 					{
+						// @ts-ignore
 						rate && <Rating value={Number(rate.value as unknown as number > 5 ? 5 : rate.value)} placeholder={'rate'}
 							onResize={undefined}
 							onResizeCapture={undefined}
@@ -118,11 +119,12 @@ const HomeDetail: FunctionComponent<Props> = ({ homeDetail, selectedDates, roomS
 					}
 				</div>
 				<div className='h-[1px] bg-black'></div>
+				{/* @ts-ignore */}
 				<FlashMessage message={messages}></FlashMessage>
 				{homeDetail.rooms.length ?
 					<div className='space-y-2 grid grid-cols-1 lg:grid-cols-5 gap-x-1 bg-gray-100 p-1 md:p-2 rounded-md'>
 						<div className='col-span-2 rounded-md space-y-2'>
-							<p className='text-xl font-semibold '>List rooms of the hotel:</p>
+							<p className='text-xl font-semibold '>Danh sách phòng:</p>
 							<div className='flex flex-col gap-y-2'>
 								{homeDetail.rooms.map(room => <RoomItem room={room} key={room.id.toString()} dateSelected={dateSelected}></RoomItem>)}
 							</div>
@@ -132,7 +134,7 @@ const HomeDetail: FunctionComponent<Props> = ({ homeDetail, selectedDates, roomS
 						</div>
 					</div> : (
 						<div className='bg-white flex justify-center items-center rounded-md p-1 lg:p-4'>
-							<p className='font-semibold text-xl text-red-500 italic'>the hotel not active!</p>
+							<p className='font-semibold text-xl text-red-500 italic'>Không có lựa chọn khả dụng!</p>
 						</div>
 					)}
 				{location && <div className='grid grid-cols-1 bg-gradient-to-r from-blue-gray-600 to-blue-gray-500 lg:grid-cols-2 rounded-md'>

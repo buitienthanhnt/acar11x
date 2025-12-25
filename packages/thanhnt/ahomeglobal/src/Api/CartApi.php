@@ -15,6 +15,7 @@ use Thanhnt\Ahomeglobal\Models\Types\RoomInterface;
 final class CartApi
 {
 	const CART_KEY = 'cart';
+	const EXPECT_ORDER_KEY = 'expect_order';
 
 	public function __construct(
 		protected Session $session,
@@ -84,7 +85,7 @@ final class CartApi
 			"customer_info" => null, // array{name: string, email: string, phone: string}
 			"on_payment_order" => null,      // array{token: string, id: string,}  ()
 			'on_payment' => null,            // paypal|stripe 
-			'expect_order' => null,
+			// 'expect_order' => null,
 			'qty' => $params['qty'] ?? 1,
 		];
 
@@ -97,7 +98,7 @@ final class CartApi
 				'customer_info' => $currentCart['customer_info'],
 				"on_payment_order" => $currentCart['on_payment_order'],
 				"on_payment" => $currentCart['on_payment'],
-				"expect_order" => $currentCart['expect_order'],
+				// "expect_order" => $currentCart['expect_order'],
 			];
 		}
 
@@ -185,9 +186,10 @@ final class CartApi
 	 * clear cart
 	 * @return void
 	 */
-	public function clearCart()
+	public function clearCartOrder()
 	{
 		$this->session->forget(self::CART_KEY);
+		$this->session->forget(self::EXPECT_ORDER_KEY);
 	}
 
 	/**
@@ -251,5 +253,33 @@ final class CartApi
 		 * push session id add to array value
 		 */
 		session()->push(self::CART_KEY, $value);
+	}
+
+	/**
+	 * get expect order
+	 * @return string|null
+	 */
+	public function getExpectOrder()
+	{
+		return $this->session->get(self::EXPECT_ORDER_KEY);
+	}
+
+	/**
+	 * update expect order
+	 * @param string $expectOrder
+	 * @return void
+	 */
+	public function updateExpectOrder($expectOrder)
+	{
+		$this->session->put(self::EXPECT_ORDER_KEY, $expectOrder);
+	}
+
+	/**
+	 * clear expect order
+	 * @return void
+	 */
+	public function clearExpectOrder()
+	{
+		$this->session->forget(self::EXPECT_ORDER_KEY);
 	}
 }

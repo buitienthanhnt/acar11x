@@ -11,7 +11,7 @@ export type RoomItem = {
 	home_id: number,
 	created_at: string,
 	image_path?: string,
-	price: string,
+	price: number,
 }
 
 export type RoomDetail = RoomItem & {

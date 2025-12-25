@@ -61,12 +61,15 @@ final class OrderApi
 	{
 		$expectOrder = ExpectOrder::find($expectOrderId);
 		if ($expectOrder) {
-			return $this->order->factory()->create($expectOrder->makeHidden([
-				ExpectOrderInterface::ID,
-				'created_at',
-				'updated_at',
-				'deleted_at'
-			])->toArray());
+			return $this->order->factory()->create([
+				...$expectOrder->makeHidden([
+					ExpectOrderInterface::ID,
+					'created_at',
+					'updated_at',
+					'deleted_at'
+				])->toArray(),
+				OrderInterface::INCREMENT_ID => $expectOrder->id
+			]);
 		}
 	}
 
@@ -350,5 +353,19 @@ final class OrderApi
 		return $this->room->where(
 			fn($builder) =>  $homeId ? $builder->where(OrderTimeInterface::HOME_ID, $homeId) : $builder
 		)->whereNotIn(RoomInterface::ID, $this->getDisableArrayRoomByDates(listDate: $listDate))->exists();
+	}
+
+	/**
+	 * get order detail by increment id
+	 * @param string $incrementId
+	 * @return \Illuminate\Database\Eloquent\Builder|null
+	 */
+	public function getOrderDetailByIncrement(string $incrementId)
+	{
+		return $this->order->where(OrderInterface::INCREMENT_ID, $incrementId)
+			->with(OrderInterface::ROOM)
+			->with(OrderInterface::HOME)
+			->with(OrderInterface::DETAIL)
+			->first();
 	}
 }

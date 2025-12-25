@@ -4,7 +4,6 @@ namespace Thanhnt\Ahomeglobal\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Thanhnt\Ahomeglobal\Api\CartApi;
 use Thanhnt\Ahomeglobal\Api\HomeApi;
@@ -12,7 +11,6 @@ use Thanhnt\Ahomeglobal\Api\RoomApi;
 use Thanhnt\Ahomeglobal\Helper\DateTimeHelper;
 use Thanhnt\Ahomeglobal\Models\Order;
 use Thanhnt\Ahomeglobal\Models\Room;
-use Thanhnt\Ahomeglobal\Models\Types\OrderInterface;
 use Thanhnt\Ahomeglobal\Models\Types\RoomInterface;
 use Thanhnt\Ahomeglobal\Api\OrderApi;
 
@@ -36,7 +34,7 @@ final class AhomeController extends Controller
 	{
 		return Inertia::render('Ahomeglobal/Screens/HomeList', [
 			"homes" => $this->homeApi->paginateHomeWithFilter($request->get('filters'), limit: 8),
-			'rooms' => $this->roomApi->paginateRoomWithFilter($request->get('filters'), 6),
+			'rooms' => $this->roomApi->paginateRoomWithFilter($request->get('filters'), 8),
 			'allFilters' => $this->roomApi->allFilters(selected: $request->get('filters')),
 			"filters" => $request->get('filters'),
 		]);
@@ -67,58 +65,6 @@ final class AhomeController extends Controller
 			],
 		);
 		return $home;
-	}
-
-	/**
-	 * checkout page
-	 * @return \Inertia\Response|Redirect
-	 */
-	public function checkout(Request $request)
-	{
-		/**
-		 * post action
-		 */
-		if ($request->isMethod('POST')) {
-			if ($request->input('action') === 'customer-info') {
-				/**
-				 * update cart customer info
-				 */
-				$this->cartApi->updateCartCustomer([
-					'name' => $request->input('name'),
-					'email' => $request->input('email'),
-					'phone' => $request->input('phone'),
-				]);
-			} else {
-				/**
-				 * add cart to session.
-				 */
-				if ($this->cartApi->addCart(
-					[
-						'dateValues' => $request->input('dateSelected'),
-						'home' => $request->input('home'),
-						'room' => $request->input('room'),
-						'qty' => $request->input('qty', 1),
-					]
-				)) {
-					Inertia::share('messages',  'added for order in cart');
-				}
-			}
-		}
-
-		$cart = $this->cartApi->getCart();
-		if (empty($cart)) {
-			return redirect()->back()->with('error', 'Cart is empty');
-		}
-
-		return Inertia::render('Ahomeglobal/Screens/Checkout', [
-			'dateSelected' => config('ahomeglobal.mode') === 'list_date' ? $cart[OrderInterface::SELECTED_TIME] :
-				[$cart[OrderInterface::DATE_FROM], $cart[OrderInterface::DATE_TO]],
-			'home' => $cart[OrderInterface::HOME_ID] ? $this->homeApi->getHomeDetail($cart[OrderInterface::HOME_ID]) : null,
-			'room' => $cart[OrderInterface::ROOM_ID] ? $this->roomApi->getRoomDetailNoOrders($cart[OrderInterface::ROOM_ID]) : null,
-			'totalPrice' => $cart[OrderInterface::TOTAL_PRICE] ?? 0,
-			'customer_info' => $cart['customer_info'] ?? null,
-			'step' => $request->get('step', 'customer-info'),
-		]);
 	}
 
 	/**

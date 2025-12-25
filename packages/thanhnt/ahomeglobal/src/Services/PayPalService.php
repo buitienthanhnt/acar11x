@@ -79,15 +79,17 @@ class PayPalService
      */
     public function createOrder(array $cartParams = [])
     {
-        $params =  $this->cartApi->formatCartToPaypalParam($cartParams);
-        /**
-         * setup payment request(not require and setup here)
-         * $orderRequest->setPaymentSource($paymetSource);
-         */
         /**
          * create expect order to compare in checkout-success page.
          */
         $expectOrder = $this->orderApi->createExpectOrderByCart($cartParams);
+
+        /**
+         * setup payment request(not require and setup here)
+         * $orderRequest->setPaymentSource($paymetSource);
+         */
+        $params =  $this->cartApi->formatCartToPaypalParam($cartParams);
+        $this->cartApi->updateExpectOrder($expectOrder->id);
 
         /**
          * setup order request data.
@@ -101,7 +103,7 @@ class PayPalService
                  * update cart session for payement info
                  */
                 $this->cartApi->updateByKey('on_payment_order.token', $response->getResult()->getId());
-                $this->cartApi->updateByKey('expect_order', $expectOrder->id);
+                $this->cartApi->updateExpectOrder($expectOrder->id);
                 $this->cartApi->updateByKey('on_payment', 'paypal');
             }
 
@@ -111,6 +113,7 @@ class PayPalService
             return $response;
         } catch (\Exception $e) {
             $expectOrder->forceDelete();
+             $this->cartApi->clearExpectOrder();
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
@@ -148,8 +151,8 @@ class PayPalService
 
         try {
             $this->client->getOrdersController()->patchOrder($collect);
-            $exOrder = $this->orderApi->updateExpectOrderByCart($cartParams['expect_order'], $cartParams);
-            $this->cartApi->updateByKey('expect_order', $exOrder->id);
+            $exOrder = $this->orderApi->updateExpectOrderByCart($this->cartApi->getExpectOrder(), $cartParams);
+            $this->cartApi->updateExpectOrder($exOrder->id);
 
             /**
              * create approve order in approve_order table in database
@@ -242,7 +245,7 @@ class PayPalService
             $amountWithBreakdown
         )->build();
         $purchaseUnits->setItems($this->formatItems($data['items'], $data));
-     
+
         return $purchaseUnits;
     }
 
@@ -328,7 +331,7 @@ class PayPalService
          * set order context.
          */
         $orderRequest->setApplicationContext($this->createOrderContext([
-            'returnUrl' => $expectOrder ? route('checkout.success', ['expect_order' => $expectOrder->id]) : route('checkout.success'),
+            'returnUrl' => $expectOrder ? route('checkout.success', ['expect_order' => $this->cartApi->getExpectOrder()]) : route('checkout.success'),
             'cancelUrl' => route('checkout', ['step' => 'payment']),
         ]));
 

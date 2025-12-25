@@ -18,7 +18,7 @@ const HomeItem = ({ home, selectedDates }: { home: HomeItemType, selectedDates?:
 		<Link className="bg-blue-gray-200 shadow-md p-1 rounded-md flex gap-x-1 md:gap-x-4"
 			queryStringArrayFormat={'brackets'}
 			href={sprintf(Urls.homeDetail, [home.id])}
-			data={{selectedDates: selectedDates}}>
+			data={{ selectedDates: selectedDates }}>
 			<div>
 				<img src={home.image_path} alt="avata hotel" className="max-w-40 md:max-w-60 rounded-md" />
 			</div>
@@ -50,7 +50,7 @@ const HomeList: FunctionComponent<Props> = ({ homes, rooms, filters, allFilters 
 
 	return (
 		<PageLayout>
-			<Head title="home"></Head>
+			<Head title="Trang chủ"></Head>
 			<div className="space-y-1">
 				<div className="min-h-36 md:min-h-64 rounded-md p-4 bg-[url('/ahome/assets/img-1.jpg')] bg-cover bg-center"></div>
 				{/* <HomeMap></HomeMap> */}
@@ -156,23 +156,23 @@ const HomeFilter = ({ filters, allFilters }) => {
 	if (!allFilters) { return null; }
 
 	return (
-		<div className="flex flex-col gap-x-2 gap-y-3">
+		<div className="flex flex-col gap-x-2 gap-y-3 py-2">
 			<div className='flex gap-4 items-center'>
 				{!!formState.search && <XMarkIcon width={36} height={36} className='hover:rotate-12 hover:text-orange-800' onClick={() => {
 					searchLocation(true)
 				}}></XMarkIcon>}
 				<input type="text" value={formState.search}
 					onChange={e => setFormState(old => { return { ...old, search: e.target.value } })}
-					placeholder='Search By Location'
+					placeholder='Tìm theo địa danh'
 					className='rounded-md w-full md:w-96'
 				/>
 				{formState.search && <div onClick={() => { searchLocation(false) }}>
 					<FingerPrintIcon width={36} height={36} className='hover:scale-110 text-gray-500 hover:text-black'></FingerPrintIcon>
 				</div>}
 			</div>
-			{allFilters.map((filter, index) => {
+			{/* {allFilters.map((filter, index) => {
 				return <DropdownMenu key={index} type={filter.key} label={filter.label} data={filter.data} onChange={onFilterSubmit}></DropdownMenu>
-			})}
+			})} */}
 			<CustomTimeTable
 				selected={dateSelected}
 				onChange={onDateSelect}

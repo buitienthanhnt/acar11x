@@ -6,7 +6,10 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Thanhnt\Ahomeglobal\Api\CartApi;
+use Thanhnt\Ahomeglobal\Api\HomeApi;
 use Thanhnt\Ahomeglobal\Api\OrderApi;
+use Thanhnt\Ahomeglobal\Api\RoomApi;
+use Thanhnt\Ahomeglobal\Models\Types\OrderInterface;
 use Thanhnt\Ahomeglobal\Services\PayPalService;
 use Thanhnt\Ahomeglobal\Services\StripeService;
 
@@ -15,6 +18,8 @@ final class CheckoutController extends Controller
 	public function __construct(
 		protected OrderApi $orderApi,
 		protected CartApi $cartApi,
+		protected HomeApi $homeApi,
+		protected RoomApi $roomApi,
 		protected PayPalService $payPalService,
 		protected StripeService $stripeService,
 	) {
@@ -97,6 +102,9 @@ final class CheckoutController extends Controller
 				}
 				break;
 			default:
+				/**
+				 * code for checkout lately
+				 */
 				break;
 		}
 		return back()->with('error', 'error checkout!.',);
@@ -163,11 +171,55 @@ final class CheckoutController extends Controller
 	}
 
 	/**
-	 * 
+	 * checkout page
+	 * @return \Inertia\Response|Redirect
 	 */
-	public function checkout()
+	public function checkout(Request $request)
 	{
-		return Inertia::render('Ahomeglobal/Screens/Checkout');
+		/**
+		 * post action
+		 */
+		if ($request->isMethod('POST')) {
+			if ($request->input('action') === 'customer-info') {
+				/**
+				 * update cart customer info
+				 */
+				$this->cartApi->updateCartCustomer([
+					'name' => $request->input('name'),
+					'email' => $request->input('email'),
+					'phone' => $request->input('phone'),
+				]);
+			} else {
+				/**
+				 * add cart to session.
+				 */
+				if ($this->cartApi->addCart(
+					[
+						'dateValues' => $request->input('dateSelected'),
+						'home' => $request->input('home'),
+						'room' => $request->input('room'),
+						'qty' => $request->input('qty', 1),
+					]
+				)) {
+					Inertia::share('messages',  'added for order in cart');
+				}
+			}
+		}
+
+		$cart = $this->cartApi->getCart();
+		if (empty($cart)) {
+			return redirect()->back()->with('error', 'Cart is empty');
+		}
+
+		return Inertia::render('Ahomeglobal/Screens/Checkout', [
+			'dateSelected' => config('ahomeglobal.mode') === 'list_date' ? $cart[OrderInterface::SELECTED_TIME] :
+				[$cart[OrderInterface::DATE_FROM], $cart[OrderInterface::DATE_TO]],
+			'home' => $cart[OrderInterface::HOME_ID] ? $this->homeApi->getHomeDetail($cart[OrderInterface::HOME_ID]) : null,
+			'room' => $cart[OrderInterface::ROOM_ID] ? $this->roomApi->getRoomDetailNoOrders($cart[OrderInterface::ROOM_ID]) : null,
+			'totalPrice' => $cart[OrderInterface::TOTAL_PRICE] ?? 0,
+			'customer_info' => $cart['customer_info'] ?? null,
+			'step' => $request->get('step', 'customer-info'),
+		]);
 	}
 
 	/**
@@ -175,6 +227,7 @@ final class CheckoutController extends Controller
 	 */
 	public function checkoutSuccess(Request $request)
 	{
+		// $this->cartApi->clearCartOrder();
 		$cart = $this->cartApi->getCart();
 		if (!$cart) {
 			return redirect()->route('home');
@@ -183,25 +236,28 @@ final class CheckoutController extends Controller
 		/**
 		 * check stripe payment success
 		 */
-		if ($request->get('expect_order') === $cart['expect_order']) {
+		if ($request->get('expect_order') === $this->cartApi->getExpectOrder()) {
 			Inertia::share('messages', 'thank you for order!');
 			/**
 			 * get checkout success info
 			 * add cart to Order
 			 * clear cart data
 			 */
-			$newOrder = $this->orderApi->saveOrderByExpect($cart['expect_order']);
-			if ($newOrder) {
-				$orderDetail = $this->orderApi->saveOrderDetail($newOrder->id, $cart);
+			try {
+				$newOrder = $this->orderApi->saveOrderByExpect($this->cartApi->getExpectOrder());
+				if ($newOrder) {
+					$this->orderApi->saveOrderDetail($newOrder->id, $cart);
+				}
+				$this->cartApi->clearCartOrder();
+				if ($request->get('PayerID')) {
+					// paypal payment has PayerID(now no use)
+				}
+				return Inertia::render('Ahomeglobal/Screens/CheckoutSuccess', [
+					'order' => $this->orderApi->getOrderDetailByIncrement($newOrder->{OrderInterface::INCREMENT_ID}),
+				]);
+			} catch (\Throwable $th) {
+				//throw $th;
 			}
-			$this->cartApi->clearCart();
-			if ($request->get('PayerID')) {
-				// paypal payment has PayerID(now no use)
-			}
-			return Inertia::render('Ahomeglobal/Screens/CheckoutSuccess', [
-				'order' => $newOrder,
-				'orderDetail' => $orderDetail ?? [],
-			]);
 		}
 
 		/**

@@ -7,7 +7,6 @@ import { Button, } from '@material-tailwind/react';
 import { XMarkIcon, CubeIcon, CurrencyDollarIcon, UsersIcon } from '@heroicons/react/24/solid';
 import { usePageMessage, useRoomOrders, useMode } from '../hooks';
 import { listDateToArrayString } from '../Helper/DateTimeHelper';
-import Urls from '../netWork/Urls';
 
 const RoomItem = ({ room, dateSelected }: { room: RoomItemType, dateSelected?: Date[] }) => {
   const booked = useRoomOrders();
@@ -36,8 +35,8 @@ const RoomItem = ({ room, dateSelected }: { room: RoomItemType, dateSelected?: D
       <div>
         <img src={room.image_path} className='min-w-32 w-32 aspect-square rounded-md' alt="" />
       </div>
-      <div>
-        <p className='font-semibold text-purple-500'>Room: {room.title}</p>
+      <div className='flex flex-col gap-y-1'>
+        <p className='font-semibold text-purple-500'>Phòng: {room.title}</p>
         <div className='flex items-center gap-x-1'>
           <CubeIcon className='size-5 text-gray-800'></CubeIcon>
           <p className='text-black font-semibold text-sm md:text-md'>{room.description}</p>
@@ -59,7 +58,7 @@ type RoomTimeProps = {
   allDisable?: string[],
   dateSelected?: Date[],
   setDateSelected: (dates: Date[]) => void,
-  onCheckout: ()=> void,
+  onCheckout: () => void,
 }
 const RoomTime = ({ allDisable, dateSelected, setDateSelected, onCheckout }: RoomTimeProps) => {
   const booked = useRoomOrders();
@@ -94,17 +93,18 @@ const RoomTime = ({ allDisable, dateSelected, setDateSelected, onCheckout }: Roo
         ></CustomTimeTable>
       </div>
       <div>
-        <span className='text-lg font-semibold'>Selected room: {booked?.title || 'Random room'}</span>
+        <span className='text-md font-semibold'>Phòng đang chọn: {booked?.title || 'Ngẫu nhiên'}</span>
         <div className='col-span-1 flex flex-col space-y-1'>
-          {!!dateSelected.length && <div className='flex justify-between items-center'>
-            <span className='text-xl font-semibold'>Your selected:</span>
-            <span className='bg-orange-400 rounded-full p-2' onClick={() => { setDateSelected([]); }}>
+          {!!dateSelected.length && <div className='flex justify-between items-center my-2'>
+            <span className='text-md font-semibold'>Thời gian lưu trú:</span>
+            <span className='bg-orange-400 rounded-full p-1' onClick={() => { setDateSelected([]); }}>
               <XMarkIcon className='size-4 text-white font-extrabold'></XMarkIcon>
             </span>
           </div>}
           <SelectedInfo dateSelected={dateSelected || []}></SelectedInfo>
-          {!!dateSelected.length && <Button placeholder={'view selected'} onClick={onCheckout}>
-            <span>Order the selected</span>
+          {/* @ts-ignore */}
+          {!!dateSelected.length && <Button placeholder={'view selected'} style={{marginTop: '10px'}} onClick={onCheckout}>
+            <span>Đặt phòng</span>
           </Button>}
         </div>
       </div>

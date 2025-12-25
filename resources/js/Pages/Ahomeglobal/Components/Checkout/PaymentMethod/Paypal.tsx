@@ -22,6 +22,7 @@ const Paypal = () => {
 
 	return (
 		<div className='flex justify-end w-full mt-2'>
+			{/* @ts-ignore */}
 			<Button
 				fullWidth
 				variant="outlined"
@@ -36,8 +37,10 @@ const Paypal = () => {
 			</Button>
 			<AwaitProcess
 				open={processing}
-				headerContent="await loading for payment process"
-				bodyContent={<Spinner className="h-12 w-12" />}>
+				headerContent="Đang xử lý, vui lòng chờ phản hồi!"
+				// @ts-ignore
+				bodyContent={<Spinner className="h-12 w-12" />}
+			>
 			</AwaitProcess>
 		</div>
 	)
