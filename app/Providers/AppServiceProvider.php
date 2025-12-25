@@ -12,16 +12,12 @@ use App\Listeners\PageSavedListen;
 use App\Listeners\PageTagListen;
 use App\Listeners\ViewCountListen;
 use App\Listeners\WriterSavedListen;
-use App\Models\User;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\ServiceProvider;
-use Laravel\Cashier\Cashier;
-use Stripe\Product;
-use Stripe\Stripe;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -38,7 +34,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-       
+
         $this->defineEventListener();
 
         Vite::prefetch(concurrency: 3);
@@ -46,14 +42,6 @@ class AppServiceProvider extends ServiceProvider
         RateLimiter::for('api', function (Request $request) {
             return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
         });
-
-        /**
-         * define for cashier stripe
-         */
-        Cashier::useCustomerModel(User::class);
-        // Cashier::calculateTaxes();
-
-        Stripe::setApiKey(env('STRIPE_SECRET'));
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace Thanhnt\Ahomeglobal\Services;
 
 use PaypalServerSdkLib\PaypalServerSdkClientBuilder;
 use PaypalServerSdkLib\Environment;

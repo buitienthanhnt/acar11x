@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace Thanhnt\Ahomeglobal\Services;
 
 use ErrorException;
 use Stripe\Charge;

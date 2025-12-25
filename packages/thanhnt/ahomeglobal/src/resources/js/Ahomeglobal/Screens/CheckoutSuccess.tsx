@@ -1,10 +1,19 @@
+import { Head } from "@inertiajs/react";
+import { PageLayout } from "../Layouts";
+
 const CheckoutSuccess = () => {
 	return (
-		<div>
-			<span>
-				checkout success page
-			</span>
-		</div>
+		<PageLayout>
+			<Head>
+				<title>checkout success</title>
+			</Head>
+			<div>
+				<span>
+					checkout success page
+				</span>
+			</div>
+		</PageLayout>
+
 	)
 }
 

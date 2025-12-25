@@ -17,30 +17,25 @@ type Props = {
 	home: HomeDetail,
 	room?: RoomItem,
 	totalPrice?: number;
+	step?: 'payment' | 'customer-info';
+	customer_info?: any;
 }
 
 const steps = [
 	{
 		position: 0,
 		key: 'customer-info',
-		component: <CustomerInfo></CustomerInfo>,
+		component: <CustomerInfo onSuccess={() => { }} onError={() => { }}></CustomerInfo>,
 		label: 'customer info',
 		icon: <UserIcon className="h-5 w-5" />,
 	},
 	{
 		position: 1,
-		key: 'payment-info',
+		key: 'payment',
 		component: <PaymentInfo></PaymentInfo>,
 		label: 'payment info',
 		icon: <BuildingLibraryIcon className="h-5 w-5" />
 	},
-	{
-		position: 2,
-		key: 'submit-info',
-		component: <PaymentInfo></PaymentInfo>,
-		label: 'success info',
-		icon: <CogIcon className="h-5 w-5" />
-	}
 ]
 
 type CheckoutProps = {
@@ -57,9 +52,7 @@ const CheckoutContext = createContext<CheckoutProps>({
 	totalPrice: undefined,
 })
 
-const Checkout: FunctionComponent<Props> = ({ dateSelected, home, room, totalPrice }: Props) => {
-	// console.log('----->', dateSelected, home, room);
-
+const Checkout: FunctionComponent<Props> = ({ dateSelected, home, room, totalPrice, step, customer_info }: Props) => {
 	const [activeStep, setActiveStep] = React.useState(0);
 	const [isLastStep, setIsLastStep] = React.useState(false);
 	const [isFirstStep, setIsFirstStep] = React.useState(false);
@@ -68,7 +61,13 @@ const Checkout: FunctionComponent<Props> = ({ dateSelected, home, room, totalPri
 	const handlePrev = () => !isFirstStep && setActiveStep((cur) => cur - 1);
 
 	useEffect(() => {
-
+		console.log('----->', step, customer_info);
+		if (step) {
+			const stepSelected = steps.find(s => s.key === step);
+			if (stepSelected && customer_info) {
+				setActiveStep(stepSelected.position);
+			}
+		}
 	}, [])
 
 	const selectedStep = useMemo(() => {

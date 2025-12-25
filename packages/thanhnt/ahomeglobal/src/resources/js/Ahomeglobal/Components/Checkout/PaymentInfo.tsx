@@ -1,19 +1,38 @@
-import { FunctionComponent, useCallback, useState } from "react"
-import { Button, Radio } from "@material-tailwind/react";
+import { FunctionComponent, isValidElement, ReactElement, useCallback, useState } from "react"
+import { Radio } from "@material-tailwind/react";
 import { useForm } from "@inertiajs/react";
+import Paypal from "./PaymentMethod/Paypal";
+import StripeSessionOnline from "./PaymentMethod/StripeSessionOnline";
 
-const paymentList = [
-	{
-		type: 'bank',
-		label: 'Chuyển khoản ngân hàng',
-		content: 'Chuyển khoản ngân hàng',
-		checked: true,
-	},
+type PaymentItem = {
+	type: string;
+	label: string;
+	checked?: boolean;
+	content: string | ReactElement
+};
+
+const paymentList: PaymentItem[] = [
+	// {
+	// 	type: 'bank',
+	// 	label: 'Chuyển khoản ngân hàng',
+	// 	content: 'Chuyển khoản ngân hàng',
+	// 	checked: true,
+	// },
 	{
 		type: 'check',
 		label: 'Thanh toán tại quầy',
 		content: 'Chúng tôi sẽ liên hệ qua điện thoại xác nhận với quý khách hàng trong 60 phút sau khi xác nhận thanh toán',
-	}
+	},
+	{
+		type: 'paypal',
+		label: 'Thanh toán qua paypal',
+		content: <Paypal />,
+	},
+	{
+		type: 'stripe',
+		label: 'Thanh toán trực tiếp qua thẻ',
+		content: <StripeSessionOnline />,
+	},
 ];
 
 type Props = {
@@ -28,11 +47,7 @@ const PaymentInfo: FunctionComponent<any> = ({ onSuccess, onError }) => {
 		action: 'set-payment',
 	})
 
-	const onSubmit = useCallback(() => {
-		console.log('====================================');
-		console.log(data);
-		console.log('====================================');
-	}, [data])
+	// const onSubmit = useCallback(() => {}, [data])
 
 	return (
 		<div className="flex justify-center md:grid-cols-2 w-full rounded-md p-1 ">
@@ -41,35 +56,28 @@ const PaymentInfo: FunctionComponent<any> = ({ onSuccess, onError }) => {
 				{paymentList.map((item, index) => {
 					return (
 						<div key={index.toString()} className="flex bg-white p-2 rounded-md shadow-md gap-x-2 items-center">
+							{/* @ts-ignore */}
 							<Radio name="type" checked={item.type === data.paymentMethod} readOnly onClick={() => {
 								setData('paymentMethod', item.type);
 							}} />
-							<div>
+							<div className="w-full">
 								<p className="text-md font-medium text-blue-500">{item.label}</p>
-								{item.type === data.paymentMethod && <p>{item.content}</p>}
+								{item.type === data.paymentMethod && (
+									isValidElement(item.content) ? item.content : <p>{item.content}</p>
+								)}
 							</div>
 						</div>
 					)
 				})}
-				<div className="flex justify-end">
+				{/* <div className="flex justify-end">
 					<Button variant="gradient" onClick={onSubmit}>
 						checkout
 					</Button>
-				</div>
+				</div> */}
 			</div>
 
 		</div>
 	)
 }
-
-const CheckPayment = () => {
-	return (
-		<div>
-
-		</div>
-	)
-}
-
-
 
 export default PaymentInfo

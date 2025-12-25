@@ -12,13 +12,13 @@ type Props = {
 	onError: (error: any) => void
 }
 const CustomerInfo: FunctionComponent<Props> = ({ onSuccess, onError }) => {
-	const {orderInfo} : {orderInfo: any} = usePageProps();
+	const {customer_info} : {customer_info: any} = usePageProps();
 
 	const { data, setData, post, processing, errors, reset, setError } = useForm({
-		name: orderInfo?.name ||'' ,
-		email: orderInfo?.email ||'',
-		phone: orderInfo?.phone || '',
-		action: 'order-info',
+		name: customer_info?.name ||'' ,
+		email: customer_info?.email ||'',
+		phone: customer_info?.phone || '',
+		action: 'customer-info',
 	});
 
 	const onSubmit = (e) => {

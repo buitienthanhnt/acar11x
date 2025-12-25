@@ -3,12 +3,12 @@
 namespace Thanhnt\Ahomeglobal\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
-use App\Services\PayPalService;
-use App\Services\StripeService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Thanhnt\Ahomeglobal\Api\CartApi;
 use Thanhnt\Ahomeglobal\Api\OrderApi;
+use Thanhnt\Ahomeglobal\Services\PayPalService;
+use Thanhnt\Ahomeglobal\Services\StripeService;
 
 final class CheckoutController extends Controller
 {
