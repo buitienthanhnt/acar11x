@@ -11,4 +11,10 @@ return [
 	"qty_mode" => false, // true: support qty for room booking | false: not support
 	"currency_code" => "VND",   // USD | VND | EUR
 	"exchange_vnd" => 26331,
+	"payment" => [
+		"stripe" => [
+			"active" => true,
+			"ui_mode" => "custom", // custom(thanh toán trực tiếp) | embedded | hosted(chuyển hướng c1)
+		]
+	]
 ];

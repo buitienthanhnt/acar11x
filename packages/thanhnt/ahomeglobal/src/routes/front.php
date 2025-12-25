@@ -41,6 +41,8 @@ Route::any('checkout', [AhomeController::class, 'checkout'])->name('checkout');
  */
 Route::post('checkout-payment', [CheckoutController::class, 'paymentOrder'])->name('checkout.payment');
 
+// Route::get('create-checkout-session', [CheckoutController::class, 'paymentOrderStripe']);
+
 /**
  * order success after payment examp: paypal,stripe
  */

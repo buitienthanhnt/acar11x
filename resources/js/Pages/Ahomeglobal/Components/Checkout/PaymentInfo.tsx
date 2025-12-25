@@ -1,8 +1,8 @@
 import { FunctionComponent, isValidElement, ReactElement, useCallback, useState } from "react"
-import { Button, Radio } from "@material-tailwind/react";
+import { Radio } from "@material-tailwind/react";
 import { useForm } from "@inertiajs/react";
 import Paypal from "./PaymentMethod/Paypal";
-import Stripe from './PaymentMethod/Stripe';
+import StripeSessionOnline from "./PaymentMethod/StripeSessionOnline";
 
 type PaymentItem = {
 	type: string;
@@ -11,13 +11,13 @@ type PaymentItem = {
 	content: string | ReactElement
 };
 
-const paymentList = [
-	{
-		type: 'bank',
-		label: 'Chuyển khoản ngân hàng',
-		content: 'Chuyển khoản ngân hàng',
-		checked: true,
-	},
+const paymentList: PaymentItem[] = [
+	// {
+	// 	type: 'bank',
+	// 	label: 'Chuyển khoản ngân hàng',
+	// 	content: 'Chuyển khoản ngân hàng',
+	// 	checked: true,
+	// },
 	{
 		type: 'check',
 		label: 'Thanh toán tại quầy',
@@ -25,13 +25,13 @@ const paymentList = [
 	},
 	{
 		type: 'paypal',
-		label: 'Thanh toan online qua paypal',
+		label: 'Thanh toán qua paypal',
 		content: <Paypal />,
 	},
 	{
 		type: 'stripe',
-		label: 'Thanh toan online qua stripe',
-		content: <Stripe />,
+		label: 'Thanh toán trực tiếp qua thẻ',
+		content: <StripeSessionOnline />,
 	},
 ];
 
@@ -47,11 +47,7 @@ const PaymentInfo: FunctionComponent<any> = ({ onSuccess, onError }) => {
 		action: 'set-payment',
 	})
 
-	const onSubmit = useCallback(() => {
-		console.log('====================================');
-		console.log(data);
-		console.log('====================================');
-	}, [data])
+	// const onSubmit = useCallback(() => {}, [data])
 
 	return (
 		<div className="flex justify-center md:grid-cols-2 w-full rounded-md p-1 ">
@@ -60,6 +56,7 @@ const PaymentInfo: FunctionComponent<any> = ({ onSuccess, onError }) => {
 				{paymentList.map((item, index) => {
 					return (
 						<div key={index.toString()} className="flex bg-white p-2 rounded-md shadow-md gap-x-2 items-center">
+							{/* @ts-ignore */}
 							<Radio name="type" checked={item.type === data.paymentMethod} readOnly onClick={() => {
 								setData('paymentMethod', item.type);
 							}} />
@@ -72,25 +69,15 @@ const PaymentInfo: FunctionComponent<any> = ({ onSuccess, onError }) => {
 						</div>
 					)
 				})}
-				<div className="flex justify-end">
+				{/* <div className="flex justify-end">
 					<Button variant="gradient" onClick={onSubmit}>
 						checkout
 					</Button>
-				</div>
+				</div> */}
 			</div>
 
 		</div>
 	)
 }
-
-const CheckPayment = () => {
-	return (
-		<div>
-
-		</div>
-	)
-}
-
-
 
 export default PaymentInfo

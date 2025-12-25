@@ -52,7 +52,7 @@ final class StripeService
 	 * @param array{home_id: integer, room_id: integer, date_from: string, date_to: string, selected_time: array[string], total_price: float, currency_code: string, item: array{name: string, description: string, price: float, quantity: string, category: string, image_url: string, url: string, unit_amount: array{currency_code: string, value: float}}, customer_info: array{name: string, email: string, phone: string}, on_order: array{token: string, id: string,}} $params
 	 * @return \Stripe\Checkout\Session|null
 	 */
-	public function createCartItem($params)
+	public function createCartItem($params, $absolute = false)
 	{
 		$cartItemData = $this->formatLineItem($params);
 		/**
@@ -66,7 +66,11 @@ final class StripeService
 			/**
 			 * setup success_url
 			 */
-			$cartItemData['success_url'] = route('checkout.success', ['expect_order' => $expectOrder->id]);
+			if (config('ahomeglobal.payment.stripe.ui_mode') === 'hosted') {
+				$cartItemData['success_url'] = route('checkout.success', ['expect_order' => $expectOrder->id]);
+			} else if (config('ahomeglobal.payment.stripe.ui_mode') === 'custom') {
+				$cartItemData['return_url'] = route('checkout.success', ['expect_order' => $expectOrder->id]);
+			}
 
 			/**
 			 * add product to cart and return checkout object has url_checkout link
@@ -110,7 +114,9 @@ final class StripeService
 			/**
 			 * setup success_url
 			 */
-			$cartItemData['success_url'] = route('checkout.success', ['expect_order' => $cartParams['expect_order']]);
+			if (config('ahomeglobal.payment.stripe.ui_mode') === 'hosted') {
+				$cartItemData['success_url'] = route('checkout.success', ['expect_order' => $cartParams['expect_order']]);
+			}
 
 			/**
 			 * add product to cart and return checkout object has url_checkout link
@@ -230,9 +236,25 @@ final class StripeService
 		$formatData = [
 			'line_items' => [$item],
 			'mode' => 'payment',
-			'success_url' => route('checkout.success', ['expect_order' => $cartParams['expect_order'] ?? null]),
-			'cancel_url' => route('checkout', ['step' => 'payment']),
 		];
+
+		/**
+		 * config for stripe ui_mode
+		 */
+		if (config('ahomeglobal.payment.stripe.ui_mode') === 'custom') {
+			/**
+			 * custom mode if online checkout with stripe
+			 * pay onpage checkout
+			 */
+			$formatData['ui_mode'] = 'custom';
+			$formatData['return_url'] = route('checkout.success', ['expect_order' => $cartParams['expect_order'] ?? null]);
+		} elseif (config('ahomeglobal.payment.stripe.ui_mode') === 'hosted') {
+			/**
+			 * default pay out redirect checkout page stripe
+			 */
+			$formatData['success_url'] =  route('checkout.success', ['expect_order' => $cartParams['expect_order'] ?? null]);
+			$formatData['cancel_url'] = route('checkout', ['step' => 'payment']);
+		}
 
 		return $formatData;
 	}
