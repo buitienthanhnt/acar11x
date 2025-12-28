@@ -1,11 +1,11 @@
 import { Head, Link, useForm } from "@inertiajs/react";
-import { PageLayout } from "../Layouts";
 import { useEffect } from "react";
 import InputLabel from "@/Components/InputLabel";
 import TextInput from "@/Components/TextInput";
 import InputError from "@/Components/InputError";
 import PrimaryButton from "@/Components/PrimaryButton";
 import Checkbox from "@/Components/Checkbox";
+import BodyLayout from "../Layouts/BodyLayout";
 
 const LogIn = ({ topMenu, status, canResetPassword }) => {
 	const { data, setData, post, processing, errors, reset } = useForm({
@@ -33,13 +33,14 @@ const LogIn = ({ topMenu, status, canResetPassword }) => {
 		});
 	};
 	return (
-		<PageLayout>
+		<BodyLayout>
 			<Head title="Login"></Head>
-			<div className="bg-red-100 flex-1 flex flex-col p-4 gap-y-1 justify-center items-center rounded-md bg-[url('/ahome/assets/img-1.jpg')] bg-cover bg-center">
+			<div className="bg-red-100 flex-1 flex flex-col p-4 gap-y-1 justify-center items-center bg-[url('/ahome/assets/img-1.jpg')] bg-cover bg-center">
 				<form onSubmit={submit} autoComplete="true" className='w-full sm:max-w-md p-4 shadow-md overflow-hidden rounded-md border-2'>
 					<div className="w-full">
+						{/* @ts-ignore */}
 						<InputLabel htmlFor="email" value="Email" className="text-white font-semibold" />
-						<TextInput
+						<TextInput  // @ts-ignore
 							id="email"
 							type="email"
 							name="email"
@@ -54,8 +55,9 @@ const LogIn = ({ topMenu, status, canResetPassword }) => {
 					</div>
 
 					<div className="mt-4">
+						{/* @ts-ignore */}
 						<InputLabel htmlFor="password" value="Mật khẩu" className="text-white font-semibold" />
-						<TextInput
+						<TextInput  // @ts-ignore
 							id="password"
 							type="password"
 							name="password"
@@ -97,7 +99,7 @@ const LogIn = ({ topMenu, status, canResetPassword }) => {
 					</div>
 				</form>
 			</div>
-		</PageLayout>
+		</BodyLayout>
 	)
 }
 

@@ -5,15 +5,13 @@ use Thanhnt\Ahomeglobal\Controllers\Frontend\AhomeController;
 use Thanhnt\Ahomeglobal\Controllers\Frontend\AuthController;
 use Thanhnt\Ahomeglobal\Controllers\Frontend\CheckoutController;
 
-Route::any('/home', [AhomeController::class, 'home']);
-
 Route::prefix('ahome')->group(function () {
 	/**
 	 * default route for ahome route
 	 */
 	Route::get('/', [AhomeController::class, 'homePage']);
 
-	Route::any('homes', [AhomeController::class, 'homePage']);
+	Route::any('homes', [AhomeController::class, 'home']);
 
 	Route::any('home-detail/{home}', [AhomeController::class, 'homeDetail'])->name('home.detail');
 

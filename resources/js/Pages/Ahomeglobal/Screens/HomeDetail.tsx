@@ -99,7 +99,7 @@ const HomeDetail: FunctionComponent<Props> = ({ homeDetail, selectedDates, roomS
 			<Head>
 				<title>{homeDetail.name}</title>
 			</Head>
-			<div className='space-y-1 my-1'>
+			<div className='space-y-1 my-1 '>
 				<div className='flex flex-col gap-y-2 p-1 md:p-2 rounded-md'>
 					<p className='text-lg md:text-xl font-bold text-black'>Nơi lưu trú: {homeDetail.name}</p>
 					<div className='flex space-x-1'>

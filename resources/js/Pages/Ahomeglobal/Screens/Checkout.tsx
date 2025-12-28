@@ -1,5 +1,4 @@
 import { Head } from "@inertiajs/react";
-import { PageLayout } from "../Layouts";
 import React, { createContext, FunctionComponent, useEffect, useMemo } from "react";
 import { Stepper, Step, Typography, } from "@material-tailwind/react";
 import {
@@ -84,7 +83,7 @@ const Checkout: FunctionComponent<Props> = ({ dateSelected, home, room, totalPri
 				homeDetail: home,
 				roomSelected: room,
 			}}>
-				<div className="flex-1 bg-white">
+				<div className="flex-1 bg-gradient-to-r from-blue-gray-500 to-blue-gray-300">
 					<div className="w-full p-1 md:p-2 space-y-2">
 						<OrderInfomation homeSelected={home} roomSelected={room} dateSelected={dateSelected} totalPrice={totalPrice}></OrderInfomation>
 						<div className="flex flex-col gap-y-10">
