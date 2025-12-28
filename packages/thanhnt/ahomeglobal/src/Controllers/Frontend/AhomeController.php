@@ -26,6 +26,16 @@ final class AhomeController extends Controller
 		// throw new \Exception('Not implemented');
 	}
 
+	public function home(Request $request)
+	{
+		return Inertia::render('Ahomeglobal/Screens/HomePage', [
+			"homes" => $this->homeApi->paginateHomeWithFilter($request->get('filters'), limit: 8),
+			'rooms' => $this->roomApi->paginateRoomWithFilter($request->get('filters'), 8),
+			'allFilters' => $this->roomApi->allFilters(selected: $request->get('filters')),
+			"filters" => $request->get('filters'),
+		]);
+	}
+
 	/**
 	 * show all of home are woking
 	 * @return \Inertia\Response

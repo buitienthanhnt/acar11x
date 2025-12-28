@@ -10,6 +10,7 @@ import { HomeDetail } from "../types/Home";
 import { RoomItem } from "../types/Room";
 import { convertStringServerToDates } from "../Helper/DateTimeHelper";
 import { DatesInfo, HomeInfo, RoomInfo, CustomerInfo, PaymentInfo } from "../Components/Checkout";
+import BodyLayout from "../Layouts/BodyLayout";
 
 type Props = {
 	dateSelected: string[],
@@ -74,7 +75,7 @@ const Checkout: FunctionComponent<Props> = ({ dateSelected, home, room, totalPri
 	}
 
 	return (
-		<PageLayout>
+		<BodyLayout>
 			<Head>
 				<title>Thanh toán</title>
 			</Head>
@@ -83,7 +84,7 @@ const Checkout: FunctionComponent<Props> = ({ dateSelected, home, room, totalPri
 				homeDetail: home,
 				roomSelected: room,
 			}}>
-				<div className="bg-blue-gray-300 flex-1">
+				<div className="flex-1 bg-white">
 					<div className="w-full p-1 md:p-2 space-y-2">
 						<OrderInfomation homeSelected={home} roomSelected={room} dateSelected={dateSelected} totalPrice={totalPrice}></OrderInfomation>
 						<div className="flex flex-col gap-y-10">
@@ -134,7 +135,7 @@ const Checkout: FunctionComponent<Props> = ({ dateSelected, home, room, totalPri
 					</div>
 				</div>
 			</CheckoutContext.Provider>
-		</PageLayout>
+		</BodyLayout>
 	)
 }
 

@@ -10,6 +10,7 @@ use Thanhnt\Ahomeglobal\Api\HomeApi;
 use Thanhnt\Ahomeglobal\Api\OrderApi;
 use Thanhnt\Ahomeglobal\Api\RoomApi;
 use Thanhnt\Ahomeglobal\Models\Types\OrderInterface;
+use Thanhnt\Ahomeglobal\Services\GoogleService;
 use Thanhnt\Ahomeglobal\Services\PayPalService;
 use Thanhnt\Ahomeglobal\Services\StripeService;
 
@@ -22,6 +23,7 @@ final class CheckoutController extends Controller
 		protected RoomApi $roomApi,
 		protected PayPalService $payPalService,
 		protected StripeService $stripeService,
+		protected GoogleService $googleService,
 	) {
 		// throw new \Exception('Not implemented');
 	}
@@ -101,6 +103,8 @@ final class CheckoutController extends Controller
 					return Inertia::location($reponse->url);
 				}
 				break;
+			case 'google':
+				return $this->googleService->checkout();
 			default:
 				/**
 				 * code for checkout lately

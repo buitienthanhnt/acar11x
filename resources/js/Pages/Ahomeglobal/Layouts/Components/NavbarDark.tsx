@@ -9,14 +9,14 @@ import { BellIcon, Cog6ToothIcon, UserCircleIcon, UserMinusIcon } from "@heroico
 import { Link } from "@inertiajs/react";
 import usePageProps from "../../hooks/usePageProps";
 
-export function NavbarDark() {
+export function NavbarDark({ navStyles, }: { navStyles?: string }) {
 	const { auth: { user } } = usePageProps();
 
 	return (
 		<Navbar
 			variant="gradient"
 			color="blue-gray"
-			className="mx-auto from-blue-gray-900 to-blue-gray-800 px-4 py-3 rounded-md"
+			className={`w-full mx-auto from-blue-gray-900 to-blue-gray-800 px-4 py-3 ${navStyles}`}
 		>
 			<div className="flex flex-wrap items-center justify-between gap-y-4 text-white">
 				<Link href={'/ahome/homes'}>

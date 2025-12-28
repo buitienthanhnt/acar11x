@@ -1,5 +1,3 @@
-
-import { useCallback } from 'react';
 import { RoomItem as RoomItemType } from '../types/Room';
 import { router, } from '@inertiajs/react';
 import { CustomTimeTable } from '../Components/CustomCalenda';
@@ -27,13 +25,14 @@ const RoomItem = ({ room, dateSelected }: { room: RoomItemType, dateSelected?: D
       })
     }
   }
-
+ 
   return (
-    <div className={`p-0.5 rounded-md flex gap-x-2 shadow-md ${booked?.id === room.id ? 'bg-green-400' : 'bg-deep-purple-100'}`} onClick={() => {
-      onClickRoom(room);
-    }}>
+    <div className={`hover:shadow-md rounded-md gap-x-2 flex 
+			 h-full ${booked?.id === room.id ? 'bg-gradient-to-r from-green-400 to-green-300' : 'bg-white shadow-sm'}`} onClick={() => {
+        onClickRoom(room);
+      }}>
       <div>
-        <img src={room.image_path} className='min-w-32 w-32 aspect-square rounded-md' alt="" />
+        <img src={room.image_path} className="w-36 min-w-32 aspect-square rounded-md " alt="" />
       </div>
       <div className='flex flex-col gap-y-1'>
         <p className='font-semibold text-purple-500'>Phòng: {room.title}</p>
@@ -64,21 +63,21 @@ const RoomTime = ({ allDisable, dateSelected, setDateSelected, onCheckout }: Roo
   const booked = useRoomOrders();
   const bookedDate = booked?.booked_dates || [];
 
-  const onSubmitOrder = useCallback(() => {
-    const selectedValues = dateSelected.map(d => [
-      d.getFullYear(),
-      d.getMonth() + 1 >= 10 ? d.getMonth() + 1 : '0' + (d.getMonth() + 1).toString(),
-      d.getDate() < 10 ? '0' + d.getDate().toString() : d.getDate(),
-    ].join('-'));
+  // const onSubmitOrder = useCallback(() => {
+  //   const selectedValues = dateSelected.map(d => [
+  //     d.getFullYear(),
+  //     d.getMonth() + 1 >= 10 ? d.getMonth() + 1 : '0' + (d.getMonth() + 1).toString(),
+  //     d.getDate() < 10 ? '0' + d.getDate().toString() : d.getDate(),
+  //   ].join('-'));
 
-    router.visit(window.location.href, {
-      method: 'post',
-      data: {
-        values: selectedValues,
-      },
-    })
+  //   router.visit(window.location.href, {
+  //     method: 'post',
+  //     data: {
+  //       values: selectedValues,
+  //     },
+  //   })
 
-  }, [dateSelected])
+  // }, [dateSelected])
 
   return (
     <div className='space-y-2 grid grid-col-1 md:grid-cols-3 gap-1 lg:gap-2'>
@@ -103,7 +102,7 @@ const RoomTime = ({ allDisable, dateSelected, setDateSelected, onCheckout }: Roo
           </div>}
           <SelectedInfo dateSelected={dateSelected || []}></SelectedInfo>
           {/* @ts-ignore */}
-          {!!dateSelected.length && <Button placeholder={'view selected'} style={{marginTop: '10px'}} onClick={onCheckout}>
+          {!!dateSelected.length && <Button placeholder={'view selected'} style={{ marginTop: '10px' }} onClick={onCheckout}>
             <span>Đặt phòng</span>
           </Button>}
         </div>
@@ -124,7 +123,7 @@ export const SelectedInfo = ({ dateSelected }: { dateSelected: Date[] }) => {
       return <div className='flex flex-col gap-1 md:gap-2'>
         {dateSelected[0] &&
           <div className='text-xl font-semibold text-blue-500'>
-            In Date: {dateSelected[0].getFullYear()}-{dateSelected[0].getMonth() + 1}-{dateSelected[0].getDate()}
+            Trong ngày: {dateSelected[0].getFullYear()}-{dateSelected[0].getMonth() + 1}-{dateSelected[0].getDate()}
           </div>
         }
       </div>
@@ -133,12 +132,12 @@ export const SelectedInfo = ({ dateSelected }: { dateSelected: Date[] }) => {
       <div className='flex flex-col gap-1 md:gap-2'>
         {dateSelected[0] &&
           <div className='text-xl font-semibold text-blue-500'>
-            Date from: {dateSelected[0].getFullYear()}-{dateSelected[0].getMonth() + 1}-{dateSelected[0].getDate()}
+            Từ ngày: {dateSelected[0].getFullYear()}-{dateSelected[0].getMonth() + 1}-{dateSelected[0].getDate()}
           </div>
         }
         {dateSelected[dateSelected.length - 1] &&
           <div className='text-xl font-semibold text-blue-500'>
-            Date to: {dateSelected[dateSelected.length - 1].getFullYear()}-{dateSelected[dateSelected.length - 1].getMonth() + 1}-{dateSelected[dateSelected.length - 1].getDate()}
+            Đến ngày: {dateSelected[dateSelected.length - 1].getFullYear()}-{dateSelected[dateSelected.length - 1].getMonth() + 1}-{dateSelected[dateSelected.length - 1].getDate()}
           </div>
         }
       </div>
@@ -149,7 +148,7 @@ export const SelectedInfo = ({ dateSelected }: { dateSelected: Date[] }) => {
     <div className='grid grid-cols-2 gap-1 md:gap-2'>
       {dateSelected.map((date, index) => {
         return (
-          <div key={index} className='p-1 bg-blue-400 rounded-md flex justify-center items-center content-center'>
+          <div key={index} className='p-1 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-md flex justify-center items-center content-center'>
             <span className='text-black font-semibold'>{date.getFullYear()}-{date.getMonth() + 1}-{date.getDate()}</span>
           </div>
         )

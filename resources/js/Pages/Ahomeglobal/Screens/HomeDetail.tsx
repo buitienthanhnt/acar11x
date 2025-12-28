@@ -13,6 +13,7 @@ import Location from '../Components/Location';
 import useMode from '../hooks/useMode';
 import { isDateInRange, listDateToArrayString } from '../Helper/DateTimeHelper';
 import { PageLayout } from '../Layouts';
+import BodyLayout from '../Layouts/BodyLayout';
 
 type Props = {
 	homeDetail: HomeDetailType,
@@ -94,20 +95,20 @@ const HomeDetail: FunctionComponent<Props> = ({ homeDetail, selectedDates, roomS
 	}
 
 	return (
-		<PageLayout>
+		<BodyLayout>
 			<Head>
 				<title>{homeDetail.name}</title>
 			</Head>
 			<div className='space-y-1 my-1'>
-				<div className='flex flex-col gap-y-2 bg-gray-100 p-1 md:p-2 rounded-md'>
-					<p className='text-2xl font-bold text-black'>Nơi lưu trú: {homeDetail.name}</p>
+				<div className='flex flex-col gap-y-2 p-1 md:p-2 rounded-md'>
+					<p className='text-lg md:text-xl font-bold text-black'>Nơi lưu trú: {homeDetail.name}</p>
 					<div className='flex space-x-1'>
 						<MapPinIcon className="size-5 text-gray-800"></MapPinIcon>
-						<p className='text-lg font-semibold '>Địa chỉ: {homeDetail.district}</p>
+						<p className='text-base md:text-lg font-semibold '>Địa chỉ: {homeDetail.district}</p>
 					</div>
 					<div className='flex space-x-1'>
 						<SparklesIcon className="size-5 text-gray-800"></SparklesIcon>
-						<p className='text-md font-semibold text-green-400'>Mô tả: {homeDetail.description}</p>
+						<p className='text-sm md:text-base font-semibold text-green-400'>Mô tả: {homeDetail.description}</p>
 					</div>
 					{
 						// @ts-ignore
@@ -118,11 +119,11 @@ const HomeDetail: FunctionComponent<Props> = ({ homeDetail, selectedDates, roomS
 						/>
 					}
 				</div>
-				<div className='h-[1px] bg-black'></div>
+				{/* <div className='h-[1px] bg-black'></div> */}
 				{/* @ts-ignore */}
 				<FlashMessage message={messages}></FlashMessage>
 				{homeDetail.rooms.length ?
-					<div className='space-y-2 grid grid-cols-1 lg:grid-cols-5 gap-x-1 bg-gray-100 p-1 md:p-2 rounded-md'>
+					<div className='space-y-2 grid grid-cols-1 lg:grid-cols-5 gap-x-1 p-1 md:p-2 rounded-md'>
 						<div className='col-span-2 rounded-md space-y-2'>
 							<p className='text-xl font-semibold '>Danh sách phòng:</p>
 							<div className='flex flex-col gap-y-2'>
@@ -137,14 +138,14 @@ const HomeDetail: FunctionComponent<Props> = ({ homeDetail, selectedDates, roomS
 							<p className='font-semibold text-xl text-red-500 italic'>Không có lựa chọn khả dụng!</p>
 						</div>
 					)}
-				{location && <div className='grid grid-cols-1 bg-gradient-to-r from-blue-gray-600 to-blue-gray-500 lg:grid-cols-2 rounded-md'>
+				{location && <div className='grid grid-cols-1 lg:grid-cols-2 rounded-md'>
 					<div className='col-span-1 lg:visible'></div>
 					<Location
-						style='w-[420px] h-[360px] border p-1'
+						style='w-[270px] h-[270px] lg:w-80 lg:h-80 border p-1'
 						url={location.value}></Location>
 				</div>}
 			</div>
-		</PageLayout>
+		</BodyLayout>
 	);
 }
 

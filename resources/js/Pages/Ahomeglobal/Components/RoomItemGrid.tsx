@@ -13,12 +13,13 @@ type Props = {
 const RoomItemGrid: FunctionComponent<Props> = ({ room, selectedDates }) => {
 	return (
 		<Link href={sprintf(Urls.homeDetail, [room.home_id])} data={{ room: room.id, selectedDates: selectedDates }}
-			className="p-1 h-full bg-blue-gray-100 rounded-md shadow-lg min-h-10 flex gap-x-2 hover:bg-blue-gray-200"
+			className="shadow-sm md:shadow-md hover:shadow-lg rounded-md gap-x-1 md:gap-x-4 flex md:flex-col 
+			bg-gradient-to-r from-blue-gray-200 to-blue-gray-100 md:bg-transparent md:from-transparent md:to-transparent h-full"
 		>
 			<div>
-				<img src={room.image_path} alt="room avata" className="max-w-40 md:max-w-60 h-full rounded-md" />
+				<img src={room.image_path} alt="room avata" className="max-w-40 md:max-w-60 lg:max-w-full md:min-h-44 lg:min-h-56 rounded-md md:rounded-t-md md:rounded-b-none" />
 			</div>
-			<div className="flex flex-col justify-between md:justify-start">
+			<div className="flex flex-col justify-between md:justify-start md:p-1 md:py-2 h-full space-y-1">
 				<p className='font-semibold text-purple-500'>Room: {room.title}</p>
 				<div className='flex items-center gap-x-1'>
 					<CubeIcon className='size-5 text-gray-800'></CubeIcon>
