@@ -6,8 +6,10 @@ use Exception;
 use Thanhnt\Ahomeglobal\Events\HomeSaveEvent;
 use Thanhnt\Ahomeglobal\Helper\ModelHelper;
 use Thanhnt\Ahomeglobal\Models\Attr;
+use Thanhnt\Ahomeglobal\Models\Gallery;
 use Thanhnt\Ahomeglobal\Models\Home;
 use Thanhnt\Ahomeglobal\Models\Types\AttrInterface;
+use Thanhnt\Ahomeglobal\Models\Types\GalleryInterface;
 use Thanhnt\Ahomeglobal\Models\Types\HomeInterface;
 
 final class HomeRepository
@@ -31,7 +33,32 @@ final class HomeRepository
 			\Illuminate\Support\Facades\Event::dispatch(new HomeSaveEvent($newHome));
 			$this->saveHomeAttr($newHome, $data['attrs'] ?? null);
 		}
+		$this->saveGallery($newHome, explode(',', $data[HomeInterface::GALLERY]) ?? []);
 		return $newHome;
+	}
+
+	/**
+	 * @param Home $home
+	 * @param string[] $data
+	 * @return void
+	 */
+	public function saveGallery(Home $home, array $data)
+	{
+		/**
+		 * delete old gallery
+		 */
+		$home->gallery()->delete();
+		/**
+		 * create new gallery
+		 */
+		$home->gallery()->createMany(
+			array_map(function ($item) {
+				return [
+					GalleryInterface::TYPE => 'home',
+					GalleryInterface::PATH => $item,
+				];
+			}, $data)
+		);
 	}
 
 	/**
@@ -78,7 +105,14 @@ final class HomeRepository
 		}
 		$home->fill($data);
 		$home->save();
+		/**
+		 * save custom attributes
+		 */
 		$this->saveHomeAttr($home, $data['attrs'] ?? []);
+		/**
+		 * save for gallery
+		 */
+		$this->saveGallery($home, explode(',', $data[HomeInterface::GALLERY]) ?? []);
 	}
 
 	/**
@@ -87,6 +121,9 @@ final class HomeRepository
 	 */
 	public function deleteHomeAttrs($home)
 	{
+		/**
+		 * delete old attributes
+		 */
 		$home->attr()->forceDelete();
 	}
 
@@ -106,6 +143,10 @@ final class HomeRepository
 			throw new Exception('the require id not exist');
 		}
 		$home->delete();
+		/**
+		 * delete old gallery
+		 */
+		$home->gallery()->delete();
 		$this->deleteHomeAttrs($home);
 		$this->deleteRooms($home);
 	}

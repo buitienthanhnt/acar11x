@@ -1,11 +1,14 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from 'swiper/modules';
 import ImagePage from "./ImagePage";
-import listPage from "@/data/pageList";
 
+type Props = {
+	images: { path: string }[],
+	className?: string,
+}
 // https://swiperjs.com/react
 // https://swiperjs.com/demos#navigation
-export default function SwiperImage(params) {
+export default function SwiperImage({ className, images }: Props) {
 	const pagination = {
 		clickable: true,
 		renderBullet: function (index, className) {
@@ -13,12 +16,16 @@ export default function SwiperImage(params) {
 		},
 	};
 
+	if (!images) {
+		return null;
+	}
+
 	return (
-		<div className={`${params?.className}`}>
+		<div className={`${className}`}>
 			<style>
 			</style>
 			<Swiper navigation={true} pagination={pagination} modules={[Pagination, Navigation]} className="mySwiper">
-				{listPage.map((item, index) => <SwiperSlide key={index}>
+				{images.map((item, index) => <SwiperSlide key={index}>
 					<SwiperImageItem item={item}></SwiperImageItem>
 				</SwiperSlide>)}
 			</Swiper>
@@ -29,7 +36,7 @@ export default function SwiperImage(params) {
 function SwiperImageItem({ item }) {
 	return (
 		<div className="aspect-video max-h-[450px] w-full md:h-1/3 flex justify-center items-center content-center">
-			<ImagePage source={item.image_path} className={'w-full h-auto rounded-md'}></ImagePage>
+			<ImagePage source={item.image_path || item.path} className={'w-full h-auto rounded-md'}></ImagePage>
 		</div>
 	)
 }

@@ -17,6 +17,13 @@ interface HomeInterface
     const ATTR = 'attr';
     const ORDER_TIMES = 'orderTimes';
     const ORDERS = 'orders';
+    const GALLERY = 'gallery';
+
+    public function rooms(): \Illuminate\Database\Eloquent\Relations\HasMany;
+    public function attr(): \Illuminate\Database\Eloquent\Relations\HasMany;
+    public function orderTimes(): \Illuminate\Database\Eloquent\Relations\HasMany;
+    public function orders(): \Illuminate\Database\Eloquent\Relations\HasMany;
+    public function gallery(): \Illuminate\Database\Eloquent\Relations\HasMany;
 
     /**
      * khai báo thuộc tính biểu mẫu để tạo form.
@@ -26,14 +33,17 @@ interface HomeInterface
     const ATTR_LOCATION = 'location';
     const ATTR_RATE = 'rate';
 
+    const DEFAULT_SELECT = [self::ID, self::NAME, self::DESCRIPTION, self::DISTRICT, self::IMAGE_PATH];
+
     /**
      * define main form fields for Home model
      */
     const FORM_FIELDS = [
+        self::IMAGE_PATH => ['key' => self::IMAGE_PATH, 'type' => FormInterface::TYPE_IMAGE_CHOOSE, 'label' => 'Ảnh đại diện',],
         self::NAME => ['key' => self::NAME, 'type' => FormInterface::TYPE_TEXT, 'label' => 'tên khách sạn', 'required' => true,],
         self::DESCRIPTION => ['key' => self::DESCRIPTION, 'type' => FormInterface::TYPE_TEXTAREA, 'label' => 'mô tả chung',],
         self::DISTRICT => ['key' => self::DISTRICT, 'type' => FormInterface::TYPE_TEXTAREA, 'label' => 'địa chỉ',],
-        self::IMAGE_PATH => ['key' => self::IMAGE_PATH, 'type' => FormInterface::TYPE_IMAGE_CHOOSE, 'label' => 'image avatar',],
+        self::GALLERY => ['key' => self::GALLERY, 'type' => FormInterface::TYPE_IMAGE_CHOOSE, 'label' => 'Ảnh chi tiết', 'placeholder' => 'chọn ảnh'],
     ];
 
     /**

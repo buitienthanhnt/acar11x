@@ -5,12 +5,12 @@ import {
 	Button,
 	Input,
 } from "@material-tailwind/react";
-import { BellIcon, Cog6ToothIcon, UserCircleIcon, UserMinusIcon } from "@heroicons/react/24/solid";
+import { Cog6ToothIcon, ShoppingCartIcon, UserCircleIcon, UserMinusIcon } from "@heroicons/react/24/solid";
 import { Link } from "@inertiajs/react";
 import usePageProps from "../../hooks/usePageProps";
 
 export function NavbarDark({ navStyles, }: { navStyles?: string }) {
-	const { auth: { user } } = usePageProps();
+	const { auth: { user }, activeCart } = usePageProps();
 
 	return (
 		<Navbar
@@ -30,10 +30,10 @@ export function NavbarDark({ navStyles, }: { navStyles?: string }) {
 				</Link>
 				<div className="ml-auto flex gap-1 md:mr-4">
 					{/* <IconButton variant="text" color="white"><Cog6ToothIcon className="h-6 w-6" /></IconButton> */}
-					<Link href='/checkout'>
+					{activeCart && <Link href='/checkout'>
 						<IconButton variant="text" color="white">
-							<BellIcon className="h-6 w-6" />
-						</IconButton></Link>
+							<ShoppingCartIcon className="h-6 w-6" color="orange" />
+						</IconButton></Link>}
 					{!user ?
 						<Link href={'/ahome/login'}>
 							<IconButton variant="text" color="white">

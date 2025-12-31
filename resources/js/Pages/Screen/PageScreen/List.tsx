@@ -23,9 +23,11 @@ const List = ({ paginate: { current_page, last_page, data, links, }, filters }) 
                         return <ListItem key={index} item={item}></ListItem>
                     })}
                 </div>}
-                {current_page && <Paginate pageSize={last_page} currentPage={current_page} links={links} url={window.location.href}></Paginate>}
+                {current_page && <Paginate pageSize={last_page} currentPage={current_page} url={window.location.href}></Paginate>}
                 {/* <Banner layout={''} page={randoms[2]}></Banner> */}
+                {/* @ts-ignore */}
                 <RandomHorizon></RandomHorizon>
+                {/* @ts-ignore */}
                 <CenterCategory></CenterCategory>
                 <div className="grid bg-white rounded-md grid-cols-6 gap-x-2 p-1">
                     <div className="bg-blue-gray-400 col-span-6 md:col-span-4">
@@ -94,6 +96,7 @@ const PageFilter = ({ filters = [] }) => {
 }
 
 List.layout = page => (
+    // @ts-ignore
     <TopPageLayout children={page} />
 )
 

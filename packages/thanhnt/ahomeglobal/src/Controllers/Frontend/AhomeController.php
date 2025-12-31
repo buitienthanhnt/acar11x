@@ -26,23 +26,13 @@ final class AhomeController extends Controller
 		// throw new \Exception('Not implemented');
 	}
 
-	public function home(Request $request)
-	{
-		return Inertia::render('Ahomeglobal/Screens/HomePage', [
-			"homes" => $this->homeApi->paginateHomeWithFilter($request->get('filters'), limit: 8),
-			'rooms' => $this->roomApi->paginateRoomWithFilter($request->get('filters'), 8),
-			'allFilters' => $this->roomApi->allFilters(selected: $request->get('filters')),
-			"filters" => $request->get('filters'),
-		]);
-	}
-
 	/**
 	 * show all of home are woking
 	 * @return \Inertia\Response
 	 */
-	public function homePage(Request $request)
+	public function home(Request $request)
 	{
-		return Inertia::render('Ahomeglobal/Screens/HomeList', [
+		return Inertia::render('Ahomeglobal/Screens/HomePage', [
 			"homes" => $this->homeApi->paginateHomeWithFilter($request->get('filters'), limit: 8),
 			'rooms' => $this->roomApi->paginateRoomWithFilter($request->get('filters'), 8),
 			'allFilters' => $this->roomApi->allFilters(selected: $request->get('filters')),
@@ -56,7 +46,6 @@ final class AhomeController extends Controller
 	 */
 	public function homeDetail(\Illuminate\Http\Request $request, $home)
 	{
-		// code...
 		/**
 		 * please get all order of the room then pass to Js page for disable the day selected.
 		 */

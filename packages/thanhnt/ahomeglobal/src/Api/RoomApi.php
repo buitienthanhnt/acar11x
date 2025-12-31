@@ -129,7 +129,7 @@ final class RoomApi
 		 * no filter params
 		 */
 		if (!$filterParams) {
-			return Room::paginate($limit, pageName: 'room_page')->through(function ($room) {
+			return Room::with(RoomInterface::HOME)->paginate($limit, pageName: 'room_page')->through(function ($room) {
 				return $room->makeHidden([RoomInterface::BOOKED_DATE,])->makeVisible([RoomInterface::HOME_ID]);
 			});
 		}
@@ -165,7 +165,7 @@ final class RoomApi
 		 * dùng: [through] để hiển thị: HOME_ID khi dùng paginate phân trang 
 		 * nếu không nó sẽ chỉ trả về danh sách kết quả mà không có các thuộc tính phân trang
 		 */
-		return $instance->paginate($limit, pageName: 'room_page')->through(function ($room) {
+		return $instance->with(RoomInterface::HOME)->paginate($limit, pageName: 'room_page')->through(function ($room) {
 			return $room->makeHidden([RoomInterface::BOOKED_DATE,])->makeVisible([RoomInterface::HOME_ID]);
 		});
 	}

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Thanhnt\Ahomeglobal\Models\Home;
 use Thanhnt\Ahomeglobal\Models\Types\HomeInterface;
 
-class HomeFactory extends Factory implements HomeInterface
+class HomeFactory extends Factory
 {
 	/**
      * The name of the factory's corresponding model.
@@ -17,9 +17,9 @@ class HomeFactory extends Factory implements HomeInterface
 
 	public function definition() {
 		return [
-			self::NAME => $this->faker->name(),
-			self::DESCRIPTION => $this->faker->paragraph(1),
-			self::DISTRICT => $this->faker->paragraph(),
+			HomeInterface::NAME => $this->faker->name(),
+			HomeInterface::DESCRIPTION => $this->faker->paragraph(1),
+			HomeInterface::DISTRICT => $this->faker->paragraph(),
 		];
 	}
 }

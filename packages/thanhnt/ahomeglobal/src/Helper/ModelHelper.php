@@ -36,6 +36,9 @@ final class ModelHelper
 	public function formAttribute(array $fields, array $data): array
 	{
 		foreach ($fields as $key => &$value) {
+			if (!isset($data[$key])) {
+				continue;
+			}
 			$value['value'] = $data[$key];
 		}
 		return array_values($fields);

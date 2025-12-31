@@ -41,9 +41,7 @@ final class AhomeglobalProvider extends ServiceProvider
 		 * need define web middleware for router unless the request missing session data. 
 		 */
 		Route::middleware([
-			\Illuminate\Session\Middleware\StartSession::class,
-			\App\Http\Middleware\HandleInertiaRequests::class,
-			\Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets::class,
+			...Route::getMiddlewareGroups()['web'],
 			\Thanhnt\Ahomeglobal\Middleware\MergeInertiaConfig::class,
 		])->group(function () {
 			$this->loadRoutesFrom(__DIR__ . '/routes/adminhtml.php');

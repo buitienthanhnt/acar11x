@@ -1,20 +1,20 @@
 import { Head } from "@inertiajs/react";
-import { PageLayout } from "../Layouts";
 import { OrderDetailInterface } from "../types/Order";
 import { FunctionComponent } from "react";
+import BodyLayout from "../Layouts/BodyLayout";
 
 type Props = {
 	order: OrderDetailInterface
 };
 const CheckoutSuccess: FunctionComponent<Props> = ({ order }) => {
 	return (
-		<PageLayout>
+		<BodyLayout>
 			<Head>
 				<title>checkout success</title>
 			</Head>
 			<div className="flex-1 rounded-md p-4 ">
 				<span className="text-xl text-green-600">
-					Xin cảm ơn quý khách hàng đã đặt phòng!
+					Trân trọng cảm ơn quý khách hàng đã đặt phòng!
 				</span>
 				<p className="text-md font-semibold">Thông tin hóa đơn: {order.increment_id}</p>
 				<div className="flex md:flex-row md:justify-between md:gap-x-2 flex-col gap-y-2 mt-4">
@@ -43,7 +43,7 @@ const CheckoutSuccess: FunctionComponent<Props> = ({ order }) => {
 					<p className="text-md font-semibold">Quý khách có thắc mắc có thể liên hệ với khách sạn qua sdt: 0702032201</p>
 				</div>
 			</div>
-		</PageLayout>
+		</BodyLayout>
 
 	)
 }

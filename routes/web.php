@@ -22,5 +22,3 @@ Route::middleware([
         return Inertia::render('Dashboard');
     })->name('dashboard');
 });
-
-require __DIR__.'/../packages/thanhnt/ahomeglobal/src/routes/front.php';

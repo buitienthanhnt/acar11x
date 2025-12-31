@@ -15,10 +15,12 @@ const RoomItem = ({ room, dateSelected }: { room: RoomItemType, dateSelected?: D
     if (urlParams.get('room') === room.id.toString()) {
       router.visit(window.location.pathname, {
         method: 'get',
+        preserveScroll: true,
       });
     } else {
       router.visit(window.location.href, {
         method: 'get',
+        preserveScroll: true,
         data: { room: room.id, selectedDates: dateSelected ? listDateToArrayString(dateSelected) : undefined },
         only: messages ? [] : ['roomSelected', 'selectedDates'], // clear app props if has flash mesasge.
         // preserveState: true, // for remenber old state of page(can save for: dateSelected)

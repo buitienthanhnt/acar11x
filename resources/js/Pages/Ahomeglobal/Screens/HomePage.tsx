@@ -7,8 +7,8 @@ import { Head, Link, router, useRemember } from "@inertiajs/react";
 import { sprintf } from "sprintf-js";
 import Urls from "../netWork/Urls";
 import { listDateToArrayString } from "../Helper/DateTimeHelper";
-import { HomeItem as HomeItemType } from "../types/Home";
-import { RoomItem as RoomItemType } from "../types/Room";
+import { HomeDetail, HomeItem as HomeItemType } from "../types/Home";
+import { RoomHome, } from "../types/Room";
 import { PagePaginate } from "../types/Paginate";
 import { Paginate, CustomTimeTable, RoomItemGrid, HomeMap } from "../Components";
 import { FingerPrintIcon, MapPinIcon, XMarkIcon } from "@heroicons/react/24/solid";
@@ -56,10 +56,9 @@ const HomePage: FunctionComponent<Props> = ({ homes, rooms, filters, allFilters 
 					</div>
 				</div>
 
-				<div className="flex flex-col flex-1 w-full container mx-auto ">
+				<div className="flex flex-col flex-1 w-full p-1 mx-auto md:container">
 					<div className="space-y-1">
-						{/* <HomeMap></HomeMap> */}
-
+						<HomeMap homes={homes.data as unknown as HomeDetail[]}></HomeMap>
 						<div className="grid lg:space-x-4 md:py-2 py-1 space-y-2 lg:space-y-0">
 							<div className="col-span-1 lg:col-span-3 flex flex-col gap-y-1  md:gap-y-2 p-1 md:p-0">
 								<p className="text-xl font-bold text-purple-800">Danh sách địa chỉ đề xuất: {homes.total}</p>
@@ -74,13 +73,12 @@ const HomePage: FunctionComponent<Props> = ({ homes, rooms, filters, allFilters 
 									}}></Paginate>
 							</div>
 						</div>
-						{/* <div className='h-[1px] bg-black my-2'></div> */}
-						{rooms && <div className="gap-2 space-y-2 p-1 md:p-0">
+						{rooms && filters?.district && <div className="gap-2 space-y-2 p-1 md:p-0">
 							<p className="text-xl font-bold text-purple-800">Danh sách phòng nghỉ đề xuất: {rooms.total}</p>
-							
+
 							<div className="grid md:grid-cols-3 lg:grid-cols-4 gap-1 md:gap-2 lg:gap-3 w-full">
 								{rooms?.data.map(room => <div key={room.id}>
-									<RoomItemGrid room={room as unknown as RoomItemType} selectedDates={filters?.dates}></RoomItemGrid>
+									<RoomItemGrid room={room as unknown as RoomHome} selectedDates={filters?.dates}></RoomItemGrid>
 								</div>)}
 							</div>
 							<Paginate pageSize={rooms.last_page} currentPage={rooms.current_page} pageName="room_page"
@@ -90,7 +88,7 @@ const HomePage: FunctionComponent<Props> = ({ homes, rooms, filters, allFilters 
 									prefetch: ['hover',], // prefecth must be use in GET request only
 								}}></Paginate>
 						</div>}
-						
+
 						<District></District>
 						<div className='h-2'></div>
 					</div>
@@ -111,7 +109,7 @@ const HomeItem = ({ home, selectedDates }: { home: HomeItemType, selectedDates?:
 			href={sprintf(Urls.homeDetail, [home.id])}
 			data={{ selectedDates: selectedDates }}>
 			<div >
-				<img src={home.image_path} alt="avata hotel" className="max-w-40 md:max-w-60 lg:max-w-full md:min-h-48 lg:min-h-60 rounded-md md:rounded-t-md md:rounded-b-none" />
+				<img src={home.image_path} alt="avata hotel" className="max-w-40 md:max-w-60 lg:max-w-full h-full md:min-h-48 lg:min-h-60 rounded-md md:rounded-t-md md:rounded-b-none" />
 			</div>
 			<div className="flex flex-col justify-between gap-1 md:gap-2 p-1 md:py-2 h-full">
 				<div>

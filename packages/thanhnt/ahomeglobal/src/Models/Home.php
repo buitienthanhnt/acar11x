@@ -26,33 +26,56 @@ class Home extends Model implements HomeInterface
     protected $hidden = self::HIDDEN_FIELDS;
 
     protected $fillable = self::FILLED_FILEDS;
+    /**
+     * Get a new query builder for the model's table.
+     * define for replace * to select list defualt attrs
+     *
+     * @param  bool  $exceptDeleted
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function newModelQuery()
+    {
+        return parent::newModelQuery()->select(self::DEFAULT_SELECT);
+    }
 
     /**
      * links to list rooms of the home
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function rooms() : HasMany {
+    public function rooms(): HasMany
+    {
         return $this->hasMany(Room::class, Room::HOME_ID, self::ID);
     }
 
     /**
      * links to list orders of the home
      */
-    public function orders() : HasMany {
+    public function orders(): HasMany
+    {
         return $this->hasMany(Order::class, Order::HOME_ID, self::ID);
     }
 
     /**
      * link to list booked time of the home
      */
-    public function orderTimes() : HasMany {
+    public function orderTimes(): HasMany
+    {
         return $this->hasMany(OrderTime::class, OrderTimeInterface::HOME_ID, self::ID);
     }
 
     /**
      * link to list attrribute(Attr model) of the home
      */
-    public function attr(): HasMany {
+    public function attr(): HasMany
+    {
         return $this->hasMany(Attr::class, Attr::SOURCE_ID, self::ID)->where(Attr::TYPE, 'home');
+    }
+
+    /**
+     * link to list gallery of the home
+     */
+    public function gallery(): HasMany
+    {
+        return $this->hasMany(Gallery::class, Gallery::SOURCE_ID, self::ID)->where(Gallery::TYPE, 'home');
     }
 }

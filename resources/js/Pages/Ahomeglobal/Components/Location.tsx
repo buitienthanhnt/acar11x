@@ -13,10 +13,8 @@ const Location: FunctionComponent<Props> = ({
 	url, style = 'w-[360px] h-[360px] border p-1', attributes
 }) => {
 	return (
-		<div className="flex justify-end items-center">
-			<iframe src={url}
-				className={style} loading="lazy" {...attributes}></iframe>
-		</div>
+		<iframe src={url}
+			className={style} loading="lazy" {...attributes}></iframe>
 	)
 }
 export default Location;

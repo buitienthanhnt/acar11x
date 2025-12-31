@@ -88,7 +88,7 @@ const Checkout: FunctionComponent<Props> = ({ dateSelected, home, room, totalPri
 						<OrderInfomation homeSelected={home} roomSelected={room} dateSelected={dateSelected} totalPrice={totalPrice}></OrderInfomation>
 						<div className="flex flex-col gap-y-10">
 							<div className="w-full justify-center flex">
-								<div className="w-10/12 md:w-8/12">
+								<div className="w-10/12 md:w-8/12 px-8">
 									{/* @ts-ignore */}
 									<Stepper
 										activeStep={activeStep}

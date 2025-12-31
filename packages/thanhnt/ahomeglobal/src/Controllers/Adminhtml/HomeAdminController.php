@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Thanhnt\Ahomeglobal\Api\HomeApi;
 use Thanhnt\Ahomeglobal\Helper\ModelHelper;
 use Thanhnt\Ahomeglobal\Models\Types\AttrInterface;
+use Thanhnt\Ahomeglobal\Models\Types\GalleryInterface;
 use Thanhnt\Ahomeglobal\Models\Types\HomeInterface;
 use Thanhnt\Ahomeglobal\Repository\HomeRepository;
 
@@ -84,7 +85,11 @@ final class HomeAdminController extends Controller
 	public function edit($id, Request $request)
 	{
 		$home = $this->homeApi->getHomeDetail($id);
-		$listAttributes = $this->modelHelper->formAttribute(HomeInterface::FORM_FIELDS, $home->toArray());
+
+		$listAttributes = $this->modelHelper->formAttribute(
+			HomeInterface::FORM_FIELDS,
+			[...$home->toArray(), HomeInterface::GALLERY => implode(',', $home->gallery->pluck(GalleryInterface::PATH)->toArray())]
+		);
 		$optionAttribute = array_map(function ($field) {
 			return [
 				...HomeInterface::CUSTOM_ATTRS[$field['key']],

@@ -22,7 +22,7 @@ const BodyLayout = ({ children, showBanner }: { children: React.ReactNode, showB
 					<div className="min-h-36 md:min-h-[480px] p-4 bg-[url('/ahome/assets/img-1.jpg')] bg-cover bg-center"></div>
 				</div>}
 
-				<div className="flex flex-col flex-1 w-full container mx-auto">
+				<div className="flex flex-col flex-1 w-full md:container mx-auto px-1">
 					{children}
 					<HomeSpeed></HomeSpeed>
 				</div>

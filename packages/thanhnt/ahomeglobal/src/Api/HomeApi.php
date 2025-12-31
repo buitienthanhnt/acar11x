@@ -27,11 +27,20 @@ final class HomeApi
 	 */
 	public function getHomeDetail(int $homeId)
 	{
-		$home =  $this->home->with('rooms')->with('orderTimes')->with('attr')->find($homeId);
+		/**
+		 * @var Home|null $home
+		 */
+		$home =  $this->home
+			->with(HomeInterface::ROOMS)
+			->with(HomeInterface::ORDER_TIMES)
+			->with(HomeInterface::ATTR)
+			->with(HomeInterface::GALLERY)
+			->find($homeId);
 		/**
 		 * set hidden for: booked_dates attribute(not need in homeDetail)
+		 * dùng ?-> để kiem tra null trên $home không bị lỗi.
 		 */
-		$home->rooms->setHidden([RoomInterface::BOOKED_DATE, ...RoomInterface::HIDDEN_FIELDS]);
+		$home?->rooms->setHidden([RoomInterface::BOOKED_DATE, ...RoomInterface::HIDDEN_FIELDS]);
 		return $home;
 	}
 
@@ -113,11 +122,11 @@ final class HomeApi
 			 */
 			$homeIds = isset($homeIds) ? array_intersect($this->getHomeIdfilterByCustomAttr($filterParams), $homeIds) : $this->getHomeIdfilterByCustomAttr($filterParams);
 
-			return Home::whereIn(HomeInterface::ID, $homeIds ?? [])->withWhereHas('rooms')->paginate($limit);
+			return Home::whereIn(HomeInterface::ID, $homeIds ?? [])->withWhereHas(HomeInterface::ROOMS)->with(HomeInterface::ATTR)->paginate($limit);
 		}
 		/**
 		 * return default home list
 		 */
-		return Home::withWhereHas('rooms')->paginate($limit);
+		return Home::withWhereHas(HomeInterface::ROOMS)->with(HomeInterface::ATTR)->paginate($limit);
 	}
 }

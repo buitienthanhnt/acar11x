@@ -14,6 +14,10 @@ export type RoomItem = {
 	price: number,
 }
 
+export type RoomHome = RoomItem & {
+	home: HomeItem,
+};
+
 export type RoomDetail = RoomItem & {
 	home: HomeItem,
 	// orders: OrderItemInterface[],
