@@ -20,6 +20,14 @@ final class RoomApi
 	}
 
 	/**
+	 * @param array $homeIds
+	 * @return \Illuminate\Database\Eloquent\Builder
+	 */
+	public function getRoomByHomeIds(array $homeIds = []) {
+		return $this->roomModel->whereIn(RoomInterface::HOME_ID, $homeIds);
+	}
+
+	/**
 	 * get room detail by id with list order
 	 * @param int $roomId
 	 * @return \Thanhnt\Ahomeglobal\Models\Room|null
@@ -123,7 +131,7 @@ final class RoomApi
 	 * @param int $limit
 	 * @return \Illuminate\Pagination\LengthAwarePaginator
 	 */
-	public function paginateRoomWithFilter($filterParams, $limit)
+	public function paginateRoomWithFilter($filterParams, $limit = 12)
 	{
 		/**
 		 * no filter params
@@ -141,6 +149,10 @@ final class RoomApi
 			$instance = $this->orderApi->getActiveRoomByDates(listDate: $listDate);
 		} else {
 			$instance = Room::query();
+		}
+
+		if (isset($filterParams['home_id'])) {
+			$instance->whereIn(RoomInterface::HOME_ID, $filterParams['home_id']);
 		}
 
 		/**

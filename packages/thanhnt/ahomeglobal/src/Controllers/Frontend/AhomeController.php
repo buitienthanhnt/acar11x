@@ -4,6 +4,7 @@ namespace Thanhnt\Ahomeglobal\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Inertia\Inertia;
 use Thanhnt\Ahomeglobal\Api\CartApi;
 use Thanhnt\Ahomeglobal\Api\HomeApi;
@@ -13,6 +14,7 @@ use Thanhnt\Ahomeglobal\Models\Order;
 use Thanhnt\Ahomeglobal\Models\Room;
 use Thanhnt\Ahomeglobal\Models\Types\RoomInterface;
 use Thanhnt\Ahomeglobal\Api\OrderApi;
+use Thanhnt\Ahomeglobal\Mail\OrderEmail;
 
 final class AhomeController extends Controller
 {
@@ -32,9 +34,20 @@ final class AhomeController extends Controller
 	 */
 	public function home(Request $request)
 	{
+		/**
+		 * caculate filter for home
+		 */
+		$homeList = $this->homeApi->paginateHomeWithFilter($request->get('filters'), limit: 12);
+		// dd($homeList);
+		/**
+		 * caculate filter for room
+		 */
+		$activeHomeIds = $this->homeApi->getHomeIdfilterByCustomAttr($request->get('filters', []));
+		$roomList = $this->roomApi->paginateRoomWithFilter([...($request->get('filters', [])), 'home_id' => $activeHomeIds]);
+
 		return Inertia::render('Ahomeglobal/Screens/HomePage', [
-			"homes" => $this->homeApi->paginateHomeWithFilter($request->get('filters'), limit: 8),
-			'rooms' => $this->roomApi->paginateRoomWithFilter($request->get('filters'), 8),
+			"homes" => $homeList,
+			'rooms' => $roomList,
 			'allFilters' => $this->roomApi->allFilters(selected: $request->get('filters')),
 			"filters" => $request->get('filters'),
 		]);
@@ -100,5 +113,16 @@ final class AhomeController extends Controller
 		$dates = ['2025-12-13', '2025-12-14', '2025-12-15'];
 		$listActives = $this->orderApi->getActiveRoom($dates); // Room::whereNotIn('id', $conflicRooms)->get()->makeHidden(['booked_dates'])->toArray();
 		dd($listActives->toArray());
+	}
+
+	public function sendMailOrder()
+	{
+		$orderIncrement = '01kdzrw3e0jxsz1czkdn9vn7v6';
+		$order = $this->orderApi->getOrderDetailByIncrement($orderIncrement);
+		// dd($order->detail->email);
+		// return view('emails.order-email', compact('order'));
+
+		Mail::to($order->detail->email)->send(new OrderEmail($order));
+		return 123;
 	}
 }

@@ -14,4 +14,7 @@ export type HomeDetail = HomeItem & {
 	rooms: RoomItem[],
 	order_times: OrderTimeInterface[],
 	attr: AttrInterface[],
+	gallery?: {
+		path: string
+	}[],
 }

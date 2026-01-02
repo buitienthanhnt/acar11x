@@ -2,14 +2,11 @@
 
 namespace Thanhnt\Ahomeglobal\Api;
 
-use Thanhnt\Ahomeglobal\Models\Attr;
 use Thanhnt\Ahomeglobal\Models\Home;
 use Thanhnt\Ahomeglobal\Models\Room;
 use Thanhnt\Ahomeglobal\Models\Types\AttrInterface;
 use Thanhnt\Ahomeglobal\Models\Types\HomeInterface;
 use Thanhnt\Ahomeglobal\Models\Types\RoomInterface;
-
-use function PHPSTORM_META\map;
 
 final class HomeApi
 {
@@ -70,8 +67,16 @@ final class HomeApi
 	 * @param array{[string]: string}[] $filterParams
 	 * @return int[]
 	 */
-	protected function getHomeIdfilterByCustomAttr($filterParams): array
+	public function getHomeIdfilterByCustomAttr($filterParams): array
 	{
+		if (empty($filterParams)) {
+			return [];
+		}
+
+		if ($district = $filterParams['district'] ?? null) {
+			$homeIds = $this->getHomeByDistrict($district)->select('id')->get()->pluck(['id'])->toArray();
+		}
+
 		$listFilters = array_intersect_key($filterParams, RoomInterface::CUSTOM_ATTRS);
 		$instance = Room::query()->with(RoomInterface::HOME);
 
@@ -89,7 +94,9 @@ final class HomeApi
 					break;
 			}
 		}
-		return $instance->get()->makeHidden([RoomInterface::BOOKED_DATE, RoomInterface::PRICE])->pluck('home.id')->unique()->toArray();
+
+		$default = $instance->whereHas(RoomInterface::HOME)->get()->pluck(RoomInterface::HOME_ID)->unique()->toArray();
+		return isset($homeIds) ? array_intersect($homeIds, $default) : $default;
 	}
 
 	protected function filterHomeByRate() {}
@@ -122,11 +129,14 @@ final class HomeApi
 			 */
 			$homeIds = isset($homeIds) ? array_intersect($this->getHomeIdfilterByCustomAttr($filterParams), $homeIds) : $this->getHomeIdfilterByCustomAttr($filterParams);
 
-			return Home::whereIn(HomeInterface::ID, $homeIds ?? [])->withWhereHas(HomeInterface::ROOMS)->with(HomeInterface::ATTR)->paginate($limit);
+			/**
+			 * paginate home
+			 */
+			return Home::whereIn(HomeInterface::ID, $homeIds ?? [])->whereHas(HomeInterface::ROOMS)->with(HomeInterface::ATTR)->paginate($limit);
 		}
 		/**
-		 * return default home list
+		 * return default home list without filter
 		 */
-		return Home::withWhereHas(HomeInterface::ROOMS)->with(HomeInterface::ATTR)->paginate($limit);
+		return Home::whereHas(HomeInterface::ROOMS)->with(HomeInterface::ATTR)->paginate($limit);
 	}
 }

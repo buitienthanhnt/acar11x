@@ -4,6 +4,7 @@ import {
 	useCheckout
 } from '@stripe/react-stripe-js/checkout';
 import { Spinner } from "@material-tailwind/react";
+import AwaitProcess from "./AwaitProcess";
 
 const validateEmail = async (email, checkout) => {
 	const updateResult = await checkout.updateEmail(email);
@@ -30,7 +31,7 @@ const EmailInput = ({ checkout, email, setEmail, error, setError }) => {
 	};
 
 	return (
-		<div className="flex w-full items-center py-2 space-x-2">
+		<div className="flex w-full items-end py-2 space-x-2">
 			<label className="text-xl font-medium">
 				Email:
 			</label>
@@ -57,13 +58,13 @@ const SessionCheckoutForm = () => {
 
 	if (checkoutState.type === 'loading') {
 		return (
-			<div>Loading...</div>
+			<div>Đang xử lý...</div>
 		);
 	}
 
 	if (checkoutState.type === 'error') {
 		return (
-			<div>Error: {checkoutState.error.message}</div>
+			<div>Lỗi: {checkoutState.error.message}</div>
 		);
 	}
 
@@ -111,11 +112,17 @@ const SessionCheckoutForm = () => {
 						<Spinner color='red' className="w-4 h-4" onResize={undefined} onResizeCapture={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}></Spinner>
 					</div>
 				) : (
-					`Pay ${checkoutState.checkout.total.total.amount} now`
+					`Thanh toán: ${checkoutState.checkout.total.total.amount}`
 				)}
 			</button>
 			{/* Show any error or success messages */}
 			{message && <div id="payment-message">{message}</div>}
+			<AwaitProcess
+				open={isSubmitting}
+				headerContent="Đang xử lý, vui lòng chờ phản hồi!"
+				// @ts-ignore
+				bodyContent={<Spinner className="h-12 w-12" />}
+			></AwaitProcess>
 		</form>
 	);
 }

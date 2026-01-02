@@ -11,8 +11,12 @@ export type RoomItem = {
 	home_id: number,
 	created_at: string,
 	image_path?: string,
-	price: string,
+	price: number,
 }
+
+export type RoomHome = RoomItem & {
+	home: HomeItem,
+};
 
 export type RoomDetail = RoomItem & {
 	home: HomeItem,

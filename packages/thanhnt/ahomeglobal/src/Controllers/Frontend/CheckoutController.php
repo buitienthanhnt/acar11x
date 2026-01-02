@@ -4,11 +4,13 @@ namespace Thanhnt\Ahomeglobal\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Inertia\Inertia;
 use Thanhnt\Ahomeglobal\Api\CartApi;
 use Thanhnt\Ahomeglobal\Api\HomeApi;
 use Thanhnt\Ahomeglobal\Api\OrderApi;
 use Thanhnt\Ahomeglobal\Api\RoomApi;
+use Thanhnt\Ahomeglobal\Mail\OrderEmail;
 use Thanhnt\Ahomeglobal\Models\Types\OrderInterface;
 use Thanhnt\Ahomeglobal\Services\GoogleService;
 use Thanhnt\Ahomeglobal\Services\PayPalService;
@@ -256,8 +258,16 @@ final class CheckoutController extends Controller
 				if ($request->get('PayerID')) {
 					// paypal payment has PayerID(now no use)
 				}
+				$order = $this->orderApi->getOrderDetailByIncrement($newOrder->{OrderInterface::INCREMENT_ID});
+				/**
+				 * send order detail to customer email.
+				 */
+				Mail::to($order->detail->email)->send(new OrderEmail($order));
+				/**
+				 * return order success page
+				 */
 				return Inertia::render('Ahomeglobal/Screens/CheckoutSuccess', [
-					'order' => $this->orderApi->getOrderDetailByIncrement($newOrder->{OrderInterface::INCREMENT_ID}),
+					'order' => $order,
 				]);
 			} catch (\Throwable $th) {
 				//throw $th;

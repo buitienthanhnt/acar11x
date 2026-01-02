@@ -27,6 +27,8 @@ Route::prefix('ahome')->group(function () {
 		Route::get('filter-order', [AhomeController::class, 'orderFiler']);
 
 		Route::get('active-rooms', [AhomeController::class, 'activeRoom']);
+
+		Route::get('order-email',[AhomeController::class, 'sendMailOrder']); 
 	});
 });
 

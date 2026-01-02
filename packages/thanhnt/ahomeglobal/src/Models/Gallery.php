@@ -2,12 +2,18 @@
 
 namespace Thanhnt\Ahomeglobal\Models;
 
+use Illuminate\Database\Eloquent\Attributes\UseFactory;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Thanhnt\Ahomeglobal\Database\Factories\GalleryFactory;
 use Thanhnt\Ahomeglobal\Models\Types\GalleryInterface;
 
+#[UseFactory(GalleryFactory::class)]
 class Gallery  extends Model implements GalleryInterface
 {
+	use HasFactory;
+
 	/**
 	 * define for fillable field
 	 */
