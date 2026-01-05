@@ -13,6 +13,7 @@ interface RoomInterface
 	const DESCRIPTION = 'description';
 	const COUNT = 'count';
 	const TYPE = 'type';
+
 	const TYPE_VALUE = [
 		['label' => '1 giường đơn', 'value' => '1',],
 		['label' => '1 giường đôi', 'value' => '2',],
@@ -36,7 +37,7 @@ interface RoomInterface
 	 * khai báo thuộc tính biểu mẫu để tạo form.
 	 * define: [string $key => ['key' => string, 'type' => string, 'label ?=> string]][]
 	 */
-	const ATTR_PRICE = 'price';
+	// const ATTR_PRICE = 'price';
 	const ATTR_BED = 'bed';
 	const ATTR_PERSON = 'persion';
 	const ATTR_RATE = 'rate';
@@ -50,13 +51,13 @@ interface RoomInterface
 		self::TYPE => ['key' => self::TYPE, 'type' => FormInterface::TYPE_SELECT, 'label' => 'số giường', 'model' => \Thanhnt\Ahomeglobal\Models\Room::class, 'required' => true,],
 		self::IMAGE_PATH => ['key' => self::IMAGE_PATH, 'type' => FormInterface::TYPE_IMAGE_CHOOSE, 'label' => 'image avatar',],
 		self::COUNT => ['key' => self::COUNT, 'type' => FormInterface::TYPE_NUMBER, 'label' => 'số lượng',],
+		self::PRICE => ['key' => self::PRICE, 'type' => FormInterface::TYPE_NUMBER, 'label' => 'Giá phòng(1 ngày)', 'required' => true, 'placeholder' => 'Giá'],
 	];
 
 	/**
 	 * define custom attributes for custom form fields attribute
 	 */
 	const CUSTOM_ATTRS = [
-		self::ATTR_PRICE => ['key' => self::ATTR_PRICE, 'type' => FormInterface::TYPE_NUMBER, 'label' => 'Giá phòng(1 ngày)', 'required' => true, 'placeholder' => 'Giá'],
 		// self::ATTR_BED => ['key' => self::ATTR_BED, 'type' => FormInterface::TYPE_SELECT, 'label' => 'số giường', 'model' => \Thanhnt\AhomeGlobal\Models\Room::class, 'required' => true,],
 		self::ATTR_PERSON => ['key' => self::ATTR_PERSON, 'type' => FormInterface::TYPE_NUMBER, 'label' => 'số người tối đa', 'placeholder' => ''],
 		self::ATTR_RATE => ['key' => self::ATTR_RATE, 'type' => FormInterface::TYPE_NUMBER, 'label' => 'đánh giá', 'placeholder' => ''],
@@ -65,7 +66,7 @@ interface RoomInterface
 	/**
 	 * khai báo danh sách các thuộc tính được gán hàng loạt.
 	 */
-	const FILLED_FILEDS = [self::TITLE, self::DESCRIPTION, self::TYPE, self::IMAGE_PATH, self::HOME_ID];
+	const FILLED_FILEDS = [self::TITLE, self::DESCRIPTION, self::TYPE, self::IMAGE_PATH, self::COUNT, self::PRICE, self::HOME_ID];
 
 	const HIDDEN_FIELDS = ['created_at', 'updated_at', 'deleted_at', self::HOME_ID];
 

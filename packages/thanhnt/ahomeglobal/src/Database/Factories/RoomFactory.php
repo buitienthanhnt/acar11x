@@ -22,6 +22,7 @@ class RoomFactory extends Factory implements RoomInterface
 			self::DESCRIPTION => $this->faker->paragraph(2),
 			self::HOME_ID => 1,
 			self::TYPE => RoomInterface::TYPE_VALUE[0],
+			self::PRICE => 80,
 		];
 	}
 }

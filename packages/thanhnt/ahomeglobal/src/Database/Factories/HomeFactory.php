@@ -26,6 +26,7 @@ class HomeFactory extends Factory
 			HomeInterface::DESCRIPTION => $this->faker->paragraph(1),
 			HomeInterface::DISTRICT => $this->faker->paragraph(),
 			HomeInterface::IMAGE_PATH => $this->faker->imageUrl(),
+			HomeInterface::ADDRESS => $this->faker->address(),
 		];
 	}
 

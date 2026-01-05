@@ -10,6 +10,7 @@ use App\Models\Types\PageInterface;
 use App\Models\Types\WriterInterface;
 use Database\Configs\AdminPermission;
 use Illuminate\Support\Facades\Route;
+use Thanhnt\Abookglobal\Controllers\Admin\BookAdminController;
 use Thanhnt\Ahomeglobal\Controllers\Adminhtml\HomeAdminController;
 use Thanhnt\Ahomeglobal\Controllers\Adminhtml\OrderAdminController;
 use Thanhnt\Ahomeglobal\Controllers\Adminhtml\RoomAdminController;
@@ -157,7 +158,31 @@ if (isAdminEnv()) {
 
             Route::post('room-register/{home_id}', [RoomAdminController::class, 'register']);
 
-             Route::delete('room-delete/{id}', [HomeAdminController::class, 'roomDelete']);
+            Route::delete('room-delete/{id}', [HomeAdminController::class, 'roomDelete']);
+        });
+
+        Route::prefix('abook')->group(function (): void {
+            Route::get('book-list', [BookAdminController::class, 'index'])->setBindingFields([
+                'route_name' => 'abook manager',
+                'route_icon' => 'dataset_linked', // https://fonts.google.com/icons => [Icon name]
+                'show' => true,
+                // 'permission' => AdminPermission::ACTION_LIST
+            ]);
+
+            Route::get('create', [BookAdminController::class, 'createBook']);
+
+            Route::post('register', [BookAdminController::class, 'registerBook']);
+
+            Route::get('book-cate', [BookAdminController::class, 'listBookCates'])->setBindingFields([
+                'route_name' => 'abook cate manager',
+                'route_icon' => 'dataset_linked', // https://fonts.google.com/icons => [Icon name]
+                'show' => true,
+                // 'permission' => AdminPermission::ACTION_LIST
+            ]);
+
+            Route::get('bookcate-create', [BookAdminController::class, 'createBookCate']);
+
+            Route::post('bookcate-register', [BookAdminController::class, 'registerBookCate']);
         });
     });
 }

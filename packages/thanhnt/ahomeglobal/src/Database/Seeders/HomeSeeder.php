@@ -31,7 +31,7 @@ final class HomeSeeder extends Seeder
 	 */
 	protected function createHome()
 	{
-		Home::factory()->count(50)->state(new Sequence(
+		Home::factory()->count(2)->state(new Sequence(
 			// [Home::DISTRICT => 'Quận 1 TP HCM',],
 			// [Home::DISTRICT => 'Quận 2 TP HCM',],
 			[Home::DISTRICT => 'Quận 3 TP HCM',],
@@ -60,12 +60,12 @@ final class HomeSeeder extends Seeder
 		))
 			->has(
 				Room::factory()->count(6)->state(new Sequence(
-					[RoomInterface::TITLE => 'P-101',],
-					[RoomInterface::TITLE => 'P-102',],
-					[RoomInterface::TITLE => 'P-103',],
-					[RoomInterface::TITLE => 'P-104',],
-					[RoomInterface::TITLE => 'P-105',],
-					[RoomInterface::TITLE => 'P-106',],
+					[RoomInterface::TITLE => 'P-101', RoomInterface::PRICE => 100,],
+					[RoomInterface::TITLE => 'P-102', RoomInterface::PRICE => 150,],
+					[RoomInterface::TITLE => 'P-103', RoomInterface::PRICE => 120,],
+					[RoomInterface::TITLE => 'P-104', RoomInterface::PRICE => 200,],
+					[RoomInterface::TITLE => 'P-105', RoomInterface::PRICE => 240,],
+					[RoomInterface::TITLE => 'P-106', RoomInterface::PRICE => 300,],
 				))->state(new Sequence(
 					[HomeInterface::IMAGE_PATH => 'http://acar11x.dev/storage/photos/shares/uploads/62161275_1112810635573522_8741650106958217216_n_104932_084827.jpg'],
 					[HomeInterface::IMAGE_PATH => 'http://acar11x.dev/storage/photos/shares/uploads/10301190_679242935474644_4276477968542896581_n_084425.jpg'],
@@ -86,7 +86,7 @@ final class HomeSeeder extends Seeder
 					[RoomInterface::TYPE => RoomInterface::TYPE_VALUE[4]['value']],
 				))->has(
 					Attr::factory()->count(3)->state(new Sequence(
-						[AttrInterface::TYPE => 'room', AttrInterface::KEY => 'price', AttrInterface::VALUE => '500',],
+						// [AttrInterface::TYPE => 'room', AttrInterface::KEY => 'price', AttrInterface::VALUE => '500',],
 						[AttrInterface::TYPE => 'room', AttrInterface::KEY => 'rate', AttrInterface::VALUE => '3',],
 						[AttrInterface::TYPE => 'room', AttrInterface::KEY => 'persion', AttrInterface::VALUE => '1',],
 					), HomeInterface::ATTR)

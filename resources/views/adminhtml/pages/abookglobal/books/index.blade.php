@@ -1,0 +1,16 @@
+@extends('adminhtml.layouts.left-bar')
+
+@section('title')
+    abook books
+@endsection
+
+@section('mainBody')
+    <x-dashboard-chart />
+    <div>
+        <a class="btn btn-sm btn-info" href="{{ url('adminhtml/abook/create') }}">create new book</a>
+    </div>
+    <div class='p-2'>
+        {{-- $__data : dung de lay tat ca cac bien duoc truyen vao 1 blade template --}}
+        {!! view('components.adminhtml.pages.blocks.tableListItem', $__data) !!}
+    </div>
+@endsection

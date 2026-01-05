@@ -11,6 +11,7 @@ interface HomeInterface
     const DESCRIPTION = 'description';
     const DISTRICT = 'district';
     const IMAGE_PATH = 'image_path';
+    const ADDRESS = 'address';
 
     // define relationship conditions
     const ROOMS = 'rooms';
@@ -43,6 +44,7 @@ interface HomeInterface
         self::NAME => ['key' => self::NAME, 'type' => FormInterface::TYPE_TEXT, 'label' => 'tên khách sạn', 'required' => true,],
         self::DESCRIPTION => ['key' => self::DESCRIPTION, 'type' => FormInterface::TYPE_TEXTAREA, 'label' => 'mô tả chung',],
         self::DISTRICT => ['key' => self::DISTRICT, 'type' => FormInterface::TYPE_TEXTAREA, 'label' => 'địa chỉ',],
+        self::ADDRESS => ['key' => self::ADDRESS, 'type' => FormInterface::TYPE_TEXT, 'label' => 'Vị trí',],
         self::GALLERY => ['key' => self::GALLERY, 'type' => FormInterface::TYPE_IMAGE_CHOOSE, 'label' => 'Ảnh chi tiết', 'placeholder' => 'chọn ảnh'],
     ];
 
@@ -59,7 +61,7 @@ interface HomeInterface
     /**
      * khai báo danh sách các thuộc tính được gán hàng loạt.
      */
-    const FILLED_FILEDS = [self::NAME, self::DESCRIPTION, self::DISTRICT, self::IMAGE_PATH,];
+    const FILLED_FILEDS = [self::NAME, self::DESCRIPTION, self::DISTRICT, self::IMAGE_PATH, self::ADDRESS,];
 
     /**
      * define hidden fields

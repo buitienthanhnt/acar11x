@@ -4,7 +4,7 @@
     ])
     <select id="select2-{{ $field['key'] }}" name="{{ $field['key'] }}[]" multiple="multiple" style="width: 75%">
         @isset($field['model'])
-            @foreach ($field['model']::{ $field['key'] . 'Options' }() as $item)
+            @foreach ($field['model']::{ isset($field['fn']) ? $field['fn'] : $field['key'] . 'Options' }() as $item)
                 <option value="{{ $item['value'] }}"
                     @isset($field['value'])
             @if (in_array($item['value'], $field['value']))

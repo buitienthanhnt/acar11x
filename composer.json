@@ -17,9 +17,13 @@
             "type": "path",
             "url": "packages/thanhnt/acarglobal"
         },
-         {
+        {
             "type": "path",
             "url": "packages/thanhnt/ahomeglobal"
+        },
+        {
+            "type": "path",
+            "url": "packages/thanhnt/abookglobal"
         }
     ],
     "require": {
@@ -38,6 +42,7 @@
         "thanhnt/acarglobal": "@dev",
         "thanhnt/ahomeglobal": "@dev",
         "thanhnt/amuaglobal": "@dev",
+        "thanhnt/abookglobal": "@dev",
         "tightenco/ziggy": "^2.0",
         "unisharp/laravel-filemanager": "^2.12"
     },

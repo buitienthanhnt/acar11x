@@ -31,7 +31,7 @@ class Room extends Model implements RoomInterface
      *
      * @var array
      */
-    protected $appends = [self::BOOKED_DATE, self::PRICE];
+    protected $appends = [self::BOOKED_DATE,];
 
     /**
      * link to home of the room
@@ -68,11 +68,11 @@ class Room extends Model implements RoomInterface
         );
     }
 
-    protected function price() : Attribute {
-        return new Attribute(
-            get: fn() => $this->attr()->where(AttrInterface::KEY, RoomInterface::ATTR_PRICE)->first()->value
-        );
-    }
+    // protected function price() : Attribute {
+    //     return new Attribute(
+    //         get: fn() => $this->attr()->where(AttrInterface::KEY, RoomInterface::ATTR_PRICE)->first()->value
+    //     );
+    // }
 
     /**
      * get room attributes

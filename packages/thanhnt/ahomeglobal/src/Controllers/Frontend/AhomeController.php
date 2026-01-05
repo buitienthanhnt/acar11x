@@ -5,6 +5,7 @@ namespace Thanhnt\Ahomeglobal\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Thanhnt\Ahomeglobal\Api\CartApi;
 use Thanhnt\Ahomeglobal\Api\HomeApi;
@@ -46,7 +47,7 @@ final class AhomeController extends Controller
 		$roomList = $this->roomApi->paginateRoomWithFilter([...($request->get('filters', [])), 'home_id' => $activeHomeIds]);
 
 		return Inertia::render('Ahomeglobal/Screens/HomePage', [
-			"homes" => $homeList,
+			"homes" => $request->get('filters') ? $homeList : [],
 			'rooms' => $roomList,
 			'allFilters' => $this->roomApi->allFilters(selected: $request->get('filters')),
 			"filters" => $request->get('filters'),
@@ -124,5 +125,44 @@ final class AhomeController extends Controller
 
 		Mail::to($order->detail->email)->send(new OrderEmail($order));
 		return 123;
+	}
+
+	public function streamText()
+	{
+		return response()->streamDownload(function () {
+			$file = fopen('path/to/large-file.txt', 'r');
+			while (!feof($file)) {
+				echo fread($file, 1024 * 8); // Stream in 8KB chunks
+				flush(); // Force output to browser
+			}
+			fclose($file);
+		}, 'export.txt');
+	}
+
+	/**
+	 * stream large file
+	 * live for inertiaJs component
+	 */
+	public function stream()
+	{
+		$filePath = 'private/large-file.txt';
+
+		return response()->stream(function () use ($filePath) {
+			$handle = fopen(storage_path('app/' . $filePath), 'r');
+			while (($line = fgets($handle)) !== false) {
+				// Định dạng SSE: bắt đầu bằng "data: " và kết thúc bằng "\n\n"
+				echo "data: " . $line . "\n\n";
+				ob_flush();
+				flush();
+				// usleep(1000); // same as sleep; hovever 1000 = 1ms: https://www.php.net/manual/en/function.usleep.php
+			}
+			fclose($handle);
+		}, 200, [
+			'Content-Type' => 'text/event-stream',
+			'Cache-Control' => 'no-cache',
+			'Connection' => 'keep-alive',
+			'X-Accel-Buffering' => 'no', // Cần thiết cho Nginx để tắt buffering
+			// 'Content-Length' => Storage::size($filePath),
+		]);
 	}
 }

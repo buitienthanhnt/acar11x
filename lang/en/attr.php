@@ -7,7 +7,7 @@ return [
 	'active' => "trạng thái hoạt động",
 	'alias' => 'đường dẫn',
 	'image_path' => 'hình ảnh',
-	'desciption' => 'mô tả',
+	'description' => 'mô tả',
 	'name' => 'tên',
 	'email' => 'email',
 	'phone' => 'telephone number',
@@ -20,4 +20,7 @@ return [
 	'type.timeline' => 'dòng thời gian',
 	'type.select' => 'lựa chọn',
 	'type.carousel' => 'chuyển động ảnh',
+	'price' => 'giá',
+	'qty' => 'số lượng',
+	'rate' => 'đánh giá',
 ];

@@ -4,9 +4,13 @@
     create category
 @endsection
 
-@section('formBaseContentRight')
-   {!! view('components.adminhtml.formfields.formFieldRender', ['listAttributes' => $optionAttribute,]) !!}
-@endsection
+
+@isset($optionAttribute)
+    @section('formBaseContentRight')
+        {!! view('components.adminhtml.formfields.formFieldRender', ['listAttributes' => $optionAttribute]) !!}
+    @endsection
+@endisset
+
 
 @section('mainBody')
     <x-dashboard-chart></x-dashboard-chart>
@@ -14,7 +18,7 @@
         <div class="row">
             {!! view('components.adminhtml.formfields.formBase', [
                 'method' => 'POST',
-                'action' => $action ?? url(''. 'adminhtml/ahome/home-register'),
+                'action' => $action ?? url('' . 'adminhtml/ahome/home-register'),
                 'listAttributes' => $listAttributes,
             ]) !!}
 

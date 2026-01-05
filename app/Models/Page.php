@@ -111,7 +111,7 @@ class Page extends Model implements PageInterface
         /**
          * define event after page created.
          */
-        static::created((function () : void {
+        static::created((function (): void {
             /**
              * clear top_page cache
              */
@@ -122,9 +122,10 @@ class Page extends Model implements PageInterface
     /**
      * format page attribute.
      */
-    public function above(): Attribute{
+    public function above(): Attribute
+    {
         return Attribute::make(
-            set: fn (mixed $input) => !!$input,
+            set: fn(mixed $input) => !!$input,
         );
     }
 
@@ -178,6 +179,11 @@ class Page extends Model implements PageInterface
      */
     public function categories(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
+        /**
+         * liên kết nhiều - nhiều qua bảng trung gian
+         * target model: Category
+         * table trung gian: page_categories
+         */
         return $this->belongsToMany(Category::class, 'page_categories',);
     }
 
@@ -238,15 +244,17 @@ class Page extends Model implements PageInterface
      * return list comments of the page.
      *  @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function comments() {
-        return $this->hasMany(Comment::class, CommentInterface::TARGET_ID, PageInterface::ID)->where(CommentInterface::TYPE, 'page')->where(CommentInterface::ACTIVE, true);    
+    public function comments()
+    {
+        return $this->hasMany(Comment::class, CommentInterface::TARGET_ID, PageInterface::ID)->where(CommentInterface::TYPE, 'page')->where(CommentInterface::ACTIVE, true);
     }
 
     /**
      * get page view source info
      *  @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
-    public function source() : HasOne {
+    public function source(): HasOne
+    {
         return $this->hasOne(ViewSource::class, ViewSourceInterface::TARGET_ID, self::ID,)->where(ViewSourceInterface::TYPE, self::MODEL_TYPE);
     }
 }

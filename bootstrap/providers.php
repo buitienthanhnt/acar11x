@@ -10,5 +10,6 @@ return [
     Thanhnt\Amuaglobal\AmuaglobalProvider::class,
     Thanhnt\Acarglobal\AcarglobalProvider::class,
     Thanhnt\Ahomeglobal\AhomeglobalProvider::class,
+    Thanhnt\Abookglobal\AbookglobalProvider::class,
     
 ];

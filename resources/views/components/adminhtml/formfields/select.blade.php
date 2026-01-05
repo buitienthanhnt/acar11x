@@ -4,7 +4,7 @@
     ])
     <select class="custom-select" name="{{ $field['key'] }}">
         <option value="">Open this select menu</option>
-        @foreach ($field['model']::{ $field['key'] . 'Options' }() as $item)
+        @foreach ($field['model']::{ isset($field['fn']) ? $field['fn'] : $field['key'] . 'Options' }() as $item)
             <option value="{{ $item['value'] }}"
                 @isset($field['value'])
                 @if ($field['value'] === $item['value'])
