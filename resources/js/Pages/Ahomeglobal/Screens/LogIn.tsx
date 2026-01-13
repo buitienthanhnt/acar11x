@@ -33,10 +33,10 @@ const LogIn = ({ topMenu, status, canResetPassword }) => {
 		});
 	};
 	return (
-		<BodyLayout>
+		<BodyLayout contentClass="md:max-w-none">
 			<Head title="Login"></Head>
-			<div className="bg-red-100 flex-1 flex flex-col p-4 gap-y-1 justify-center items-center bg-[url('/ahome/assets/img-1.jpg')] bg-cover bg-center">
-				<form onSubmit={submit} autoComplete="true" className='w-full sm:max-w-md p-4 shadow-md overflow-hidden rounded-md border-2'>
+			<div className="flex-1 flex flex-col p-4 gap-y-1 justify-center items-center bg-[url('/ahome/assets/img-1.jpg')] bg-cover bg-center">
+				<form onSubmit={submit} autoComplete="true" className='w-full sm:max-w-md lg:max-w-2xl p-4 shadow-md overflow-hidden rounded-md border-2'>
 					<div className="w-full">
 						{/* @ts-ignore */}
 						<InputLabel htmlFor="email" value="Email" className="text-white font-semibold" />
@@ -53,7 +53,6 @@ const LogIn = ({ topMenu, status, canResetPassword }) => {
 						/>
 						<InputError message={errors.email} className="mt-2" />
 					</div>
-
 					<div className="mt-4">
 						{/* @ts-ignore */}
 						<InputLabel htmlFor="password" value="Mật khẩu" className="text-white font-semibold" />
@@ -69,7 +68,6 @@ const LogIn = ({ topMenu, status, canResetPassword }) => {
 						/>
 						<InputError message={errors.password} className="mt-2" />
 					</div>
-
 					<div className="block mt-4">
 						<label className="flex items-center">
 							<Checkbox
@@ -80,19 +78,15 @@ const LogIn = ({ topMenu, status, canResetPassword }) => {
 							<span className="ms-2 text-sm text-gray-600">Ghi nhớ!</span>
 						</label>
 					</div>
-
 					<div className="flex items-center justify-end mt-4">
 						{(
 							<Link
 								href={'/account-create'}
-								className="underline text-sm text-gray-100 hover:text-blue-900"
+								className="underline text-md text-gray-100 hover:text-green-900"
 							>
 								Tạo tài khoản!
 							</Link>
 						)}
-
-
-
 						<PrimaryButton className="ms-4" disabled={processing}>
 							Đăng nhập
 						</PrimaryButton>

@@ -50,7 +50,7 @@ final class AbookglobalProvider extends ServiceProvider
 
 		/**
 		 * publish inertiaJs component to js/Pages views and active running with controllers Inertial::render()
-		 * php artisan vendor:publish --tag=ahomeglobal-inertiajs
+		 * php artisan vendor:publish --tag=abookglobal-inertiajs
 		 */
 		$this->publishes([
 			__DIR__ . '/resources/js' => resource_path('js/Pages'),

@@ -50,3 +50,11 @@ https://www.cloudways.com/blog/laravel-performance-optimization/
 
 https://viblo.asia/p/mot-so-ham-co-chuc-nang-tuong-tu-nhau-giua-php-va-javascript-maGK7oV9Kj2
   -->
+
+  # https://vietnix.vn/jwt-la-gi/
+  # https://vietnix.vn/cors-la-gi/
+  # https://vietnix.vn/cookie-la-gi/
+  # https://vietnix.vn/jenkins-la-gi/
+  
+  # https://vietnix.vn/json-la-gi/
+  # https://vietnix.vn/html5-la-gi/

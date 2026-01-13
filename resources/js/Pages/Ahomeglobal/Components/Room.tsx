@@ -29,7 +29,7 @@ const RoomItem = ({ room, dateSelected }: { room: RoomItemType, dateSelected?: D
   }
  
   return (
-    <div className={`hover:shadow-md rounded-md gap-x-2 flex 
+    <div className={`hover:shadow-md rounded-md gap-x-2 flex border border-gray-400
 			 h-full ${booked?.id === room.id ? 'bg-gradient-to-r from-green-400 to-green-300' : 'bg-white shadow-sm'}`} onClick={() => {
         onClickRoom(room);
       }}>

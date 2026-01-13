@@ -16,6 +16,7 @@ use Thanhnt\Ahomeglobal\Models\Room;
 use Thanhnt\Ahomeglobal\Models\Types\RoomInterface;
 use Thanhnt\Ahomeglobal\Api\OrderApi;
 use Thanhnt\Ahomeglobal\Mail\OrderEmail;
+use Thanhnt\Ahomeglobal\Models\Types\HomeInterface;
 
 final class AhomeController extends Controller
 {
@@ -36,21 +37,19 @@ final class AhomeController extends Controller
 	public function home(Request $request)
 	{
 		/**
-		 * caculate filter for home
+		 *  Magento Solution Specialist, Magento Certified Developer có nhiều năm kinh nghiệm.
 		 */
-		$homeList = $this->homeApi->paginateHomeWithFilter($request->get('filters'), limit: 12);
-		// dd($homeList);
-		/**
-		 * caculate filter for room
-		 */
-		$activeHomeIds = $this->homeApi->getHomeIdfilterByCustomAttr($request->get('filters', []));
-		$roomList = $this->roomApi->paginateRoomWithFilter([...($request->get('filters', [])), 'home_id' => $activeHomeIds]);
+		$filters = $request->get('filters',);
 
 		return Inertia::render('Ahomeglobal/Screens/HomePage', [
-			"homes" => $request->get('filters') ? $homeList : [],
-			'rooms' => $roomList,
-			'allFilters' => $this->roomApi->allFilters(selected: $request->get('filters')),
-			"filters" => $request->get('filters'),
+			"homes" => isset($filters[HomeInterface::DISTRICT]) ?
+				$this->homeApi->getHomeByDistrict($filters[HomeInterface::DISTRICT])->whereHas(HomeInterface::ROOMS)->with(HomeInterface::ATTR)->paginate(6) :
+				[],
+			'rooms' => isset($filters[HomeInterface::DISTRICT]) ?
+				$this->roomApi->paginateRoomWithFilter([...($filters ?: []), 'home_id' => $this->homeApi->getHomeIdfilterByCustomAttr($filters)]) :
+				null,
+			'allFilters' => $this->roomApi->allFilters(selected: $filters),
+			"filters" => $filters,
 		]);
 	}
 

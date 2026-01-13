@@ -27,14 +27,13 @@ const CreateAccount = ({ topMenu, status, canResetPassword }) => {
 	};
 
 	return (
-		<BodyLayout>
+		<BodyLayout contentClass="md:max-w-none">
 			<Head title="Login"></Head>
-			<div className="bg-red-100 flex-1 flex flex-col p-4 gap-y-1 justify-center items-center bg-[url('/ahome/assets/img-1.jpg')] bg-cover bg-center">
-				<form onSubmit={submit} autoComplete="true" className='w-full sm:max-w-md p-4 shadow-md overflow-hidden rounded-md border-2'>
+			<div className="flex-1 flex flex-col p-4 gap-y-1 justify-center items-center bg-[url('/ahome/assets/img-1.jpg')] bg-cover bg-center">
+				<form onSubmit={submit} autoComplete="true" className='w-full sm:max-w-md lg:max-w-2xl p-4 shadow-md overflow-hidden rounded-md border-2'>
 					<div>
 						{/* @ts-ignore */}
 						<InputLabel htmlFor="name" value="Name" className="text-white font-semibold" />
-
 						<TextInput
 							// @ts-ignore
 							id="name"
@@ -46,11 +45,10 @@ const CreateAccount = ({ topMenu, status, canResetPassword }) => {
 							onChange={(e) => setData('name', e.target.value)}
 							required
 						/>
-
 						<InputError message={errors.name} className="mt-2" />
 					</div>
 
-					<div className="w-full">
+					<div className="mt-4">
 						{/* @ts-ignore */}
 						<InputLabel htmlFor="email" value="Email" className="text-white font-semibold" />
 						<TextInput // @ts-ignore
@@ -88,7 +86,6 @@ const CreateAccount = ({ topMenu, status, canResetPassword }) => {
 					<div className="mt-4">
 						{/* @ts-ignore */}
 						<InputLabel htmlFor="password_confirmation" value="Xác nhận mật khẩu" className="text-white font-semibold" />
-
 						<TextInput  // @ts-ignore
 							id="password_confirmation"
 							type="password"
@@ -100,7 +97,6 @@ const CreateAccount = ({ topMenu, status, canResetPassword }) => {
 							placeholder='Enter confirm password'
 							required
 						/>
-
 						<InputError message={errors.password_confirmation} className="mt-2" />
 					</div>
 

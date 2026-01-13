@@ -93,7 +93,9 @@ const HomeDetail: FunctionComponent<Props> = ({ homeDetail, selectedDates, roomS
 	}
 
 	return (
-		<BodyLayout>
+		<BodyLayout mainStyles={{
+			// backgroundColor: '#f2f7fa'
+		}}>
 			<Head>
 				<title>{homeDetail.name}</title>
 			</Head>
@@ -153,7 +155,7 @@ const HomeInfo = ({ homeDetail }: { homeDetail: HomeDetailType }) => {
 					}
 					{location &&
 						<Location
-							style='h-full w-full flex-1 lg:h-40 border p-1'
+							style='h-full w-full flex-1 lg:h-40'
 							url={location.value}></Location>
 					}
 				</div>

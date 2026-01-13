@@ -42,7 +42,7 @@ const HomePage: FunctionComponent<Props> = ({ homes, rooms, filters, allFilters 
 				</div>
 
 				<div className="w-full mx-auto bg-gradient-to-r from-blue-gray-900 to-blue-gray-800 space-y-1">
-					<div className="min-h-36 md:min-h-[480px] p-1 md:p-4 bg-[url('https://cdn1.ivivu.com/images/2025/12/19/15/ixora-hotram-t_nv9uek_.webp')] bg-cover bg-center">
+					<div className="min-h-36 md:min-h-[480px] p-1 md:p-4 bg-[url('/ahome/assets/img-1.jpg')] bg-cover bg-center">
 						<div className="grid lg:grid-cols-6 xl:grid-cols-7 lg:space-x-4 space-y-2 lg:space-y-0">
 							<div className="col-span-1 lg:col-span-2">
 								<HomeFilter filters={filters} allFilters={allFilters}></HomeFilter>
@@ -59,11 +59,11 @@ const HomePage: FunctionComponent<Props> = ({ homes, rooms, filters, allFilters 
 
 				<div className="flex flex-col flex-1 w-full p-1 mx-auto md:container">
 					<div className="space-y-10 ">
-						{filters?.district && <HomeMap homes={homes.data as unknown as HomeDetail[]}></HomeMap>}
+						{filters?.district && homes && <HomeMap homes={homes.data as unknown as HomeDetail[]}></HomeMap>}
 						{homes?.data &&
 							<div className="grid lg:space-x-4 md:py-2 py-1 space-y-2 lg:space-y-0">
 								<div className="col-span-1 lg:col-span-3 flex flex-col gap-y-1  md:gap-y-3 p-1 md:p-0">
-									<Title title={`Điểm đến đề xuất: ${homes.total}`}></Title>
+									<Title title={`Nhà khách đề xuất: ${homes.total}`}></Title>
 									<div className='grid md:grid-cols-3 lg:grid-cols-4 gap-1 md:gap-2 lg:gap-3 w-full'>
 										{homes?.data.map(home => <HomeItem home={home as HomeItemType} selectedDates={filters?.dates} key={home.id.toString()}></HomeItem>)}
 									</div>
@@ -90,8 +90,8 @@ const HomePage: FunctionComponent<Props> = ({ homes, rooms, filters, allFilters 
 									prefetch: ['hover',], // prefecth must be use in GET request only
 								}}></Paginate>
 						</div>}
-						<div className='space-y-3'>
-							<Title title="Địa danh du lịch yêu thích"></Title>
+						<div className='space-y-3 mt-4'>
+							<Title title="Gợi ý điểm đến yêu thích"></Title>
 							<District></District>
 						</div>
 						<div className='h-2'></div>

@@ -14,6 +14,7 @@ import { Paginate, CustomTimeTable, RoomItemGrid, HomeMap } from "../Components"
 import { FingerPrintIcon, MapPinIcon, XMarkIcon } from "@heroicons/react/24/solid";
 import { SparklesIcon } from "@heroicons/react/24/solid";
 import District from '../Components/Homes/District';
+import Title from '../Components/Title';
 
 type Props = {
 	homes: PagePaginate,
@@ -40,7 +41,7 @@ const HomePage: FunctionComponent<Props> = ({ homes, rooms, filters, allFilters 
 					</FlashMessage>}
 				</div>
 
-				<div className="w-full mx-auto bg-gradient-to-r from-blue-gray-900 to-blue-gray-800">
+				<div className="w-full mx-auto bg-gradient-to-r from-blue-gray-900 to-blue-gray-800 space-y-1">
 					<div className="min-h-36 md:min-h-[480px] p-1 md:p-4 bg-[url('/ahome/assets/img-1.jpg')] bg-cover bg-center">
 						<div className="grid lg:grid-cols-6 xl:grid-cols-7 lg:space-x-4 space-y-2 lg:space-y-0">
 							<div className="col-span-1 lg:col-span-2">
@@ -57,25 +58,26 @@ const HomePage: FunctionComponent<Props> = ({ homes, rooms, filters, allFilters 
 				</div>
 
 				<div className="flex flex-col flex-1 w-full p-1 mx-auto md:container">
-					<div className="space-y-1">
-						{filters?.district && <HomeMap homes={homes.data as unknown as HomeDetail[]}></HomeMap>}
-						<div className="grid lg:space-x-4 md:py-2 py-1 space-y-2 lg:space-y-0">
-							<div className="col-span-1 lg:col-span-3 flex flex-col gap-y-1  md:gap-y-2 p-1 md:p-0">
-								<p className="text-xl font-bold text-purple-800">Điểm đến yêu thích: {homes.total}</p>
-								<div className='grid md:grid-cols-3 lg:grid-cols-4 gap-1 md:gap-2 lg:gap-3 w-full'>
-									{homes?.data.map(home => <HomeItem home={home as HomeItemType} selectedDates={filters?.dates} key={home.id.toString()}></HomeItem>)}
+					<div className="space-y-10 ">
+						{filters?.district && homes && <HomeMap homes={homes.data as unknown as HomeDetail[]}></HomeMap>}
+						{homes?.data &&
+							<div className="grid lg:space-x-4 md:py-2 py-1 space-y-2 lg:space-y-0">
+								<div className="col-span-1 lg:col-span-3 flex flex-col gap-y-1  md:gap-y-3 p-1 md:p-0">
+									<Title title={`Nhà khách đề xuất: ${homes.total}`}></Title>
+									<div className='grid md:grid-cols-3 lg:grid-cols-4 gap-1 md:gap-2 lg:gap-3 w-full'>
+										{homes?.data.map(home => <HomeItem home={home as HomeItemType} selectedDates={filters?.dates} key={home.id.toString()}></HomeItem>)}
+									</div>
+									<Paginate pageSize={homes.last_page} currentPage={homes.current_page}
+										mergeData={{ filters: filters || undefined }} linkProps={{
+											method: 'get',
+											preserveScroll: true,
+											prefetch: ['hover',], // prefecth must be use in GET request only
+										}}></Paginate>
 								</div>
-								<Paginate pageSize={homes.last_page} currentPage={homes.current_page}
-									mergeData={{ filters: filters || undefined }} linkProps={{
-										method: 'get',
-										preserveScroll: true,
-										prefetch: ['hover',], // prefecth must be use in GET request only
-									}}></Paginate>
 							</div>
-						</div>
-						{!!rooms?.data.length && <div className="gap-2 space-y-2 p-1 md:p-0">
-							<p className="text-xl font-bold text-purple-800">Danh sách phòng nghỉ đề xuất: {rooms.total}</p>
-
+						}
+						{!!rooms?.data.length && <div className="gap-2 space-y-3 p-1 md:p-0 mt-4">
+							<Title title={`Phòng nghỉ đề xuất: ${rooms.total}`}></Title>
 							<div className="grid md:grid-cols-3 lg:grid-cols-4 gap-1 md:gap-2 lg:gap-3 w-full">
 								{rooms?.data.map(room => <div key={room.id}>
 									<RoomItemGrid room={room as unknown as RoomHome} selectedDates={filters?.dates}></RoomItemGrid>
@@ -88,11 +90,10 @@ const HomePage: FunctionComponent<Props> = ({ homes, rooms, filters, allFilters 
 									prefetch: ['hover',], // prefecth must be use in GET request only
 								}}></Paginate>
 						</div>}
-
-						<>
-							<p className='text-md lg:text-xl text-blue-gray-800 font-semibold'>Địa danh du lịch đề xuất!</p>
+						<div className='space-y-3 mt-4'>
+							<Title title="Gợi ý điểm đến yêu thích"></Title>
 							<District></District>
-						</>
+						</div>
 						<div className='h-2'></div>
 					</div>
 					<HomeSpeed></HomeSpeed>
@@ -205,7 +206,7 @@ const HomeFilter = ({ filters, allFilters }) => {
 				<input type="text" value={formState.search}
 					onChange={e => setFormState(old => { return { ...old, search: e.target.value } })}
 					placeholder='Tìm theo địa danh'
-					className='rounded-md w-full md:w-96 bg-transparent'
+					className='rounded-md w-full border-white md:w-96 bg-transparent placeholder:text-white text-white'
 				/>
 				{formState.search && <div onClick={() => { searchLocation(false) }}>
 					<FingerPrintIcon width={36} height={36} className='hover:scale-110 text-gray-500 hover:text-black'></FingerPrintIcon>

@@ -55,7 +55,7 @@ final class HomeApi
 	 * @param string $district
 	 * @return \Illuminate\Database\Eloquent\Builder
 	 */
-	protected function getHomeByDistrict(string $district)
+	public function getHomeByDistrict(string $district)
 	{
 		// $homeList =  Home::whereRaw('district LIKE ? COLLATE utf8mb4_unicode_ci', ['%'.$district.'%']); // mysql
 		$homeList =  Home::whereLike(HomeInterface::DISTRICT, "%$district%");

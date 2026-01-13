@@ -29,7 +29,7 @@ const RoomItem = ({ room, dateSelected }: { room: RoomItemType, dateSelected?: D
   }
  
   return (
-    <div className={`hover:shadow-md rounded-md gap-x-2 flex 
+    <div className={`hover:shadow-md rounded-md gap-x-2 flex border border-gray-400
 			 h-full ${booked?.id === room.id ? 'bg-gradient-to-r from-green-400 to-green-300' : 'bg-white shadow-sm'}`} onClick={() => {
         onClickRoom(room);
       }}>
@@ -89,14 +89,14 @@ const RoomTime = ({ allDisable, dateSelected, setDateSelected, onCheckout }: Roo
           onChange={setDateSelected}
           minDate={new Date()}
           // maxDate={new Date(2025, 11, 19)}
-          disable={[...bookedDate, ...allDisable].map(s => new Date(s))}
-          forcus={dateSelected.length ? dateSelected[0] : undefined}
+          disable={[...bookedDate, ...(allDisable || [])].map(s => new Date(s))}
+          forcus={dateSelected?.length ? dateSelected[0] : undefined}
         ></CustomTimeTable>
       </div>
       <div>
         <span className='text-md font-semibold'>Phòng đang chọn: {booked?.title || 'Ngẫu nhiên'}</span>
         <div className='col-span-1 flex flex-col space-y-1'>
-          {!!dateSelected.length && <div className='flex justify-between items-center my-2'>
+          {!!dateSelected?.length && <div className='flex justify-between items-center my-2'>
             <span className='text-md font-semibold'>Thời gian lưu trú:</span>
             <span className='bg-orange-400 rounded-full p-1' onClick={() => { setDateSelected([]); }}>
               <XMarkIcon className='size-4 text-white font-extrabold'></XMarkIcon>
@@ -104,7 +104,7 @@ const RoomTime = ({ allDisable, dateSelected, setDateSelected, onCheckout }: Roo
           </div>}
           <SelectedInfo dateSelected={dateSelected || []}></SelectedInfo>
           {/* @ts-ignore */}
-          {!!dateSelected.length && <Button placeholder={'view selected'} style={{ marginTop: '10px' }} onClick={onCheckout}>
+          {!!dateSelected?.length && <Button placeholder={'view selected'} style={{ marginTop: '10px' }} onClick={onCheckout}>
             <span>Đặt phòng</span>
           </Button>}
         </div>
