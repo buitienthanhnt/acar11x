@@ -41,14 +41,14 @@ const CustomerInfo: FunctionComponent<Props> = ({ onSuccess, onError }) => {
 				className='w-full sm:max-w-lg p-4 shadow-md overflow-hidden rounded-md border-2 flex flex-col gap-y-4'>
 				<div className="">
 					{/* @ts-ignore */}
-					<InputLabel htmlFor="name" value="Họ và tên khách hàng:" className="font-semibold text-gray-900" />
+					<InputLabel htmlFor="name" value="Họ và tên khách hàng:" className="font-semibold text-white" />
 					<TextInput
 						// @ts-ignore
 						id="name"
 						type="text"
 						name="name"
 						value={data.name}
-						className="mt-1 block w-full bg-transparent placeholder-gray-800"
+						className="mt-1 block w-full bg-transparent placeholder-white"
 						onChange={(e) => setData('name', e.target.value)}
 						placeholder='Enter Name'
 					/>
@@ -57,14 +57,14 @@ const CustomerInfo: FunctionComponent<Props> = ({ onSuccess, onError }) => {
 
 				<div className="w-full">
 					{/* @ts-ignore */}
-					<InputLabel htmlFor="email" value="Địa chỉ email:" className="font-semibold text-gray-900" />
+					<InputLabel htmlFor="email" value="Địa chỉ email:" className="font-semibold text-white" />
 					<TextInput
 						// @ts-ignore
 						id="email"
 						type="email"
 						name="email"
 						value={data.email}
-						className="mt-1 block w-full bg-transparent placeholder-gray-800"
+						className="mt-1 block w-full bg-transparent placeholder-white"
 						autoComplete="name"
 						isFocused={true}
 						onChange={(e) => setData('email', e.target.value)}
@@ -75,14 +75,14 @@ const CustomerInfo: FunctionComponent<Props> = ({ onSuccess, onError }) => {
 
 				<div className="">
 					{/* @ts-ignore */}
-					<InputLabel htmlFor="phone" value="Số điện thoại:" className="font-semibold text-gray-900" />
+					<InputLabel htmlFor="phone" value="Số điện thoại:" className="font-semibold text-white" />
 					<TextInput
 						// @ts-ignore
 						id="phone"
 						type="tel"
 						name="phone"
 						value={data.phone}
-						className="mt-1 block w-full bg-transparent placeholder-gray-800"
+						className="mt-1 block w-full bg-transparent placeholder-white"
 						onChange={(e) => setData('phone', e.target.value)}
 						placeholder='Enter phone'
 					/>

@@ -8,7 +8,7 @@ use Thanhnt\Ahomeglobal\Models\Types\OrderInterface;
 use Thanhnt\Ahomeglobal\Models\Types\OrderTimeInterface;
 
 /**
- * create observer model event:
+ * create observer model event: php artisan make:observer OrderObserver --model=Order
  * Tạo lắng nghe sự kiện cho Eloquent Model
  * Khai báo trong Eloquent model: #[ObservedBy([OrderObserver::class])]
  */
@@ -19,10 +19,11 @@ final class OrderObserver
      */
     public function created(Order $order): void
     {
-        $homeId = $order->{OrderInterface::HOME_ID};
-        $listTimes = $order->{OrderInterface::SELECTED_TIME};
-        foreach ($listTimes as $value) {
-            $orderTime = OrderTime::where(OrderTimeInterface::HOME_ID, $homeId)
+        /**
+         * save for list selected time
+         */
+        foreach ($order->{OrderInterface::SELECTED_TIME} as $value) {
+            $orderTime = OrderTime::where(OrderInterface::HOME_ID, $order->{OrderInterface::HOME_ID})
                 ->where(OrderTimeInterface::DATE, $value)
                 ->first();
             if ($orderTime) {
@@ -32,7 +33,7 @@ final class OrderObserver
             } else {
                 OrderTime::create([
                     OrderTimeInterface::DATE => $value,
-                    OrderTimeInterface::HOME_ID => $homeId,
+                    OrderTimeInterface::HOME_ID => $order->{OrderInterface::HOME_ID},
                     OrderTimeInterface::ORDER_IDS => [$order->id],
                     OrderTimeInterface::ROOM_IDS => [$order->{OrderInterface::ROOM_ID}],
                 ]);

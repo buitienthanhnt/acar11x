@@ -33,7 +33,7 @@ final class CartApi
 	 */
 	public function getCart()
 	{
-		return $this->session->get(self::CART_KEY);
+		return $this->session->get($this->getCartKey());
 	}
 
 	/**
@@ -96,7 +96,7 @@ final class CartApi
 			$cartData = [
 				...$cartData,
 				'customer_info' => $currentCart['customer_info'],
-				"on_payment_order" => $currentCart['on_payment_order'],
+				// "on_payment_order" => $currentCart['on_payment_order'],
 				"on_payment" => $currentCart['on_payment'],
 				// "expect_order" => $currentCart['expect_order'],
 			];
@@ -122,12 +122,16 @@ final class CartApi
 				[
 					"amount" => [
 						"currency_code" => 'USD' ?: $params['currency_code'],
-						"value" => number_format($item['price'] / config('ahomeglobal.exchange_vnd'), 2) * $item['quantity'],
+						"value" => number_format($item['price'] / config('ahomeglobal.exchange_vnd'), 2) * $item['quantity'] +  number_format(14000 / config('ahomeglobal.exchange_vnd'), 2),
 						"breakdown" =>  [
 							"item_total" =>  [
 								"currency_code" => 'USD' ?: $params['currency_code'],
 								"value" => number_format($item['price'] / config('ahomeglobal.exchange_vnd'), 2) * $item['quantity'],
 							],
+							"shipping" => [
+								"currency_code" => 'USD' ?: $params['currency_code'],
+								"value" =>  number_format(14000 / config('ahomeglobal.exchange_vnd'), 2),
+							]
 						]
 					],
 					"items" => [
@@ -157,7 +161,7 @@ final class CartApi
 		if (empty($cartData)) {
 			return false;
 		}
-		$this->session->put(self::CART_KEY, $cartData);
+		$this->session->put($this->getCartKey(), $cartData);
 
 		/**
 		 * dispatch event save cart
@@ -175,7 +179,7 @@ final class CartApi
 	{
 		if ($cart = $this->getCart()) {
 			if ($cart['customer_info'] !== $customerInfo) {
-				$this->session->put(self::CART_KEY . '.customer_info', $customerInfo);
+				$this->session->put($this->getCartKey() . '.customer_info', $customerInfo);
 			}
 			return;
 		}
@@ -188,7 +192,7 @@ final class CartApi
 	 */
 	public function clearCartOrder()
 	{
-		$this->session->forget(self::CART_KEY);
+		$this->session->forget($this->getCartKey());
 		$this->session->forget(self::EXPECT_ORDER_KEY);
 	}
 
@@ -198,7 +202,7 @@ final class CartApi
 	 */
 	public function getCartCustomer()
 	{
-		return $this->session->get(self::CART_KEY . '.customer_info');
+		return $this->session->get($this->getCartKey() . '.customer_info');
 	}
 
 	/**
@@ -208,7 +212,7 @@ final class CartApi
 	public function updateCartOnOrder($onPaymentOrder)
 	{
 		if ($this->getCart()) {
-			$this->session->put(self::CART_KEY . '.on_payment_order', $onPaymentOrder);
+			$this->session->put($this->getCartKey() . '.on_payment_order', $onPaymentOrder);
 			return;
 		}
 		throw new Exception("cart data not found", 1);
@@ -220,7 +224,7 @@ final class CartApi
 			/**
 			 * put session is update
 			 */
-			$this->session->put(self::CART_KEY, $cartData);
+			$this->session->put($this->getCartKey(), $cartData);
 			return;
 		}
 		throw new Exception("cart data not found", 1);
@@ -238,7 +242,7 @@ final class CartApi
 			/**
 			 * put session is update
 			 */
-			$this->session->put(self::CART_KEY . '.' . $key, $value);
+			$this->session->put($this->getCartKey() . '.' . $key, $value);
 			return;
 		}
 	}
@@ -252,7 +256,7 @@ final class CartApi
 		/**
 		 * push session id add to array value
 		 */
-		session()->push(self::CART_KEY, $value);
+		session()->push($this->getCartKey(), $value);
 	}
 
 	/**
@@ -281,5 +285,10 @@ final class CartApi
 	public function clearExpectOrder()
 	{
 		$this->session->forget(self::EXPECT_ORDER_KEY);
+	}
+
+	private function getCartKey()
+	{
+		return config('ahomeglobal.cart') ?? self::CART_KEY;
 	}
 }

@@ -93,7 +93,9 @@ const HomeDetail: FunctionComponent<Props> = ({ homeDetail, selectedDates, roomS
 	}
 
 	return (
-		<BodyLayout>
+		<BodyLayout mainStyles={{
+			// backgroundColor: '#f2f7fa'
+		}}>
 			<Head>
 				<title>{homeDetail.name}</title>
 			</Head>

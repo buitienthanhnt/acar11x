@@ -2,7 +2,7 @@ import { AttrInterface } from "./Attr"
 import { OrderTimeInterface } from "./OrderTime"
 import { RoomItem } from "./Room"
 
-export type HomeItem = {
+export type HomeItemType = {
 	id: number,
 	name: string,
 	description?: string,
@@ -10,7 +10,7 @@ export type HomeItem = {
 	image_path?: string,
 }
 
-export type HomeDetail = HomeItem & {
+export type HomeDetail = HomeItemType & {
 	rooms: RoomItem[],
 	order_times: OrderTimeInterface[],
 	attr: AttrInterface[],

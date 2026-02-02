@@ -58,3 +58,4 @@ https://viblo.asia/p/mot-so-ham-co-chuc-nang-tuong-tu-nhau-giua-php-va-javascrip
   
   # https://vietnix.vn/json-la-gi/
   # https://vietnix.vn/html5-la-gi/
+  # https://docs.phpdoc.org/guide/references/phpdoc/tags/var.html

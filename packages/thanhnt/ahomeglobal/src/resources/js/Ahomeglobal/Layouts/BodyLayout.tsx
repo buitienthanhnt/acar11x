@@ -10,7 +10,7 @@ const BodyLayout = ({ children, showBanner, mainStyles, contentClass }: { childr
 	return (
 		<BaseLayout>
 			<div className="flex flex-col sm:justify-center sm:pt-0 min-h-screen mx-auto 
-						 dark:bg-gray-300"  style={mainStyles}>
+						 dark:bg-gray-300 "  style={mainStyles}>
 				<NavbarDark navStyles={'rounded-none max-w-full'}></NavbarDark>
 				<div className="relative h-0 flex justify-end overflow-y-visible">
 					{(error || success) && <FlashMessage message={error || success} type={error ? 'error' : 'success'}

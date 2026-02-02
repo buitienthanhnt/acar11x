@@ -9,6 +9,10 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
+/**
+ * Đang để chạy trên queue(chạy không đồng bộ) nó sẽ đẩy vào bảng: jobs và thực hiện sau.
+ * nếu muốn chạy ngay lập tức thì bỏ: implements ShouldQueue đi nhưng nó sẽ bị chậm phản hồi trên giao diện người đang sử dụng
+ */
 class OrderEmail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;

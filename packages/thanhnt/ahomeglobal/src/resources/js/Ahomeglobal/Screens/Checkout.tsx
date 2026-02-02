@@ -74,7 +74,7 @@ const Checkout: FunctionComponent<Props> = ({ dateSelected, home, room, totalPri
 	}
 
 	return (
-		<BodyLayout>
+		<BodyLayout contentClass="md:max-w-none">
 			<Head>
 				<title>Thanh toán</title>
 			</Head>
@@ -83,7 +83,7 @@ const Checkout: FunctionComponent<Props> = ({ dateSelected, home, room, totalPri
 				homeDetail: home,
 				roomSelected: room,
 			}}>
-				<div className="flex-1 bg-gradient-to-r from-blue-gray-500 to-blue-gray-300">
+				<div className="flex-1 bg-[url('/ahome/assets/img-1.jpg')] bg-cover bg-center">
 					<div className="w-full p-1 md:p-2 space-y-2">
 						<OrderInfomation homeSelected={home} roomSelected={room} dateSelected={dateSelected} totalPrice={totalPrice}></OrderInfomation>
 						<div className="flex flex-col gap-y-10">

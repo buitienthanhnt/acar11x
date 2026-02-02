@@ -113,7 +113,7 @@ class PayPalService
             return $response;
         } catch (\Exception $e) {
             $expectOrder->forceDelete();
-             $this->cartApi->clearExpectOrder();
+            $this->cartApi->clearExpectOrder();
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
@@ -228,6 +228,14 @@ class PayPalService
             $itemTotal['value']
         )->build();
         $amountBreakdown->setItemTotal($itemTotalMoney);
+        /**
+         * set shipping for amount breakdown
+         */
+        $shipping = $data['amount']['breakdown']['shipping'];
+        $amountBreakdown->setShipping(MoneyBuilder::init( // PaypalServerSdkLib\Models\Money
+            $shipping['currency_code'],
+            $shipping['value'],
+        )->build());
         // setShipping, setSubtotal, setTax,...
 
         /**

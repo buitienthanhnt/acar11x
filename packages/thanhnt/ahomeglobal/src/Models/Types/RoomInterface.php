@@ -13,6 +13,7 @@ interface RoomInterface
 	const DESCRIPTION = 'description';
 	const COUNT = 'count';
 	const TYPE = 'type';
+	const ALIAS = 'alias';
 
 	const TYPE_VALUE = [
 		['label' => '1 giường đơn', 'value' => '1',],
@@ -47,6 +48,7 @@ interface RoomInterface
 	 */
 	const FORM_FIELDS = [
 		self::TITLE => ['key' => self::TITLE, 'type' => FormInterface::TYPE_TEXT, 'label' => 'tên phòng', 'required' => true],
+		self::ALIAS => ['key' => self::ALIAS, 'type' => FormInterface::TYPE_TEXT, 'label' => 'mã phòng', 'placeholder' => 'mã phòng (unique)',],
 		self::DESCRIPTION => ['key' => self::DESCRIPTION, 'type' => FormInterface::TYPE_TEXTAREA, 'label' => 'mô tả chung',], // ex: 1 ngủ, có điều hòa, tầng 2
 		self::TYPE => ['key' => self::TYPE, 'type' => FormInterface::TYPE_SELECT, 'label' => 'số giường', 'model' => \Thanhnt\Ahomeglobal\Models\Room::class, 'required' => true,],
 		self::IMAGE_PATH => ['key' => self::IMAGE_PATH, 'type' => FormInterface::TYPE_IMAGE_CHOOSE, 'label' => 'image avatar',],
@@ -66,7 +68,7 @@ interface RoomInterface
 	/**
 	 * khai báo danh sách các thuộc tính được gán hàng loạt.
 	 */
-	const FILLED_FILEDS = [self::TITLE, self::DESCRIPTION, self::TYPE, self::IMAGE_PATH, self::COUNT, self::PRICE, self::HOME_ID];
+	const FILLED_FILEDS = [self::TITLE, self::DESCRIPTION, self::TYPE, self::IMAGE_PATH, self::COUNT, self::PRICE, self::HOME_ID, self::ALIAS];
 
 	const HIDDEN_FIELDS = ['created_at', 'updated_at', 'deleted_at', self::HOME_ID];
 

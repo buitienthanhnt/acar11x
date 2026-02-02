@@ -6,6 +6,7 @@ use Thanhnt\Ahomeglobal\Models\Home;
 use Thanhnt\Ahomeglobal\Models\Room;
 use Thanhnt\Ahomeglobal\Models\Types\AttrInterface;
 use Thanhnt\Ahomeglobal\Models\Types\HomeInterface;
+use Thanhnt\Ahomeglobal\Models\Types\OrderTimeInterface;
 use Thanhnt\Ahomeglobal\Models\Types\RoomInterface;
 
 final class HomeApi
@@ -29,7 +30,9 @@ final class HomeApi
 		 */
 		$home =  $this->home
 			->with(HomeInterface::ROOMS)
-			->with(HomeInterface::ORDER_TIMES)
+			->with(HomeInterface::ORDER_TIMES, function ($query) { // get order times from today or after today
+				$query->whereTodayOrAfter(OrderTimeInterface::DATE);
+			})
 			->with(HomeInterface::ATTR)
 			->with(HomeInterface::GALLERY)
 			->find($homeId);
@@ -138,5 +141,28 @@ final class HomeApi
 		 * return default home list without filter
 		 */
 		return Home::whereHas(HomeInterface::ROOMS)->with(HomeInterface::ATTR)->paginate($limit);
+	}
+
+	/**
+	 * get 8 district has most of hotels(homes)
+	 */
+	public function getMostViewed()
+	{
+		// SELECT *, count(district) as location FROM homes GROUP BY district ORDER BY location desc LIMIT 8
+		return $this->home->select('*')->selectRaw("count(" . HomeInterface::DISTRICT . ") as location")->groupBy(HomeInterface::DISTRICT)->orderBy('location', 'desc')->limit(8)->get();
+	}
+
+	/**
+	 * @param string $location
+	 * @return \Illuminate\Database\Eloquent\Builder
+	 */
+	public function getHomeLocation(string $location)
+	{
+		$home = $this->home->where(HomeInterface::DISTRICT, $location)->with(HomeInterface::ATTR);
+		return $home;
+	}
+
+	public function resourceModel() {
+		return $this->home;
 	}
 }

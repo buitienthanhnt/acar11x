@@ -207,15 +207,19 @@ final class CheckoutController extends Controller
 						'qty' => $request->input('qty', 1),
 					]
 				)) {
-					Inertia::share('messages',  'added for order in cart');
+					Inertia::share('messages',  'Đã thêm vào danh sách chờ');
 				}
 			}
 		}
-
+		/**
+		 * kiểm tra đơn đang chờ đã chọn
+		 */
 		$cart = $this->cartApi->getCart();
 		if (empty($cart)) {
-			return redirect()->back()->with('error', 'Cart is empty');
+			return redirect()->back()->with('error', 'Chưa có lựa chọn');
 		}
+
+		// dd($cart); // 01kfxjserx4xsfdb5vmtse1wwe
 
 		return Inertia::render('Ahomeglobal/Screens/Checkout', [
 			'dateSelected' => config('ahomeglobal.mode') === 'list_date' ? $cart[OrderInterface::SELECTED_TIME] :
@@ -243,10 +247,10 @@ final class CheckoutController extends Controller
 		 * check stripe payment success
 		 */
 		if ($request->get('expect_order') === $this->cartApi->getExpectOrder()) {
-			Inertia::share('messages', 'thank you for order!');
+			Inertia::share('messages', 'Cảm ơn quý khách đã đặt lịch!');
 			/**
 			 * get checkout success info
-			 * add cart to Order
+			 * save expect order to Order
 			 * clear cart data
 			 */
 			try {
@@ -256,16 +260,15 @@ final class CheckoutController extends Controller
 				}
 				$this->cartApi->clearCartOrder();
 				if ($request->get('PayerID')) {
+					// http://acar11x.dev/order-success?PayerID=F57WHNF868FF6&token=0M156964E5622770F
 					// paypal payment has PayerID(now no use)
 				}
 				$order = $this->orderApi->getOrderDetailByIncrement($newOrder->{OrderInterface::INCREMENT_ID});
+
 				/**
 				 * send order detail to customer email.
 				 */
 				Mail::to($order->detail->email)->send(new OrderEmail($order));
-				/**
-				 * return order success page
-				 */
 				return Inertia::render('Ahomeglobal/Screens/CheckoutSuccess', [
 					'order' => $order,
 				]);
@@ -280,5 +283,3 @@ final class CheckoutController extends Controller
 		return redirect()->route('home')->with('error', 'payment error!');
 	}
 }
-
-// http://acar11x.dev/order-success?PayerID=F57WHNF868FF6&token=0M156964E5622770F

@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Str;
 use Thanhnt\Ahomeglobal\Database\Factories\RoomFactory;
 use Thanhnt\Ahomeglobal\Models\Types\AttrInterface;
 use Thanhnt\Ahomeglobal\Models\Types\OrderInterface;
@@ -101,5 +102,17 @@ class Room extends Model implements RoomInterface
     public static function typeOptions()
     {
         return RoomInterface::TYPE_VALUE;
+    }
+
+    /**
+     * format alias path of model if input value null object will use value of title
+     * https://laravel.com/docs/12.x/eloquent-mutators#mutating-multiple-attributes
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute
+     */
+    public function alias(): Attribute
+    {
+        return Attribute::make(
+            set: fn($value, $attributes) => $value ?: Str::slug($attributes[self::TITLE] ?? ''),
+        );
     }
 }

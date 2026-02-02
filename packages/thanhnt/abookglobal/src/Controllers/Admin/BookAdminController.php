@@ -29,6 +29,7 @@ final class BookAdminController extends Controller
 				BookInterface::IMAGE_PATH,
 				BookInterface::NAME,
 				BookInterface::PRICE,
+				BookInterface::QTY,
 				BookInterface::DESCRIPTION,
 			],
 			'lists' => Book::paginate(12),

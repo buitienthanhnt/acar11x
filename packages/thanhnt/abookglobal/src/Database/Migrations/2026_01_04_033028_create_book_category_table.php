@@ -15,6 +15,7 @@ return new class extends Migration
         Schema::create(BookCateInterface::TABLE_NAME, function (Blueprint $table) {
             $table->id();
             $table->char(BookCateInterface::NAME);
+            $table->char(BookCateInterface::ALIAS)->nullable()->unique();
             $table->string(BookCateInterface::IMAGE_PATH)->nullable();
             $table->string(BookCateInterface::DESCRIPTION)->nullable();
             $table->integer(BookCateInterface::PARENT)->default(0);

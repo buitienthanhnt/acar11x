@@ -4,6 +4,7 @@ namespace Thanhnt\Abookglobal;
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
+use Thanhnt\Abookglobal\Providers\EventProvider;
 
 final class AbookglobalProvider extends ServiceProvider
 {
@@ -15,6 +16,12 @@ final class AbookglobalProvider extends ServiceProvider
 		/**
 		 * merge package define config to global.
 		 */
+		$this->mergeConfigFrom(__DIR__ . '/config/config.php', 'abookglobal');
+
+		/**
+		 * load for event service provider.
+		 */
+		$this->app->register(EventProvider::class);
 	}
 
 	/**

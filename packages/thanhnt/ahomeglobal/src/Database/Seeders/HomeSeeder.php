@@ -85,7 +85,7 @@ final class HomeSeeder extends Seeder
 					[RoomInterface::TYPE => RoomInterface::TYPE_VALUE[3]['value']],
 					[RoomInterface::TYPE => RoomInterface::TYPE_VALUE[4]['value']],
 				))->has(
-					Attr::factory()->count(3)->state(new Sequence(
+					Attr::factory()->count(2)->state(new Sequence(
 						// [AttrInterface::TYPE => 'room', AttrInterface::KEY => 'price', AttrInterface::VALUE => '500',],
 						[AttrInterface::TYPE => 'room', AttrInterface::KEY => 'rate', AttrInterface::VALUE => '3',],
 						[AttrInterface::TYPE => 'room', AttrInterface::KEY => 'persion', AttrInterface::VALUE => '1',],

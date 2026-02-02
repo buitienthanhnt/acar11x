@@ -7,7 +7,7 @@ import { Head, Link, router, useRemember } from "@inertiajs/react";
 import { sprintf } from "sprintf-js";
 import Urls from "../netWork/Urls";
 import { listDateToArrayString } from "../Helper/DateTimeHelper";
-import { HomeDetail, HomeItem as HomeItemType } from "../types/Home";
+import { HomeDetail, HomeItemType } from "../types/Home";
 import { RoomHome, } from "../types/Room";
 import { PagePaginate } from "../types/Paginate";
 import { Paginate, CustomTimeTable, RoomItemGrid, HomeMap } from "../Components";
@@ -15,6 +15,7 @@ import { FingerPrintIcon, MapPinIcon, XMarkIcon } from "@heroicons/react/24/soli
 import { SparklesIcon } from "@heroicons/react/24/solid";
 import District from '../Components/Homes/District';
 import Title from '../Components/Title';
+import SwipeSingle from '../Components/Homes/SwipeSingle';
 
 type Props = {
 	homes: PagePaginate,
@@ -90,6 +91,12 @@ const HomePage: FunctionComponent<Props> = ({ homes, rooms, filters, allFilters 
 									prefetch: ['hover',], // prefecth must be use in GET request only
 								}}></Paginate>
 						</div>}
+
+						<div className='space-y-3 mt-4'>
+							<Title title="Gợi ý xu hướng"></Title>
+							<SwipeSingle></SwipeSingle>
+						</div>
+
 						<div className='space-y-3 mt-4'>
 							<Title title="Gợi ý điểm đến yêu thích"></Title>
 							<District></District>
@@ -104,7 +111,7 @@ const HomePage: FunctionComponent<Props> = ({ homes, rooms, filters, allFilters 
 	);
 }
 
-const HomeItem = ({ home, selectedDates }: { home: HomeItemType, selectedDates?: any }) => {
+export const HomeItem = ({ home, selectedDates }: { home: HomeItemType, selectedDates?: any }) => {
 
 	return (
 		<Link className="shadow-sm md:shadow-md hover:shadow-lg rounded-md gap-x-1 md:gap-x-4 flex md:flex-col 

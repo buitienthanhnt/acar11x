@@ -14,7 +14,7 @@ const FlashMessage: FunctionComponent<FlashMessageInterface> = ({ message, type 
 			show && setShow(false);
 		}, 2000);
 
-		return () => clearTimeout('autoHide');
+		return () => clearTimeout(autoHide);
 	}, [show])
 
 	if (!show || !message) {

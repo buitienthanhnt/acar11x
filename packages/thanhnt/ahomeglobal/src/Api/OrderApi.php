@@ -79,10 +79,9 @@ final class OrderApi
 	 */
 	public function saveOrderDetail($orderId, array $data)
 	{
-		$orderDetailData = $this->formatCartToOrderDetail($data);
 		return OrderDetail::create([
 			OrderDetailInterface::ORDER_ID => $orderId,
-			...$orderDetailData,
+			...$this->formatCartToOrderDetail($data),
 		]);
 	}
 
@@ -325,7 +324,7 @@ final class OrderApi
 	 */
 	function getActiveRoom(array $dates, ?int $homeId = null)
 	{
-		return config('ahomeglobal.mode', 'list_date' === 'list_date') ?
+		return config('ahomeglobal.mode', 'list_date') === 'list_date' ?
 			$this->getActiveRoomByDates($dates, $homeId) : $this->getActiveRoomByRange(
 				$dates
 			);

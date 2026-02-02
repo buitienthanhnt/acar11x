@@ -50,6 +50,9 @@ final class AhomeController extends Controller
 				null,
 			'allFilters' => $this->roomApi->allFilters(selected: $filters),
 			"filters" => $filters,
+			'propose' => Inertia::defer(fn() => $this->homeApi->getMostViewed()),
+			// get random 5 homes have room for propose
+			'trend' => Inertia::defer(fn() => $this->homeApi->resourceModel()->whereHas(HomeInterface::ROOMS)->inRandomOrder()->take(5)->get()),
 		]);
 	}
 
@@ -66,7 +69,7 @@ final class AhomeController extends Controller
 			'Ahomeglobal/Screens/HomeDetail',
 			[
 				'homeDetail' => $this->homeApi->getHomeDetail($home),
-				'roomSelected' => Inertia::defer(function () use ($request) {
+				'roomSelected' => Inertia::defer(function () use ($request) { // zoom image table of location hotel
 					if (!$request->integer('room')) {
 						return null;
 					}
@@ -77,6 +80,19 @@ final class AhomeController extends Controller
 			],
 		);
 		return $home;
+	}
+
+	/**
+	 * @param string $location
+	 * @return \Inertia\Response
+	 */
+	public function homeLocation(string $location)
+	{
+		$homeLocations = $this->homeApi->getHomeLocation($location)->paginate(8);
+		return Inertia::render('Ahomeglobal/Screens/HomeLocation', [
+			'homes' => $homeLocations,
+			'location' => $location,
+		]);
 	}
 
 	/**

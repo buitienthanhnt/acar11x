@@ -1,6 +1,7 @@
 import { useMode } from "../../hooks";
+import { formatCurrency } from "../../Helper";
 
-const DatesInfo = ({ dateSelected, totalPrice }: { dateSelected: Date[], totalPrice: number }) => {
+const DatesInfo = ({ dateSelected, totalPrice, shippingMethod }: { dateSelected: Date[], totalPrice: number, shippingMethod?: any }) => {
 	const { isDateRangeMode } = useMode();
 
 	if (dateSelected.length === 0) {
@@ -16,10 +17,7 @@ const DatesInfo = ({ dateSelected, totalPrice }: { dateSelected: Date[], totalPr
 					</div>
 				}
 				<div className="bg-black h-[1px] mt-2"></div>
-				<p className="text-xl font-semibold">Total price: {new Intl.NumberFormat('de-DE', {
-					style: 'currency',
-					currency: 'VND',
-				}).format(totalPrice)}</p>
+				<p className="text-xl font-semibold">Total price: {formatCurrency(totalPrice)}</p>
 			</div>
 		}
 
@@ -35,11 +33,14 @@ const DatesInfo = ({ dateSelected, totalPrice }: { dateSelected: Date[], totalPr
 						Tới ngày: {dateSelected[dateSelected.length - 1].getFullYear()}-{dateSelected[dateSelected.length - 1].getMonth() + 1}-{dateSelected[dateSelected.length - 1].getDate()}
 					</div>
 				}
+
+				{shippingMethod && <div>
+					<div className="bg-gray-700 h-[1px] mt-2"></div>
+					<p className='text-xl font-semibold'>shipping method:</p>
+					<p className='text-xl font-semibold text-green-700'>{shippingMethod.name}: {formatCurrency(shippingMethod.shipping_cost)}</p>
+				</div>}
 				<div className="bg-black h-[1px] mt-2"></div>
-				<p className="text-xl font-semibold">Tổng giá: {new Intl.NumberFormat('de-DE', {
-					style: 'currency',
-					currency: 'VND',
-				}).format(totalPrice)}</p>
+				<p className="text-xl font-semibold">Tổng giá: {formatCurrency(totalPrice)}</p>
 			</div>
 		);
 	}

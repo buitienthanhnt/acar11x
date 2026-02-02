@@ -13,6 +13,6 @@ final class BookRepository
 		// throw new \Exception('Not implemented');
 	}
 	public function getBookDetail(int $id) {
-		return $this->book->with(['bookCate', 'attr', 'gallery'])->find($id);
+		return $this->book->with(['bookCate', 'attr', 'gallery', 'bookOrders'])->find($id);
 	}
 }

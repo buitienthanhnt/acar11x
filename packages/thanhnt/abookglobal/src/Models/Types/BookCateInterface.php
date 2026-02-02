@@ -11,6 +11,7 @@ interface BookCateInterface
 	const TABLE_NAME = 'book_cates';
 
 	const NAME = 'name';
+	const ALIAS = 'alias';
 	const DESCRIPTION = 'description';
 	const IMAGE_PATH = 'image_path';
 	const PARENT = 'parent';
@@ -22,10 +23,11 @@ interface BookCateInterface
 	 */
 	const FORM_FIELDS = [
 		self::NAME => ['key' => self::NAME, 'type' => FormInterface::TYPE_TEXT, 'label' => 'Tên danh mục', 'required' => true,],
+		self::ALIAS => ['key' => self::ALIAS, 'type' => FormInterface::TYPE_TEXT, 'label' => 'mã danh mục', ],
 		self::IMAGE_PATH => ['key' => self::IMAGE_PATH, 'type' => FormInterface::TYPE_IMAGE_CHOOSE, 'label' => 'Ảnh đại diện',],
 		self::DESCRIPTION => ['key' => self::DESCRIPTION, 'type' => FormInterface::TYPE_TEXTAREA, 'label' => 'mô tả chung',],
 		// self::PARENT => ['key' => self::PARENT, 'type' => FormInterface::TYPE_SELECT, 'model' => BookCate::class, 'label' => 'the loai cha',],
 	];
 
-	const FILLED_FILEDS = [self::NAME, self::DESCRIPTION, self::IMAGE_PATH, self::PARENT,];
+	const FILLED_FILEDS = [self::NAME, self::DESCRIPTION, self::IMAGE_PATH, self::PARENT, self::ALIAS,];
 }

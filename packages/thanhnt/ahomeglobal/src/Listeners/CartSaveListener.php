@@ -4,7 +4,6 @@ namespace Thanhnt\Ahomeglobal\Listeners;
 
 use Illuminate\Support\Facades\Log;
 use Thanhnt\Ahomeglobal\Events\CartSaveEvent;
-use Thanhnt\Ahomeglobal\Models\Types\RoomInterface;
 
 final class CartSaveListener
 {

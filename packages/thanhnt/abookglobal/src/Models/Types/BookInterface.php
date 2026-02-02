@@ -9,9 +9,11 @@ use Thanhnt\Ahomeglobal\Models\Types\FormInterface;
 interface BookInterface
 {
 	const TABLE_NAME = 'books';
+	const LINK_CATEGORY_TABLE = 'book_cate_link';
 
 	const ID = 'id';
 	const NAME = 'name';
+	const ALIAS = 'alias';
 	const DESCRIPTION = 'description';
 	const PRICE = 'price';
 	const IMAGE_PATH = 'image_path';
@@ -42,6 +44,7 @@ interface BookInterface
 	const FORM_FIELDS = [
 		self::IMAGE_PATH => ['key' => self::IMAGE_PATH, 'type' => FormInterface::TYPE_IMAGE_CHOOSE, 'label' => 'Ảnh đại diện',],
 		self::NAME => ['key' => self::NAME, 'type' => FormInterface::TYPE_TEXT, 'label' => 'Tên sách', 'required' => true,],
+		self::ALIAS => ['key' => self::ALIAS, 'type' => FormInterface::TYPE_TEXT, 'label' => 'mã sách',],
 		self::DESCRIPTION => ['key' => self::DESCRIPTION, 'type' => FormInterface::TYPE_TEXTAREA, 'label' => 'mô tả chung',],
 		self::PRICE => ['key' => self::PRICE, 'type' => FormInterface::TYPE_NUMBER, 'label' => 'giá thuê theo ngày(nghìn vnd)',],
 		self::QTY => ['key' => self::QTY, 'type' => FormInterface::TYPE_NUMBER, 'label' => 'Số lượng',],
@@ -52,6 +55,7 @@ interface BookInterface
 	/**
 	 * define custom attributes for Home model
 	 * khai báo thuộc tính biểu mẫu tùy chỉnh để tạo form.
+	 * Yêu cầu anh ra điều trần trước quốc hội FA ngay lập tức :))
 	 */
 	const CUSTOM_ATTRS = [
 		self::BOOK_CATE => ['key' => self::BOOK_CATE, 'type' => FormInterface::TYPE_MULTISELECT, 'model' => BookCate::class, 'label' => 'Danh mục', 'fn' => 'bookCateOptions',],
@@ -63,5 +67,5 @@ interface BookInterface
 	/**
 	 * define default fields for mass assign
 	 */
-	const FILLED_FILEDS = [self::NAME, self::DESCRIPTION, self::PRICE, self::IMAGE_PATH, self::QTY, self::RATE, self::PUBLISHER];
+	const FILLED_FILEDS = [self::NAME, self::ALIAS, self::DESCRIPTION, self::PRICE, self::IMAGE_PATH, self::QTY, self::RATE, self::PUBLISHER];
 }

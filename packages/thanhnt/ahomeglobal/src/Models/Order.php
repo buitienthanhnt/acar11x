@@ -13,6 +13,10 @@ use Thanhnt\Ahomeglobal\Database\Factories\OrderFactory;
 use Thanhnt\Ahomeglobal\Models\Types\OrderInterface;
 use Thanhnt\Ahomeglobal\Observers\OrderObserver;
 
+/**
+ * define model factory
+ * define event model
+ */
 #[UseFactory(OrderFactory::class)]
 #[ObservedBy([OrderObserver::class])]
 class Order extends Model implements OrderInterface
@@ -64,7 +68,8 @@ class Order extends Model implements OrderInterface
     /**
      * link the order to order detail
      */
-    public function detail() : HasOne {
+    public function detail(): HasOne
+    {
         return $this->hasOne(OrderDetail::class, OrderDetail::ORDER_ID, self::ID);
     }
 }

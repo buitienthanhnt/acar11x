@@ -146,7 +146,7 @@ final class RoomApi
 		 * date filter
 		 */
 		if ($listDate = $filterParams['dates'] ?? null) {
-			$instance = $this->orderApi->getActiveRoomByDates(listDate: $listDate);
+			$instance = $this->orderApi->getActiveRoom(dates: $listDate);
 		} else {
 			$instance = Room::query();
 		}

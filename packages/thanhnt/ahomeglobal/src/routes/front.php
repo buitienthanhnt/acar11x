@@ -24,6 +24,8 @@ Route::prefix('ahome')->group(function () {
 
 	Route::get('login', [AuthController::class, 'loginPage']);
 
+	Route::get('location/{location}', [AhomeController::class, 'homeLocation']);
+
 	Route::post('login', [AuthController::class, 'loginAction'])->name('login');
 
 	Route::prefix('test')->group(function () {
@@ -49,19 +51,22 @@ Route::prefix('ahome')->group(function () {
  * checkout page about 2 step order-info and order-payment
  * show cart-info, set order-info
  */
-Route::any('checkout', [CheckoutController::class, 'checkout'])->name('checkout');
+// Route::any('checkout', [CheckoutController::class, 'checkout'])->name('checkout'); // use checkout action in ahomeglobal
+Route::any('checkout', [\Thanhnt\Abookglobal\Controllers\CheckoutController::class, 'checkout'])->name('checkout'); // use checkout action in abookglobal
 
 /**
  * checkout by payment paypal, stripe
  */
-Route::post('checkout-payment', [CheckoutController::class, 'paymentOrder'])->name('checkout.payment');
+// Route::post('checkout-payment', [CheckoutController::class, 'paymentOrder'])->name('checkout.payment');
+Route::post('checkout-payment', [\Thanhnt\Abookglobal\Controllers\CheckoutController::class, 'checkoutAction'])->name('checkout.payment');
 
 // Route::get('create-checkout-session', [CheckoutController::class, 'paymentOrderStripe']);
 
 /**
  * order success after payment examp: paypal,stripe
  */
-Route::any('checkout-success', [CheckoutController::class, 'checkoutSuccess'])->name('checkout.success');
+// Route::any('checkout-success', [CheckoutController::class, 'checkoutSuccess'])->name('checkout.success');
+Route::any('checkout-success', [\Thanhnt\Abookglobal\Controllers\CheckoutController::class, 'checkoutSuccess'])->name('checkout.success');
 
 Route::get('account-create', [AuthController::class, 'createAccount']);
 

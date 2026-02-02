@@ -7,7 +7,7 @@ const convertLocalDate = (date: string | Date): string => {
 	return (currentDate.getMonth() + 1) + '/' + (currentDate.getDate() < 10 ? '0' + currentDate.getDate() : currentDate.getDate()) + '/' + currentDate.getFullYear()
 }
 
-const convertStringServerToDates = (dates: string[]): Date[]=>{
+const convertStringServerToDates = (dates: string[]): Date[] => {
 	if (!dates) {
 		return [];
 	}
@@ -40,11 +40,19 @@ const formatDateToLocals = (dates: Date[]): string[] => {
  * format from Date[](client format) to [YYYY-MM-DD](server format
  */
 const listDateToArrayString = (dates: Date[]): string[] => {
-	return dates.map(d => [
-		d.getFullYear(),
-		d.getMonth() + 1 >= 10 ? d.getMonth() + 1 : '0' + (d.getMonth() + 1).toString(),
-		d.getDate() < 10 ? '0' + d.getDate().toString() : d.getDate(),
-	].join('-'));
+	return dates.map(d => dateToServerString(d));
+}
+
+/**
+ * format Date to server string: YYYY-MM-DD
+ * returns: string in format YYYY-MM-DD
+ */
+const dateToServerString = (date: Date): string => {
+	return [
+		date.getFullYear(),
+		date.getMonth() + 1 >= 10 ? date.getMonth() + 1 : '0' + (date.getMonth() + 1).toString(),
+		date.getDate() < 10 ? '0' + date.getDate().toString() : date.getDate(),
+	].join('-')
 }
 
 const sortDatesAsc = (dates: Date[]): Date[] => {
@@ -71,8 +79,9 @@ const listDateByRange = (dates: Date[]): Date[] => {
 }
 
 const isDateInRange = (date: Date, dates: Date[]): boolean => {
-	const formatDate = sortDatesAsc([...dates]);
-	return date >= formatDate[0] && date <= formatDate[formatDate.length - 1];
+	date.setHours(0, 0, 0, 0);
+	const formatDate = sortDatesAsc([...dates]);	
+	return (date >= formatDate[0]) && (date <= formatDate[formatDate.length - 1]);
 }
 
 export {
@@ -84,5 +93,6 @@ export {
 	listDateByRange,
 	formatDateToLocals,
 	isDateInRange,
-	convertStringServerToDates
+	convertStringServerToDates,
+	dateToServerString,
 };

@@ -51,7 +51,7 @@ const Paginate = ({ pageSize, currentPage, url = window.location.href, pageName 
 								...mergeData, // merger old filter data
 								[pageName]: index,
 							}}>
-							<div className="p-2 px-3 md:px-4 bg-green-500 rounded-[28px] justify-center content-center">
+							<div className="p-2 px-4 md:px-4 bg-green-500 rounded-[28px] justify-center content-center">
 								<p className="text:md md:text-xl hover:text-orange-500" style={{
 									color: index === currentPage ? 'white' : undefined
 								}}>{index}</p>
@@ -68,7 +68,7 @@ const Paginate = ({ pageSize, currentPage, url = window.location.href, pageName 
 					...mergeData, // merger old filter data
 					[pageName]: currentPage + 5 <= pageSize ? currentPage + 5 : pageSize
 				}}>
-				<div className="flex p-2 px-3 md:px-4 bg-green-500 rounded-[28px] justify-center content-center items-center">
+				<div className="flex p-2 px-4 md:px-4 bg-green-500 rounded-[28px] justify-center content-center items-center">
 					<ArrowRightIcon className="h-7 w-5"></ArrowRightIcon>
 				</div>
 			</Link>}

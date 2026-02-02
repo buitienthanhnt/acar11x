@@ -12,6 +12,7 @@ interface HomeInterface
     const DISTRICT = 'district';
     const IMAGE_PATH = 'image_path';
     const ADDRESS = 'address';
+    const ALIAS = 'alias';
 
     // define relationship conditions
     const ROOMS = 'rooms';
@@ -40,9 +41,10 @@ interface HomeInterface
      * define main form fields for Home model
      */
     const FORM_FIELDS = [
-        self::IMAGE_PATH => ['key' => self::IMAGE_PATH, 'type' => FormInterface::TYPE_IMAGE_CHOOSE, 'label' => 'Ảnh đại diện',],
         self::NAME => ['key' => self::NAME, 'type' => FormInterface::TYPE_TEXT, 'label' => 'tên khách sạn', 'required' => true,],
+        self::ALIAS => ['key' => self::ALIAS, 'type' => FormInterface::TYPE_TEXT, 'label' => 'khóa định danh',],
         self::DESCRIPTION => ['key' => self::DESCRIPTION, 'type' => FormInterface::TYPE_TEXTAREA, 'label' => 'mô tả chung',],
+        self::IMAGE_PATH => ['key' => self::IMAGE_PATH, 'type' => FormInterface::TYPE_IMAGE_CHOOSE, 'label' => 'Ảnh đại diện',],
         self::DISTRICT => ['key' => self::DISTRICT, 'type' => FormInterface::TYPE_TEXTAREA, 'label' => 'địa chỉ',],
         self::ADDRESS => ['key' => self::ADDRESS, 'type' => FormInterface::TYPE_TEXT, 'label' => 'Vị trí',],
         self::GALLERY => ['key' => self::GALLERY, 'type' => FormInterface::TYPE_IMAGE_CHOOSE, 'label' => 'Ảnh chi tiết', 'placeholder' => 'chọn ảnh'],
@@ -61,7 +63,7 @@ interface HomeInterface
     /**
      * khai báo danh sách các thuộc tính được gán hàng loạt.
      */
-    const FILLED_FILEDS = [self::NAME, self::DESCRIPTION, self::DISTRICT, self::IMAGE_PATH, self::ADDRESS,];
+    const FILLED_FILEDS = [self::NAME, self::ALIAS, self::DESCRIPTION, self::IMAGE_PATH, self::DISTRICT,  self::ADDRESS,];
 
     /**
      * define hidden fields

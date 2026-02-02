@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-use Thanhnt\Ahomeglobal\Controllers\Frontend\CheckoutController;
 
 Route::get('/', [HomeController::class, 'home'])->name('home');
 

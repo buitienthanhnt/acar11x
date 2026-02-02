@@ -1,11 +1,81 @@
-import { Head } from '@inertiajs/react';
-import BodyLayout from '../../Ahomeglobal/Layouts/BodyLayout';
-import { CurrencyDollarIcon, SparklesIcon } from '@heroicons/react/24/solid';
-import SwiperImage from '../../../Components/Custom/SwiperImage';
+import { useCallback, useEffect } from 'react';
+import { Deferred, Head, Link, router, useRemember } from '@inertiajs/react';
 import { Rating } from '@material-tailwind/react';
-import { RoomTime } from '@/Pages/Ahomeglobal/Components';
+import { CurrencyDollarIcon, SparklesIcon } from '@heroicons/react/24/solid';
+import Urls from '../network/Urls';
+import SwiperImage from '../../../Components/Custom/SwiperImage';
+import BookCalenda from '../Components/BookCalenda';
+import BodyLayout from '@/Pages/Ahomeglobal/Layouts/BodyLayout';
+import { isDateInRange, listDateToArrayString, dateToServerString } from '@/Pages/Ahomeglobal/Helper/DateTimeHelper';
+import useMode from '@/hook/useMode';
+import { sprintf } from 'sprintf-js';
+import useProps from '@/hook/useProps';
+import { BookItemType } from '../Types/BookType';
 
-const BookDetail = ({ book }) => {
+const BookDetail = ({ book, bookedTimes }) => {
+	const { isDateRangMode } = useMode();
+	const [dateSelected, setDateSelected] = useRemember<Date[]>([], 'abookglobal/bookDetail');
+
+	const bookedDate = Object.keys(bookedTimes).map(dateStr => {
+		if (bookedTimes[dateStr] >= book.qty) {
+			return dateStr;
+		}
+	}).filter(Boolean);
+
+	const checkDisableDate = useCallback((dates: Date[] | string[]): boolean => {
+		if (isDateRangMode) {
+			for (let index = 0; index < bookedDate.length; index++) {
+				if (isDateInRange(
+					new Date(bookedDate[index]),
+					[new Date(dates[0]), new Date(dates[dates.length - 1])])
+				) {
+					return true;
+				}
+			}
+		} else {
+			for (let index = 0; index < dates.length; index++) {
+				if (bookedDate.includes(dateToServerString(new Date(dates[index])))) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}, [bookedDate, isDateRangMode])
+
+	const onChangeDate = useCallback((dates: Date[]) => {
+		/**
+		 * stop if has date in range disable or booked
+		 * optimate later.
+		 */
+		if (checkDisableDate(dates)) {
+			return;
+		}
+		setDateSelected(dates);
+	}, [checkDisableDate])
+
+	const onCheckout = useCallback(() => {
+		/**
+		 * preserveState: để tránh lưu trạng thái của trang hiện tại khi chuyển trang.
+		 * nếu để true sẽ lưu trạng thái làm không render lại phần flashMessage do vị trí không đổi và trạng thái lại không thay đổi.
+		 * nhưng khi để false thì trang sẽ render lại hoàn toàn và sẽ mất các trạng thái đã lưu trữ trước đó ví dụ như dateSelected.
+		 * 
+		 */
+		router.post(Urls.checkout, {
+			book_id: book.id,
+			dateSelected: listDateToArrayString(dateSelected),
+		}, { preserveState: false, });
+	}, [dateSelected, book.id])
+
+	useEffect(() => {
+		/**
+		 * clear selected date if has disable date in range
+		 */
+		if (checkDisableDate(dateSelected)) {
+			setDateSelected([]);
+		}
+		return;
+	}, [dateSelected, checkDisableDate])
+
 	if (!book) {
 		return null;
 	}
@@ -20,7 +90,7 @@ const BookDetail = ({ book }) => {
 				{book ?
 					<div className='space-y-2 grid grid-cols-1 lg:grid-cols-5 gap-x-1 p-1 md:p-2 rounded-md'>
 						<div className='col-span-3'>
-							<RoomTime ></RoomTime>
+							<BookCalenda setDateSelected={onChangeDate} dateSelected={dateSelected} onCheckout={onCheckout} bookedDate={bookedDate}></BookCalenda>
 						</div>
 					</div> : (
 						<div className='bg-white flex justify-center items-center rounded-md p-1 lg:p-4'>
@@ -28,9 +98,44 @@ const BookDetail = ({ book }) => {
 						</div>
 					)
 				}
+				<BookRelated></BookRelated>
 			</div>
 		</BodyLayout>
 	);
+}
+
+const BookRelated = () => {
+	const { relatedBooks } = useProps() as unknown as { relatedBooks: BookItemType[] };
+
+	return (
+		<Deferred fallback={<div>Loading related books...</div>} data={'relatedBooks'}>
+			<div className='space-y-2 p-1 md:p-2 rounded-md'>
+				<p className='text-xl font-bold text-blue-gray-800'>Sách liên quan</p>
+				{relatedBooks && <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-2' >
+					{relatedBooks.map(book => {
+						return (
+							<Link key={book.id} href={sprintf(Urls.bookDetail, [book.id])} className='flex-1 bg-green-100 rounded-md p-1 space-y-1'>
+								<p>
+									{book.name}
+								</p>
+								<img src={book.image_path} alt="image" className='w-full h-auto rounded-md object-contain' />
+								<p>{book.description}</p>
+								<p>{book.price}</p>
+								{
+									// @ts-ignore
+									book?.rate && <Rating value={Number(book.rate as unknown as number > 5 ? 5 : book.rate)} placeholder={'rate'}
+										onResize={undefined}
+										onResizeCapture={undefined}
+										readonly
+									/>
+								}
+							</Link>
+						)
+					})}
+				</div>}
+			</div>
+		</Deferred>
+	)
 }
 
 const BookInfo = ({ book }) => {
@@ -48,7 +153,7 @@ const BookInfo = ({ book }) => {
 					</div>
 					<div className='flex space-x-1 items-center'>
 						<CurrencyDollarIcon className="size-5 text-gray-800"></CurrencyDollarIcon>
-						<p className='text-xl font-semibold text-green-800'>Giá: {book.price}.000 vnd</p>
+						<p className='text-xl font-semibold text-green-800'>Giá: {book.price} vnd</p>
 					</div>
 					{
 						// @ts-ignore
@@ -61,7 +166,11 @@ const BookInfo = ({ book }) => {
 					<div className='space-y-1'>
 						<p className='text-xl text-gray-900 font-semibold'>Chủ đề:</p>
 						{book?.book_cate && <div className='flex flex-wrap gap-2'>
-							{book.book_cate.map(bookCate => <div className='bg-blue-gray-700 text-white p-1 px-2 rounded-md text-base md:text-xl font-medium shadow-md' key={bookCate.id}>{bookCate.name}</div>)}
+							{book.book_cate.map(bookCate => <Link href={sprintf(Urls.bookCate, [bookCate.id])}
+								className='bg-blue-gray-700 text-white p-1 px-2 rounded-md text-base md:text-xl font-medium shadow-md'
+								key={bookCate.id}>{bookCate.name}
+							</Link>
+							)}
 						</div>}
 					</div>
 

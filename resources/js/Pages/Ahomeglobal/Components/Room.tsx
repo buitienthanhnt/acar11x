@@ -27,7 +27,7 @@ const RoomItem = ({ room, dateSelected }: { room: RoomItemType, dateSelected?: D
       })
     }
   }
- 
+
   return (
     <div className={`hover:shadow-md rounded-md gap-x-2 flex border border-gray-400
 			 h-full ${booked?.id === room.id ? 'bg-gradient-to-r from-green-400 to-green-300' : 'bg-white shadow-sm'}`} onClick={() => {
@@ -115,6 +115,8 @@ const RoomTime = ({ allDisable, dateSelected, setDateSelected, onCheckout }: Roo
 
 export const SelectedInfo = ({ dateSelected }: { dateSelected: Date[] }) => {
   const { isDateRangeMode } = useMode();
+  const from = new Date(Math.min.apply(null, dateSelected));
+  const to = new Date(Math.max.apply(null, dateSelected));
 
   if (dateSelected.length === 0) {
     return;
@@ -134,12 +136,12 @@ export const SelectedInfo = ({ dateSelected }: { dateSelected: Date[] }) => {
       <div className='flex flex-col gap-1 md:gap-2'>
         {dateSelected[0] &&
           <div className='text-xl font-semibold text-blue-500'>
-            Từ ngày: {dateSelected[0].getFullYear()}-{dateSelected[0].getMonth() + 1}-{dateSelected[0].getDate()}
+            Từ: {from.getFullYear()}-{from.getMonth() + 1}-{from.getDate()}
           </div>
         }
         {dateSelected[dateSelected.length - 1] &&
           <div className='text-xl font-semibold text-blue-500'>
-            Đến ngày: {dateSelected[dateSelected.length - 1].getFullYear()}-{dateSelected[dateSelected.length - 1].getMonth() + 1}-{dateSelected[dateSelected.length - 1].getDate()}
+            Đến: {to.getFullYear()}-{to.getMonth() + 1}-{to.getDate()}
           </div>
         }
       </div>

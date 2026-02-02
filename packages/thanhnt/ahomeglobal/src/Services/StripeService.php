@@ -107,7 +107,7 @@ final class StripeService
 				$currentSession->expire();
 			}
 			$cartItemData = $this->formatLineItem($cartParams);
-			
+
 			/**
 			 * add product to cart and return checkout object has url_checkout link
 			 * https://docs.stripe.com/payments/checkout
@@ -210,6 +210,7 @@ final class StripeService
 		$product = $cartParams['item'];
 		/**
 		 * doc: https://docs.stripe.com/api/checkout/sessions/create#create_checkout_session-line_items-price_data
+		 * doc has shipping: https://docs.stripe.com/api/checkout/sessions/create?lang=php
 		 */
 		$item = [
 			'price_data' => [
@@ -226,6 +227,18 @@ final class StripeService
 		$formatData = [
 			'line_items' => [$item],
 			'mode' => 'payment',
+			'shipping_options' => [
+				[
+					'shipping_rate_data' => [
+						'display_name' => 'checkout_order',
+						'fixed_amount' => [
+							'amount' => 16000,
+							'currency' => $cartParams['currency_code'],
+						],
+						'type' => 'fixed_amount',
+					]
+				]
+			],
 		];
 
 		/**

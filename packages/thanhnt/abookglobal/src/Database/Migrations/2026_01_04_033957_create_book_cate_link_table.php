@@ -12,7 +12,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create(BookInterface::LINK_CATEGORY, function (Blueprint $table) {
+        Schema::create(BookInterface::LINK_CATEGORY_TABLE, function (Blueprint $table) {
             $table->integer('book_id');
             $table->integer('book_cate_id');
         });
@@ -23,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists(BookInterface::LINK_CATEGORY);
+        Schema::dropIfExists(BookInterface::LINK_CATEGORY_TABLE);
     }
 };

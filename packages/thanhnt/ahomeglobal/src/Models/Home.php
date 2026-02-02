@@ -4,11 +4,13 @@ namespace Thanhnt\Ahomeglobal\Models;
 
 use App\Models\ShareAction\ImagePathAttrModel;
 use Illuminate\Database\Eloquent\Attributes\UseFactory;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 // use Illuminate\Database\Eloquent\Concerns\HasTimestamps;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Str;
 use Thanhnt\Ahomeglobal\Database\Factories\HomeFactory;
 use Thanhnt\Ahomeglobal\Models\Types\HomeInterface;
 use Thanhnt\Ahomeglobal\Models\Types\OrderTimeInterface;
@@ -77,5 +79,17 @@ class Home extends Model implements HomeInterface
     public function gallery(): HasMany
     {
         return $this->hasMany(Gallery::class, Gallery::SOURCE_ID, self::ID)->where(Gallery::TYPE, 'home');
+    }
+
+    /**
+     * format alias path of model if input value null object will use value of title
+     * https://laravel.com/docs/12.x/eloquent-mutators#mutating-multiple-attributes
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute
+     */
+    public function alias(): Attribute
+    {
+        return Attribute::make(
+            set: fn($value, $attributes) => $value ?: Str::slug($attributes[self::NAME] ?? ''),
+        );
     }
 }

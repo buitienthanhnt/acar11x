@@ -15,6 +15,7 @@ return new class extends Migration
         Schema::create(BookInterface::TABLE_NAME, function (Blueprint $table) {
             $table->id();
             $table->char(BookInterface::NAME);
+            $table->char(BookInterface::ALIAS)->nullable()->unique();
             $table->string(BookInterface::DESCRIPTION)->nullable();
             $table->string(BookInterface::IMAGE_PATH)->nullable();
             $table->integer(BookInterface::PRICE);
