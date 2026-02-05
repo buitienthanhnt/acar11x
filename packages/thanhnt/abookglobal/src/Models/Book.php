@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Thanhnt\Abookglobal\Models\Types\BookInterface;
 use Thanhnt\Ahomeglobal\Models\Attr;
 use Thanhnt\Ahomeglobal\Models\Gallery;
+use Thanhnt\Amuaglobal\Models\Order;
 
 final class Book extends Model implements BookInterface
 {
@@ -52,7 +53,7 @@ final class Book extends Model implements BookInterface
 
 	public function bookOrders(): HasMany
 	{
-		return $this->hasMany(BookOrder::class, BookOrder::BOOK_ID, self::ID)->whereTodayOrAfter(BookOrder::DATE_TO);
+		return $this->hasMany(Order::class, Order::ITEM_ID, self::ID)->whereTodayOrAfter(Order::DATE_TO);
 	}
 
 	protected function url(): Attribute

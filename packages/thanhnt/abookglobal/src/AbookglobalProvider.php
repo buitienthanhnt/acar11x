@@ -17,11 +17,6 @@ final class AbookglobalProvider extends ServiceProvider
 		 * merge package define config to global.
 		 */
 		$this->mergeConfigFrom(__DIR__ . '/config/config.php', 'abookglobal');
-
-		/**
-		 * load for event service provider.
-		 */
-		$this->app->register(EventProvider::class);
 	}
 
 	/**

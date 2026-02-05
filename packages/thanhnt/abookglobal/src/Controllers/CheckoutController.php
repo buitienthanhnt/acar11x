@@ -8,22 +8,27 @@ use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 use Thanhnt\Abookglobal\Api\BookApi;
 use Thanhnt\Abookglobal\Api\BookOrderApi;
-use Thanhnt\Abookglobal\Api\CartApi;
-use Thanhnt\Abookglobal\Api\OrderApi;
-use Thanhnt\Abookglobal\Models\Types\BookInterface;
-use Thanhnt\Abookglobal\Models\Types\BookOrderInterface;
-use Thanhnt\Abookglobal\Services\PayPalService;
-use Thanhnt\Abookglobal\Services\StripeService;
+use Thanhnt\Amuaglobal\Models\Types\ExpectOrderInterface;
+use Thanhnt\Amuaglobal\Models\Types\OrderInterface;
+use Thanhnt\Amuaglobal\Api\CartApi;
+use Thanhnt\Amuaglobal\Api\ExpectOrderApi;
+use Thanhnt\Amuaglobal\Api\OrderApi;
+use Thanhnt\Amuaglobal\Models\ExpectOrder;
+use Thanhnt\Amuaglobal\Services\CheckMoneyService;
+use Thanhnt\Amuaglobal\Services\PayPalService;
+use Thanhnt\Amuaglobal\Services\StripeService;
 
 final class CheckoutController extends Controller
 {
 	public function __construct(
-		protected BookApi $bookApi,
 		protected CartApi $cartApi,
 		protected OrderApi $orderApi,
 		protected BookOrderApi $bookOrderApi,
+		protected BookApi $bookApi,
+		protected ExpectOrderApi $expectOrderApi,
 		protected PayPalService $paypalService,
 		protected StripeService $stripeService,
+		protected CheckMoneyService $checkMoneyService,
 	) {
 		// throw new \Exception('Not implemented');
 	}
@@ -101,7 +106,7 @@ final class CheckoutController extends Controller
 		return Inertia::render('Abookglobal/Screens/Checkout', [
 			'cart' => $cart,
 			'step' => $request->input('step', 'customer-info'),
-			'shipping_method' => config('abookglobal.shipping_method'),
+			'shipping_method' => config('amuaglobal.shipping_method'),
 		]);
 	}
 
@@ -149,17 +154,35 @@ final class CheckoutController extends Controller
 		/**
 		 * clone expect order to order
 		 */
-		$expectOrder = $this->bookOrderApi->getExpectOrderById( $request->get('expect_order'));
+		$expectOrder = $this->expectOrderApi->getExpectOrderById($request->get('expect_order'));
 
 		Inertia::share('messages', 'Cảm ơn quý khách đã đặt lịch!');
+		/**
+		 * cretae order after payment success and not create order now if payment type is checkmoney
+		 */
+		if (in_array($request->get('type'), ['paypal', 'stripe'])) {
+			$expectOrder->{ExpectOrderInterface::STATUS} = 'success';
+			$expectOrder->save();
+			$order =  $this->orderApi->getOrderByIncrement(
+				$this->orderApi->cloneExpectOrderToOrder($expectOrder->refresh())->{OrderInterface::INCREMENT_ID},
+			);
+		} else {
+			$order = $expectOrder;
+		}
+		/**
+		 * associate book(gán lại item detail cho order hoặc expectorder do mặc định nó trả về Model của product)
+		 * tùy vào từng loại sản phẩm mà có sự chuyển đổi phù hợp.
+		 */
+		$book = $this->bookApi->getBookById($expectOrder->item_id);
+		$order->item()->associate($book);
 		/**
 		 * clear cart data after checkout
 		 */
 		$this->cartApi->clearCart();
 
 		return Inertia::render('Abookglobal/Screens/CheckoutSuccess', [
-			'order' => $this->orderApi->getOrderDetailByIncrement($this->orderApi->cloneExpectOrderToOrder($expectOrder)->{BookOrderInterface::INCREMENT_ID}),
-			'shipping_method' => config('abookglobal.shipping_method')
+			'order' => $order,
+			'shipping_method' => config('amuaglobal.shipping_method')
 		]);
 	}
 
@@ -247,15 +270,12 @@ final class CheckoutController extends Controller
 				}
 				break;
 			default:
-				# code...
+				/**
+				 * @var ExpectOrder $responseApi
+				 */
+				$responseApi = $this->checkMoneyService->checkout($cartParams);
+				return redirect()->route('checkout.success', ['type' => 'checkmoney', 'expect_order' => $responseApi->{ExpectOrderInterface::ID}]);
 				break;
 		}
-		$currentCart = $this->cartApi->getCart();
-		$currentCart['total_price'];
-		// $order = $this->bookOrderApi->placeOrder(
-		// 	bookId: $request->input('book_id'),
-		// 	dateSelected: $request->input('dateSelected'),
-		// 	qty: 1
-		// );
 	}
 }

@@ -2,84 +2,34 @@
 
 namespace Thanhnt\Abookglobal\Api;
 
-use Thanhnt\Abookglobal\Events\BookOrderSave;
 use Thanhnt\Abookglobal\Models\Book;
-use Thanhnt\Abookglobal\Models\BookExpectOrder;
-use Thanhnt\Abookglobal\Models\BookOrder;
-use Thanhnt\Abookglobal\Models\BookOrderDetail;
-use Thanhnt\Abookglobal\Models\BookOrderTime;
-use Thanhnt\Abookglobal\Models\Types\BookOrderInterface;
-use Thanhnt\Ahomeglobal\Helper\DateTimeHelper;
+use Thanhnt\Amuaglobal\Models\Order;
+use Thanhnt\Amuaglobal\Helper\DateTimeHelper;
+use Thanhnt\Amuaglobal\Models\ExpectOrder;
+use Thanhnt\Amuaglobal\Models\Types\OrderInterface;
 
 final class BookOrderApi
 {
 	public function __construct(
 		protected Book $book,
-		protected BookOrder $bookOrder,
-		protected BookExpectOrder $bookExpectOrder,
-		protected BookOrderDetail $bookOrderDetail,
-		protected BookOrderTime $bookOrderTime,
+		protected Order $order,
+		protected ExpectOrder $expectOrder,
 		protected DateTimeHelper $dateTimeHelper,
 	) {
 		// throw new \Exception('Not implemented');
 	}
 
-	public function placeOrder(int $bookId, array $dateSelected, int $qty = 1)
-	{
-		/**
-		 * save order
-		 */
-		$order = $this->saveOrder(...func_get_args());
-		return $order;
-		/**
-		 * save order time
-		 * will save in event listener because has full data for generate time
-		 */
-
-		// $this->saveOrderTime($order);
-		// $this->saveOrderDetail();
-	}
-
-	/**
-	 * @param int $bookId
-	 * @param string[] $dateSelected
-	 * @param int $qty
-	 * @return \Thanhnt\Abookglobal\Models\BookOrder
-	 */
-	protected function saveOrder(int $bookId, array $dateSelected, int $qty = 1)
-	{
-		$book = $this->book->findOrFail($bookId);
-		/**
-		 * @var \Thanhnt\Abookglobal\Models\BookOrder $bookOrder
-		 */
-		$bookOrder = $this->bookOrder->newInstance();
-		$bookOrder->{BookOrderInterface::BOOK_ID} = $book->id;
-		$bookOrder->{BookOrderInterface::TOTAL_PRICE} = $book->price * $qty;
-		$bookOrder->{BookOrderInterface::QTY} = $qty;
-		$bookOrder->{BookOrderInterface::STATUS} = 'pending';
-		$bookOrder->{BookOrderInterface::DATE_FROM} = min($dateSelected);
-		$bookOrder->{BookOrderInterface::DATE_TO} = max($dateSelected);
-		$bookOrder->{BookOrderInterface::SELECTED_TIME} = $this->dateTimeHelper->getListDates($dateSelected, 'Y-m-d');
-		$bookOrder->save();
-		/**
-		 * Dispatch event after save order
-		 */
-		BookOrderSave::dispatch($bookOrder);
-
-		return $bookOrder;
-	}
-
 	/** 
 	 * @param int $bookId
 	 * @param string[] $dateSelecteds
-	 * @return \Illuminate\Database\Eloquent\Collection<\Thanhnt\Abookglobal\Models\BookOrder>
+	 * @return \Illuminate\Database\Eloquent\Collection<\Thanhnt\Amuaglobal\Models\Order>
 	 */
 	public function getOrderByDateSelect(int $bookId, array $dateSelecteds)
 	{
-		$orders = $this->bookOrder->where(BookOrderInterface::BOOK_ID, $bookId)
+		$orders = $this->order->where(OrderInterface::ITEM_ID, $bookId)
 			->where(function ($query) use ($dateSelecteds) {
 				foreach ($dateSelecteds as $date) {
-					$query->orWhereJsonContains(BookOrderInterface::SELECTED_TIME, $date);
+					$query->orWhereJsonContains(OrderInterface::SELECTED_TIME, $date);
 				}
 			})
 			->get();
@@ -96,11 +46,11 @@ final class BookOrderApi
 		$orders = $this->getOrderByDateSelect($bookId, $dateSelecteds);
 		$timeOrderBooked = [];
 		foreach ($orders as $order) {
-			foreach ($order->{BookOrderInterface::SELECTED_TIME} as $date) {
+			foreach ($order->{OrderInterface::SELECTED_TIME} as $date) {
 				if (isset($timeOrderBooked[$date])) {
-					$timeOrderBooked[$date] += $order->{BookOrderInterface::QTY};
+					$timeOrderBooked[$date] += $order->{OrderInterface::QTY};
 				} else {
-					$timeOrderBooked[$date] = $order->{BookOrderInterface::QTY};
+					$timeOrderBooked[$date] = $order->{OrderInterface::QTY};
 				}
 			}
 		}
@@ -158,15 +108,17 @@ final class BookOrderApi
 	/**
 	 * get expect order by id
 	 * @param string $expectId
-	 * @return \Thanhnt\Abookglobal\Models\BookExpectOrder
+	 * @return \Thanhnt\Amuaglobal\Models\ExpectOrder
 	 * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
 	 */
 	public function getExpectOrderById(string $expectId)
 	{
-		return $this->bookExpectOrder->findOrFail($expectId);
+		$expectOrder = $this->expectOrder->with('item')->findOrFail($expectId);
+		/**
+		 * associate book(gán lại item detail cho order hoặc expectorder do mặc định nó trả về Model của product)
+		 * tùy vào từng loại sản phẩm mà có sự chuyển đổi phù hợp.
+		 */
+		$expectOrder->item()->associate(Book::findOrFail($expectOrder->item_id));
+		return $expectOrder;
 	}
-
-	protected function saveOrderTime() {}
-
-	protected function saveOrderDetail() {}
 }

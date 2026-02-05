@@ -5,7 +5,6 @@ namespace Thanhnt\Ahomeglobal;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Thanhnt\Ahomeglobal\Providers\PackageEventServiceProvider;
-use Thanhnt\Ahomeglobal\Providers\PaymentServiceProvider;
 
 final class AhomeglobalProvider extends ServiceProvider
 {
@@ -23,10 +22,6 @@ final class AhomeglobalProvider extends ServiceProvider
 		 * load for event service provider.
 		 */
 		$this->app->register(PackageEventServiceProvider::class);
-		/**
-		 * load for payment service provider
-		 */
-		$this->app->register(PaymentServiceProvider::class);
 	}
 
 	/**

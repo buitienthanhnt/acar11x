@@ -11,6 +11,7 @@ import useMode from '@/hook/useMode';
 import { sprintf } from 'sprintf-js';
 import useProps from '@/hook/useProps';
 import { BookItemType } from '../Types/BookType';
+import { formatCurrency } from '@/Pages/Ahomeglobal/Helper';
 
 const BookDetail = ({ book, bookedTimes }) => {
 	const { isDateRangMode } = useMode();
@@ -109,26 +110,26 @@ const BookRelated = () => {
 
 	return (
 		<Deferred fallback={<div>Loading related books...</div>} data={'relatedBooks'}>
-			<div className='space-y-2 p-1 md:p-2 rounded-md'>
-				<p className='text-xl font-bold text-blue-gray-800'>Sách liên quan</p>
+			<div className='space-y-2 p-1 md:p-2'>
+				<p className='text-xl font-bold text-blue-gray-800'>Danh sách liên quan</p>
 				{relatedBooks && <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-2' >
 					{relatedBooks.map(book => {
 						return (
-							<Link key={book.id} href={sprintf(Urls.bookDetail, [book.id])} className='flex-1 bg-green-100 rounded-md p-1 space-y-1'>
-								<p>
-									{book.name}
-								</p>
-								<img src={book.image_path} alt="image" className='w-full h-auto rounded-md object-contain' />
-								<p>{book.description}</p>
-								<p>{book.price}</p>
-								{
-									// @ts-ignore
-									book?.rate && <Rating value={Number(book.rate as unknown as number > 5 ? 5 : book.rate)} placeholder={'rate'}
-										onResize={undefined}
-										onResizeCapture={undefined}
-										readonly
-									/>
-								}
+							<Link key={book.id} href={sprintf(Urls.bookDetail, [book.id])} className='flex-1 flex flex-col border border-gray-400 rounded-md space-y-1 justify-between'>
+								<img src={book.image_path} alt="image" className='w-full h-auto rounded-t-md object-contain' />
+								<div className='p-1 space-y-[2px]'>
+									<p className='font-semibold text-md '>{book.name}</p>
+									<p className='text-green-700 text-sm'>{book.description}</p>
+									<p className='font-bold text-purple-600'>{formatCurrency(book.price)}</p>
+									{
+										// @ts-ignore
+										book?.rate && <Rating value={Number(book.rate as unknown as number > 5 ? 5 : book.rate)} placeholder={'rate'}
+											onResize={undefined}
+											onResizeCapture={undefined}
+											readonly
+										/>
+									}
+								</div>
 							</Link>
 						)
 					})}
@@ -153,7 +154,7 @@ const BookInfo = ({ book }) => {
 					</div>
 					<div className='flex space-x-1 items-center'>
 						<CurrencyDollarIcon className="size-5 text-gray-800"></CurrencyDollarIcon>
-						<p className='text-xl font-semibold text-green-800'>Giá: {book.price} vnd</p>
+						<p className='text-xl font-semibold text-green-800'>Giá: {formatCurrency(book.price)}</p>
 					</div>
 					{
 						// @ts-ignore
@@ -167,7 +168,7 @@ const BookInfo = ({ book }) => {
 						<p className='text-xl text-gray-900 font-semibold'>Chủ đề:</p>
 						{book?.book_cate && <div className='flex flex-wrap gap-2'>
 							{book.book_cate.map(bookCate => <Link href={sprintf(Urls.bookCate, [bookCate.id])}
-								className='bg-blue-gray-700 text-white p-1 px-2 rounded-md text-base md:text-xl font-medium shadow-md'
+								className='border-gray-600 border px-2 rounded-md text-base md:text-lg font-medium md:font-semibold shadow-md'
 								key={bookCate.id}>{bookCate.name}
 							</Link>
 							)}

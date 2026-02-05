@@ -3,6 +3,7 @@ import { Radio } from "@material-tailwind/react";
 import { useForm } from "@inertiajs/react";
 import Paypal from "@/Pages/Ahomeglobal/Components/Checkout/PaymentMethod/Paypal";
 import StripeSessionOnline from "@/Pages/Ahomeglobal/Components/Checkout/PaymentMethod/StripeSessionOnline";
+import CheckMoney from "@/Pages/Ahomeglobal/Components/Checkout/PaymentMethod/CheckMoney";
 
 type PaymentItem = {
 	type: string;
@@ -21,7 +22,8 @@ const paymentList: PaymentItem[] = [
 	{
 		type: 'check',
 		label: 'Thanh toán tại quầy',
-		content: 'Chúng tôi sẽ liên hệ qua điện thoại xác nhận với quý khách hàng trong 60 phút sau khi xác nhận thanh toán',
+		content: <CheckMoney />,
+		// content: 'Chúng tôi sẽ liên hệ qua điện thoại xác nhận với quý khách hàng trong 60 phút sau khi xác nhận thanh toán',
 	},
 	{
 		type: 'paypal',

@@ -1,12 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Thanhnt\Ahomeglobal\Controllers\Frontend\AhomeController;
 use Thanhnt\Ahomeglobal\Controllers\Frontend\AhomeTestController;
 use Thanhnt\Ahomeglobal\Controllers\Frontend\AuthController;
-use Thanhnt\Ahomeglobal\Controllers\Frontend\CheckoutController;
 
 Route::prefix('ahome')->group(function () {
 	/**
@@ -46,27 +44,6 @@ Route::prefix('ahome')->group(function () {
 		Route::get('/view-stream', [AhomeTestController::class, 'optimateStream']);
 	});
 });
-
-/**
- * checkout page about 2 step order-info and order-payment
- * show cart-info, set order-info
- */
-// Route::any('checkout', [CheckoutController::class, 'checkout'])->name('checkout'); // use checkout action in ahomeglobal
-Route::any('checkout', [\Thanhnt\Abookglobal\Controllers\CheckoutController::class, 'checkout'])->name('checkout'); // use checkout action in abookglobal
-
-/**
- * checkout by payment paypal, stripe
- */
-// Route::post('checkout-payment', [CheckoutController::class, 'paymentOrder'])->name('checkout.payment');
-Route::post('checkout-payment', [\Thanhnt\Abookglobal\Controllers\CheckoutController::class, 'checkoutAction'])->name('checkout.payment');
-
-// Route::get('create-checkout-session', [CheckoutController::class, 'paymentOrderStripe']);
-
-/**
- * order success after payment examp: paypal,stripe
- */
-// Route::any('checkout-success', [CheckoutController::class, 'checkoutSuccess'])->name('checkout.success');
-Route::any('checkout-success', [\Thanhnt\Abookglobal\Controllers\CheckoutController::class, 'checkoutSuccess'])->name('checkout.success');
 
 Route::get('account-create', [AuthController::class, 'createAccount']);
 

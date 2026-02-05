@@ -22,6 +22,7 @@ return new class extends Migration
             $table->integer(BookInterface::QTY)->default(1);
             $table->integer(BookInterface::RATE)->default(3);
             $table->integer(BookInterface::PUBLISHER)->nullable();
+            $table->string(BookInterface::ALIAS, 256)->nullable()->unique();
             $table->timestamps();
             $table->softDeletes();
         });
