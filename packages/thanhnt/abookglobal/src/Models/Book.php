@@ -9,8 +9,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Thanhnt\Abookglobal\Models\Types\BookInterface;
-use Thanhnt\Ahomeglobal\Models\Attr;
-use Thanhnt\Ahomeglobal\Models\Gallery;
+use Thanhnt\Amuaglobal\Models\Attr;
+use Thanhnt\Amuaglobal\Models\Gallery;
 use Thanhnt\Amuaglobal\Models\Order;
 
 final class Book extends Model implements BookInterface

@@ -5,9 +5,8 @@ namespace Thanhnt\Ahomeglobal\Controllers\Adminhtml;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Thanhnt\Ahomeglobal\Api\HomeApi;
-use Thanhnt\Ahomeglobal\Helper\ModelHelper;
-use Thanhnt\Ahomeglobal\Models\Types\AttrInterface;
-use Thanhnt\Ahomeglobal\Models\Types\GalleryInterface;
+use Thanhnt\Amuaglobal\Helper\ModelHelper;
+use Thanhnt\Amuaglobal\Models\Types\GalleryInterface;
 use Thanhnt\Ahomeglobal\Models\Types\HomeInterface;
 use Thanhnt\Ahomeglobal\Repository\HomeRepository;
 

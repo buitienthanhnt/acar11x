@@ -2,19 +2,17 @@ import { useCallback, useEffect } from 'react';
 import { Deferred, Head, Link, router, useRemember } from '@inertiajs/react';
 import { Rating } from '@material-tailwind/react';
 import { CurrencyDollarIcon, SparklesIcon } from '@heroicons/react/24/solid';
+import BodyLayout from '../Layouts/BodyLayout';
 import Urls from '../network/Urls';
-import SwiperImage from '../../../Components/Custom/SwiperImage';
 import BookCalenda from '../Components/BookCalenda';
-import BodyLayout from '@/Pages/Ahomeglobal/Layouts/BodyLayout';
-import { isDateInRange, listDateToArrayString, dateToServerString } from '@/Pages/Ahomeglobal/Helper/DateTimeHelper';
-import useMode from '@/hook/useMode';
 import { sprintf } from 'sprintf-js';
-import useProps from '@/hook/useProps';
+import SwiperImage from '@/Components/Custom/SwiperImage';
 import { BookItemType } from '../Types/BookType';
-import { formatCurrency } from '@/Pages/Ahomeglobal/Helper';
+import {usePageProps, useMode} from '@/Pages/Amuaglobal/hooks';
+import { formatCurrency, isDateInRange, listDateToArrayString, dateToServerString } from "@/Pages/Amuaglobal/Helper";
 
 const BookDetail = ({ book, bookedTimes }) => {
-	const { isDateRangMode } = useMode();
+	const { isDateRangeMode } = useMode();
 	const [dateSelected, setDateSelected] = useRemember<Date[]>([], 'abookglobal/bookDetail');
 
 	const bookedDate = Object.keys(bookedTimes).map(dateStr => {
@@ -24,7 +22,7 @@ const BookDetail = ({ book, bookedTimes }) => {
 	}).filter(Boolean);
 
 	const checkDisableDate = useCallback((dates: Date[] | string[]): boolean => {
-		if (isDateRangMode) {
+		if (isDateRangeMode) {
 			for (let index = 0; index < bookedDate.length; index++) {
 				if (isDateInRange(
 					new Date(bookedDate[index]),
@@ -41,7 +39,7 @@ const BookDetail = ({ book, bookedTimes }) => {
 			}
 		}
 		return false;
-	}, [bookedDate, isDateRangMode])
+	}, [bookedDate, isDateRangeMode])
 
 	const onChangeDate = useCallback((dates: Date[]) => {
 		/**
@@ -106,7 +104,7 @@ const BookDetail = ({ book, bookedTimes }) => {
 }
 
 const BookRelated = () => {
-	const { relatedBooks } = useProps() as unknown as { relatedBooks: BookItemType[] };
+	const { relatedBooks } = usePageProps() as unknown as { relatedBooks: BookItemType[] };
 
 	return (
 		<Deferred fallback={<div>Loading related books...</div>} data={'relatedBooks'}>

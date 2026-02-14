@@ -398,15 +398,15 @@ class PayPalService
                 [
                     "amount" => [
                         "currency_code" => 'USD' ?: $params['currency_code'],
-                        "value" => number_format($item['price'] / config('ahomeglobal.exchange_vnd'), 2) * $quantity +  number_format($params['shipping_method']['shipping_cost'] / config('ahomeglobal.exchange_vnd'), 2),
+                        "value" => number_format($item['price'] / config('amuaglobal.exchange_vnd'), 2) * $quantity +  number_format($params['shipping_method']['shipping_cost'] / config('amuaglobal.exchange_vnd'), 2),
                         "breakdown" =>  [
                             "item_total" =>  [
                                 "currency_code" => 'USD' ?: $params['currency_code'],
-                                "value" => number_format($item['price'] / config('ahomeglobal.exchange_vnd'), 2) * $quantity,
+                                "value" => number_format($item['price'] / config('amuaglobal.exchange_vnd'), 2) * $quantity,
                             ],
                             "shipping" => [
                                 "currency_code" => 'USD' ?: $params['currency_code'],
-                                "value" =>  number_format($params['shipping_method']['shipping_cost'] / config('ahomeglobal.exchange_vnd'), 2),
+                                "value" =>  number_format($params['shipping_method']['shipping_cost'] / config('amuaglobal.exchange_vnd'), 2),
                             ]
                         ]
                     ],
@@ -416,7 +416,7 @@ class PayPalService
                             "description" => $item['description'] ?? null,
                             "unit_amount" => [ // require_field
                                 "currency_code" => 'USD' ?: $params['currency_code'],
-                                "value" => number_format($item['price'] / config('ahomeglobal.exchange_vnd'), 2),
+                                "value" => number_format($item['price'] / config('amuaglobal.exchange_vnd'), 2),
                             ],
                             "quantity" => $quantity,
                             "image_url" => $item['image_url'],

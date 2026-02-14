@@ -2,7 +2,7 @@ import { Alert } from "@material-tailwind/react";
 import { FunctionComponent, useEffect, useState } from "react";
 
 interface FlashMessageInterface {
-	message: string;
+	message?: string;
 	type: string,
 	className?: string,
 }
@@ -14,7 +14,7 @@ const FlashMessage: FunctionComponent<FlashMessageInterface> = ({ message, type 
 			show && setShow(false);
 		}, 2000);
 
-		return () => clearTimeout('autoHide');
+		return () => clearTimeout(autoHide);
 	}, [show])
 
 	if (!show || !message) {

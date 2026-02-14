@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 use Thanhnt\Ahomeglobal\Database\Factories\RoomFactory;
-use Thanhnt\Ahomeglobal\Models\Types\AttrInterface;
+use Thanhnt\Amuaglobal\Models\Types\AttrInterface;
 use Thanhnt\Ahomeglobal\Models\Types\OrderInterface;
 use Thanhnt\Ahomeglobal\Models\Types\OrderTimeInterface;
 use Thanhnt\Ahomeglobal\Models\Types\RoomInterface;

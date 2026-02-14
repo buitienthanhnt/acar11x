@@ -4,7 +4,7 @@ namespace Thanhnt\Abookglobal\Models\Types;
 
 use Thanhnt\Abookglobal\Models\BookCate;
 use Thanhnt\Abookglobal\Models\Publisher;
-use Thanhnt\Ahomeglobal\Models\Types\FormInterface;
+use Thanhnt\Amuaglobal\Models\Types\FormInterface;
 
 interface BookInterface
 {

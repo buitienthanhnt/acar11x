@@ -1,7 +1,7 @@
 <?php
 return [
 	"app-name" => 'amua global',
-	"description" => "app for book hotel quick",
+	"description" => "app for sell product",
 	'package' => 'amuaglobal',
 	'version' => '1.0.0',
 	"mode" => "date_range",

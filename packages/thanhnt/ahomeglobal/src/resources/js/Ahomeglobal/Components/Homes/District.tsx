@@ -27,10 +27,10 @@ const District = () => {
 									<div className='relative h-full w-full overflow-hidden rounded-md group'>
 										<div style={{ backgroundImage: `url('${item.image_path}')` }}
 											className={`h-[124px] md:h-[200px] relative w-full bg-cover bg-center transition-transform duration-700 ease-out group-hover:scale-110 `}>
-											<p className="absolute left-2 md:left-10 bottom-2 md:bottom-10">
+											<div className="absolute left-2 md:left-10 bottom-2 md:bottom-10">
 												<h4 className="row-span-2 text-xl font-semibold text-white">{item.name}</h4>
 												<span className="only-show-desktop invisible md:visible row-span-2 text-white">{item.location} khách sạn</span>
-											</p>
+											</div>
 										</div>
 									</div>
 								</Link>
@@ -41,10 +41,10 @@ const District = () => {
 									<div className='relative h-full w-full overflow-hidden rounded-md group'>
 										<div style={{ backgroundImage: `url('${item.image_path}')` }}
 											className={`relative w-full h-full bg-cover bg-center transition-transform duration-700 ease-out group-hover:scale-110 `}>
-											<p className="absolute left-2 md:left-10 bottom-2 md:bottom-10">
+											<div className="absolute left-2 md:left-10 bottom-2 md:bottom-10">
 												<h4 className="row-span-2 font-semibold text-xl text-white">{item.name}</h4>
 												<span className="row-span-2 only-show-desktop invisible md:visible text-white">{item.location} khách sạn</span>
-											</p>
+											</div>
 										</div>
 									</div>
 								</Link>
@@ -55,10 +55,10 @@ const District = () => {
 									<div className='relative h-full w-full overflow-hidden rounded-md group'>
 										<div style={{ backgroundImage: `url('${item.image_path}')` }}
 											className={`relative w-full h-full bg-cover bg-center transition-transform duration-700 ease-out group-hover:scale-110 `}>
-											<p className="absolute left-2 md:left-10 bottom-2 md:bottom-10">
+											<div className="absolute left-2 md:left-10 bottom-2 md:bottom-10">
 												<h4 className="row-span-2 font-semibold text-xl text-white">{item.name}</h4>
 												<span className="row-span-2 only-show-desktop invisible md:visible text-white">{item.location} khách sạn</span>
-											</p>
+											</div>
 										</div>
 									</div>
 								</Link>
@@ -75,10 +75,10 @@ const District = () => {
 									<div className='relative h-full w-full overflow-hidden rounded-md group'>
 										<div style={{ backgroundImage: `url('${item.image_path}')` }}
 											className={`relative w-full h-full bg-cover bg-center transition-transform duration-700 ease-out group-hover:scale-110 `}>
-											<p className="absolute left-2 md:left-10 bottom-2 md:bottom-10">
+											<div className="absolute left-2 md:left-10 bottom-2 md:bottom-10">
 												<h4 className="row-span-2 font-semibold text-xl text-white">{item.name}</h4>
 												<span className="row-span-2 only-show-desktop invisible md:visible text-white">{item.location} khách sạn</span>
-											</p>
+											</div>
 										</div>
 									</div>
 								</Link>
@@ -89,10 +89,10 @@ const District = () => {
 									<div className='relative h-full w-full overflow-hidden rounded-md group'>
 										<div style={{ backgroundImage: `url('${item.image_path}')` }}
 											className={`relative w-full h-[124px] md:h-[200px] bg-cover bg-center transition-transform duration-700 ease-out group-hover:scale-110 `}>
-											<p className="absolute left-2 md:left-10 bottom-2 md:bottom-10">
+											<div className="absolute left-2 md:left-10 bottom-2 md:bottom-10">
 												<h4 className="row-span-2 font-semibold text-xl text-white">{item.name}</h4>
 												<span className="row-span-2 only-show-desktop invisible md:visible text-white">{item.location} khách sạn</span>
-											</p>
+											</div>
 										</div>
 									</div>
 								</Link>
@@ -103,10 +103,10 @@ const District = () => {
 									<div className='relative h-full w-full overflow-hidden rounded-md group'>
 										<div style={{ backgroundImage: `url('${item.image_path}')` }}
 											className={`relative w-full h-full bg-cover bg-center transition-transform duration-700 ease-out group-hover:scale-110 `}>
-											<p className="absolute left-2 md:left-10 bottom-2 md:bottom-10">
+											<div className="absolute left-2 md:left-10 bottom-2 md:bottom-10">
 												<h4 className="row-span-2 font-semibold text-xl text-white">{item.name}</h4>
 												<span className="row-span-2 only-show-desktop invisible md:visible text-white">{item.location} khách sạn</span>
-											</p>
+											</div>
 										</div>
 									</div>
 								</Link>

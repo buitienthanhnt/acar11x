@@ -18,9 +18,9 @@ final class OrderSaveListen
 		 * @var \Thanhnt\Amuaglobal\Models\Order $order
 		 */
 		$order = $event->order;
-		$this->saveBookOrderTime($order);
+		$this->saveOrderTime($order);
 		// ghi log
-		log('===> BookOrderSaveListen event fired: ' . $order->id);
+		log('===> OrderSaveListen event fired: ' . $order->id);
 	}
 
 	/**
@@ -28,7 +28,7 @@ final class OrderSaveListen
 	 * @param \Thanhnt\Amuaglobal\Models\Order $order
 	 * @return void
 	 */
-	protected function saveBookOrderTime(Order $order)
+	protected function saveOrderTime(Order $order)
 	{
 		$selectedDates = $order->{OrderInterface::SELECTED_TIME};
 		/**

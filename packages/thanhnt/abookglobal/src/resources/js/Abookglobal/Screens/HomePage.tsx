@@ -1,17 +1,14 @@
-import BaseLayout from '../../Ahomeglobal/Layouts/BaseLayout';
-import HomeSpeed from '../../Ahomeglobal/Layouts/Components/HomeSpeed';
-import { FooterWithLogo } from '../../Ahomeglobal/Layouts/Components/FooterWithLogo';
 import { Head, router, useRemember } from '@inertiajs/react';
-import { NavbarDark } from '../../Ahomeglobal/Layouts/Components/NavbarDark';
-import FlashMessage from '../../Ahomeglobal/Components/FlashMessage';
-import useMessage from '../../Ahomeglobal/hooks/useMessage';
 import { FingerPrintIcon, XMarkIcon } from '@heroicons/react/24/solid';
-import Paginate from '../../Ahomeglobal/Components/Paginate';
-import Title from '../Components/Title';
+import BaseLayout from '../Layouts/BaseLayout';
+import { FooterWithLogo, NavbarDark } from '../Layouts/Components';
 import BookGridItem from '../Components/BookGridItem';
-import HorizonSlick from '../Components/HorizonSlick';
-import { GalleryList } from '@/Components/Custom';
+import { FlashMessage, Title, Paginate, HorizonSlick, GalleryList } from '@/Pages/Amuaglobal/Components';
+import HomeSpeed from '@/Pages/Amuaglobal/Components/Layout/HomeSpeed';
+import { useMessage } from '@/Pages/Amuaglobal/hooks';
 import data from '../data/centercate';
+import Urls from '../network/Urls';
+import { sprintf } from 'sprintf-js';
 
 /**
  * 
@@ -56,7 +53,7 @@ const HomePage = ({ filters, books }) => {
 				<div className="flex flex-col flex-1 w-full p-1 mx-auto md:container">
 					<div className="space-y-4">
 						<div className="col-span-1 lg:col-span-3 flex flex-col gap-y-1 md:gap-y-2 p-1 md:p-0 lg:space-x-4 md:py-2 py-1 space-y-2 lg:space-y-0">
-							<Title title='moi nhat'></Title>
+							<Title title='Nổi bật'></Title>
 							<div className='grid md:grid-cols-3 lg:grid-cols-4 gap-1 md:gap-2 lg:gap-3 w-full'>
 								{books?.data.map(book => <BookGridItem book={book} key={book.id.toString()}></BookGridItem>)}
 							</div>
@@ -67,12 +64,13 @@ const HomePage = ({ filters, books }) => {
 									prefetch: ['hover',], // prefecth must be use in GET request only
 								}}></Paginate>
 						</div>
-						<HorizonSlick items={books?.data}></HorizonSlick>
+						<HorizonSlick items={books?.data} onClick={(item) => {
+							router.get(sprintf(Urls.bookDetail, item.id))
+						}}></HorizonSlick>
 						<div className='space-y-4'>
-							<Title title='tong hop'></Title>
+							<Title title='Tổng hợp'></Title>
 							<GalleryList data={data}></GalleryList>
 						</div>
-
 					</div>
 					<HomeSpeed></HomeSpeed>
 				</div>

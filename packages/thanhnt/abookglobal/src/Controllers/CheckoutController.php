@@ -91,7 +91,7 @@ final class CheckoutController extends Controller
 				if (!$this->bookOrderApi->checkAvailableTime($request->get('book_id'), $request->input('dateSelected'),)) {
 					return redirect()->back()->with('error', 'Selected time is not available, please choose another time.');
 				}
-				$this->cartApi->addToCart($request->input('book_id'), $request->input('dateSelected'));
+				$this->cartApi->addToCart($this->bookApi->getBookById($request->input('book_id')), $request->input('dateSelected'));
 			}
 		}
 
@@ -260,7 +260,7 @@ final class CheckoutController extends Controller
 					/**
 					 * return for online inpage payment
 					 */
-					if (config('ahomeglobal.payment.stripe.ui_mode') === 'custom') {
+					if (config('amuaglobal.payment.stripe.ui_mode') === 'custom') {
 						return ['clientSecret' => $reponse->client_secret,];
 					}
 					/**

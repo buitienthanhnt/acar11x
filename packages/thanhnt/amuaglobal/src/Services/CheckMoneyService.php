@@ -4,7 +4,7 @@ namespace Thanhnt\Amuaglobal\Services;
 
 use Thanhnt\Amuaglobal\Api\CartApi;
 use Thanhnt\Amuaglobal\Api\OrderApi;
-use Thanhnt\Amuaglobal\Models\BookExpectOrder;
+use Thanhnt\Amuaglobal\Models\ExpectOrder;
 
 class CheckMoneyService
 {
@@ -23,7 +23,7 @@ class CheckMoneyService
 	 * 	shipping_address?: array{name: string, phone: string, location: string}, 
 	 * 	expect_order?: string, cart_total: float, on_payment_order?: array{ token?: string, id?: string,}, on_payment?: string,
 	 * } $cartParams
-	 * @return BookExpectOrder
+	 * @return ExpectOrder
 	 */
 	public function checkout($cartParams)
 	{
@@ -39,7 +39,7 @@ class CheckMoneyService
 	 * 	shipping_address?: array{name: string, phone: string, location: string}, 
 	 * 	expect_order?: string, cart_total: float, on_payment_order?: array{ token?: string, id?: string,}, on_payment?: string,
 	 * } $cartParams
-	 * @return BookExpectOrder
+	 * @return ExpectOrder
 	 */
 	protected function createOrder($cartParams)
 	{

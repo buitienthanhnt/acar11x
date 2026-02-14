@@ -39,20 +39,12 @@ class AmuaglobalProvider extends ServiceProvider
 			$this->loadRoutesFrom(__DIR__ . '/routes/adminhtml.php');
 		});
 
-		/**
-		 * khai báo các command
-		 * dùng hàm: is_subclass_of; để kiểm tra các class định nghĩa trong đây: https://www.php.net/manual/en/function.is-subclass-of.php
-		 */
-		$this->commands([
-			\Thanhnt\Amuaglobal\Commands\DemoCommand::class,
-		]);
-
 		// Load views, routes, migrations, publish assets, etc.
 		$this->loadViewsFrom(__DIR__ . '/resources/views', 'amuaglobal');
 
 		/**
 		 * load migration define 
-		 * make migration: php artisan make:migration create_books_table --path=packages/thanhnt/amuaglobal/src/Database/Migrations
+		 * make migration: php artisan make:migration create_products_table --path=packages/thanhnt/amuaglobal/src/Database/Migrations
 		 * rollback: php artisan migrate:rollback --step=1
 		 */
 		$this->loadMigrationsFrom(__DIR__ . '/Database/Migrations');
@@ -60,6 +52,14 @@ class AmuaglobalProvider extends ServiceProvider
 		 * load factory for package
 		 */
 		$this->loadFactoriesFrom(__DIR__ . '/Database/Factories');
+		/**
+		 * khai báo các command
+		 * dùng hàm: is_subclass_of; để kiểm tra các class định nghĩa trong đây: https://www.php.net/manual/en/function.is-subclass-of.php
+		 */
+		$this->commands([
+			\Thanhnt\Amuaglobal\Commands\DemoCommand::class,
+			\Thanhnt\Amuaglobal\Commands\MakePackageModelCommand::class,
+		]);
 
 		/**
 		 * publish inertiaJs component to js/Pages views and active running with controllers Inertial::render()
@@ -68,5 +68,21 @@ class AmuaglobalProvider extends ServiceProvider
 		$this->publishes([
 			__DIR__ . '/resources/js' => resource_path('js/Pages'),
 		], 'amuaglobal-inertiajs');
+
+		/**
+		 * coppy config file from the package to global config
+		 * php artisan vendor:publish --provider="Thanhnt\Amuaglobal\AmuaglobalProvider"
+		 */
+		$this->publishes([
+			__DIR__ . '/config/config.php' => config_path('amuaglobal.php'),
+		], 'amuaglobal-config');
+
+		/**
+		 * publish assets to public folder
+		 * php artisan vendor:publish --tag=amuaglobal-assets
+		 */
+		$this->publishes([
+			__DIR__ . '/resources/public' => public_path('amua'),
+		], 'amuaglobal-assets');
 	}
 }

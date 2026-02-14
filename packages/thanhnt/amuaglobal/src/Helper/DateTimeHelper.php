@@ -48,7 +48,7 @@ final class DateTimeHelper
 	 */
 	public function getListDates(array $dateStrings, string $format = 'Y-m-d')
 	{
-		if (config('ahomeglobal.mode', 'list_date') === 'date_range') {
+		if (config('amuaglobal.mode', 'list_date') === 'date_range') {
 			// https://code.mu/vi/php/manual/time/oop/DatePeriod/
 			// https://www.php.net/manual/en/class.dateperiod.php
 			$dateStrings = new \DatePeriod(

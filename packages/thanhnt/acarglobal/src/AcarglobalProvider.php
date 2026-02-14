@@ -26,13 +26,5 @@ final class AcarglobalProvider extends ServiceProvider
 		 * make model: 	   php artisan acar:make-model Acar
 		 */
 		$this->loadMigrationsFrom(__DIR__ . '/database/migrations');
-
-		/**
-		 * khai báo các command
-		 * dùng hàm: is_subclass_of; để kiểm tra các class định nghĩa trong đây: https://www.php.net/manual/en/function.is-subclass-of.php
-		 */
-		$this->commands([
-			\Thanhnt\Acarglobal\Commands\MakePackageModelCommand::class,
-		]);
 	}
 }

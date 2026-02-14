@@ -4,10 +4,10 @@ namespace Thanhnt\Abookglobal\Repository;
 
 use Thanhnt\Abookglobal\Models\Book;
 use Thanhnt\Abookglobal\Models\Types\BookInterface;
-use Thanhnt\Ahomeglobal\Helper\ModelHelper;
-use Thanhnt\Ahomeglobal\Models\Attr;
-use Thanhnt\Ahomeglobal\Models\Types\AttrInterface;
-use Thanhnt\Ahomeglobal\Models\Types\GalleryInterface;
+use Thanhnt\Amuaglobal\Helper\ModelHelper;
+use Thanhnt\Amuaglobal\Models\Attr;
+use Thanhnt\Amuaglobal\Models\Types\AttrInterface;
+use Thanhnt\Amuaglobal\Models\Types\GalleryInterface;
 
 final class BookRepository
 {

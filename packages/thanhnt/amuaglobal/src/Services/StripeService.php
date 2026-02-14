@@ -258,14 +258,14 @@ class StripeService
 		/**
 		 * config for stripe ui_mode
 		 */
-		if (config('ahomeglobal.payment.stripe.ui_mode') === 'custom') {
+		if (config('amuaglobal.payment.stripe.ui_mode') === 'custom') {
 			/**
 			 * custom mode if online checkout with stripe
 			 * pay onpage checkout
 			 */
 			$formatData['ui_mode'] = 'custom';
 			$formatData['return_url'] = route('checkout.success', ['expect_order' => $this->cartApi->getExpectOrder(), 'type' => 'stripe',]);
-		} elseif (config('ahomeglobal.payment.stripe.ui_mode') === 'hosted') {
+		} elseif (config('amuaglobal.payment.stripe.ui_mode') === 'hosted') {
 			/**
 			 * default pay out redirect checkout page stripe
 			 */

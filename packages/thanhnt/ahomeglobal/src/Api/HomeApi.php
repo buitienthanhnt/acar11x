@@ -4,7 +4,7 @@ namespace Thanhnt\Ahomeglobal\Api;
 
 use Thanhnt\Ahomeglobal\Models\Home;
 use Thanhnt\Ahomeglobal\Models\Room;
-use Thanhnt\Ahomeglobal\Models\Types\AttrInterface;
+use Thanhnt\Amuaglobal\Models\Types\AttrInterface;
 use Thanhnt\Ahomeglobal\Models\Types\HomeInterface;
 use Thanhnt\Ahomeglobal\Models\Types\OrderTimeInterface;
 use Thanhnt\Ahomeglobal\Models\Types\RoomInterface;

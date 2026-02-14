@@ -1,7 +1,8 @@
-import { CurrencyDollarIcon, MapPinIcon, SparklesIcon } from "@heroicons/react/24/solid"
+import { CurrencyDollarIcon, SparklesIcon } from "@heroicons/react/24/solid"
 import { Link } from "@inertiajs/react"
 import { sprintf } from "sprintf-js"
 import Urls from "../network/Urls"
+import { formatCurrency } from "@/Pages/Amuaglobal/Helper"
 
 const BookGridItem = ({ book, selectedDates }: { book: any, selectedDates?: any }) => {
 
@@ -12,7 +13,7 @@ const BookGridItem = ({ book, selectedDates }: { book: any, selectedDates?: any 
 			href={sprintf(Urls.bookDetail, [book.id])}
 			data={{ selectedDates: selectedDates }}>
 			<div >
-				<img src={book.image_path} alt="avata hotel" className="max-w-40 md:max-w-60 lg:max-w-full h-full md:min-h-48 lg:min-h-60 rounded-md md:rounded-t-md md:rounded-b-none" />
+				<img src={book.image_path} alt="avata hotel" className="max-w-40 md:max-w-60 object-contain lg:max-w-full h-full md:min-h-48 lg:min-h-60 rounded-md md:rounded-t-md md:rounded-b-none" />
 			</div>
 			<div className="flex flex-col justify-between gap-1 md:gap-2 p-1 md:py-2 h-full">
 				<div>
@@ -22,9 +23,9 @@ const BookGridItem = ({ book, selectedDates }: { book: any, selectedDates?: any 
 						<p className="text-sm md:text-base lg:text-md font-semibold">{book.description}</p>
 					</div>
 				</div>
-				<div className="flex">
-					<CurrencyDollarIcon className="size-5 text-purple-500"></CurrencyDollarIcon>
-					<p className="italic text-purple-600 font-semibold text-sm md:text-md">{book.price}.000 vnd</p>
+				<div className="flex items-center">
+					<CurrencyDollarIcon className="size-5"></CurrencyDollarIcon>
+					<p className="italic text-purple-600 font-semibold text-sm md:text-md">&nbsp;{formatCurrency(book.price)}</p>
 				</div>
 			</div>
 		</Link>

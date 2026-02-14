@@ -1,7 +1,8 @@
-import { CurrencyDollarIcon, MapPinIcon, SparklesIcon } from "@heroicons/react/24/solid"
+import { CurrencyDollarIcon, SparklesIcon } from "@heroicons/react/24/solid"
 import { Link } from "@inertiajs/react"
 import { sprintf } from "sprintf-js"
 import Urls from "../network/Urls"
+import { formatCurrency } from "@/Pages/Amuaglobal/Helper"
 
 const BookGridItem = ({ book, selectedDates }: { book: any, selectedDates?: any }) => {
 
@@ -22,9 +23,9 @@ const BookGridItem = ({ book, selectedDates }: { book: any, selectedDates?: any 
 						<p className="text-sm md:text-base lg:text-md font-semibold">{book.description}</p>
 					</div>
 				</div>
-				<div className="flex">
+				<div className="flex items-center">
 					<CurrencyDollarIcon className="size-5"></CurrencyDollarIcon>
-					<p className="italic text-purple-600 font-semibold text-sm md:text-md">&nbsp;{book.price} vnd</p>
+					<p className="italic text-purple-600 font-semibold text-sm md:text-md">&nbsp;{formatCurrency(book.price)}</p>
 				</div>
 			</div>
 		</Link>

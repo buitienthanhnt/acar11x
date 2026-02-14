@@ -30,7 +30,7 @@ final class AbookglobalProvider extends ServiceProvider
 		 */
 		Route::middleware([
 			...Route::getMiddlewareGroups()['web'],
-			\Thanhnt\Ahomeglobal\Middleware\MergeInertiaConfig::class,
+			\Thanhnt\Amuaglobal\Middleware\MergeInertiaConfig::class,
 		])->group(function () {
 			$this->loadRoutesFrom(__DIR__ . '/routes/adminhtml.php');
 			$this->loadRoutesFrom(__DIR__ . '/routes/front.php');

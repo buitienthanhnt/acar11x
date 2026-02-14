@@ -3,12 +3,11 @@ import { Head, Link, router, useRemember } from "@inertiajs/react";
 import { sprintf } from "sprintf-js";
 import Urls from "../netWork/Urls";
 import { listDateToArrayString } from "../Helper/DateTimeHelper";
-import { HomeItem as HomeItemType } from "../types/Home";
-import { RoomItem as RoomItemType } from "../types/Room";
+import { HomeItemType } from "../types/Home";
+import { RoomHome, } from "../types/Room";
 import { PagePaginate } from "../types/Paginate";
-import { Paginate, CustomTimeTable, RoomItemGrid, HomeMap } from "../Components";
-import { FingerPrintIcon, MapPinIcon, XMarkIcon } from "@heroicons/react/24/solid";
-import { SparklesIcon } from "@heroicons/react/24/solid";
+import { Paginate, CustomTimeTable, RoomItemGrid } from "../Components";
+import { FingerPrintIcon, MapPinIcon, XMarkIcon, SparklesIcon } from "@heroicons/react/24/solid";
 import { PageLayout } from "../Layouts";
 
 
@@ -75,7 +74,7 @@ const HomeList: FunctionComponent<Props> = ({ homes, rooms, filters, allFilters 
 					<h3 className="text-lg font-semibold text-purple-300"></h3>
 					<div className="lg:p-4 grid grid-cols-1 md:grid-cols-2 gap-2">
 						{rooms?.data.map(room => <div key={room.id}>
-							<RoomItemGrid room={room as unknown as RoomItemType} selectedDates={filters?.dates}></RoomItemGrid>
+							<RoomItemGrid room={room as unknown as RoomHome} selectedDates={filters?.dates}></RoomItemGrid>
 						</div>)}
 					</div>
 					<Paginate pageSize={rooms.last_page} currentPage={rooms.current_page} pageName="room_page"
@@ -90,7 +89,7 @@ const HomeList: FunctionComponent<Props> = ({ homes, rooms, filters, allFilters 
 	)
 }
 
-const HomeFilter = ({ filters, allFilters }) => {
+const HomeFilter: FunctionComponent<{ filters: any, allFilters: any }> = ({ filters, allFilters }) => {
 	const [dateSelected] = useState<Date[]>(!!filters && filters?.dates ? filters?.dates.map((d: string) => new Date(d)) || [] : []);
 
 	const [formState, setFormState] = useRemember({

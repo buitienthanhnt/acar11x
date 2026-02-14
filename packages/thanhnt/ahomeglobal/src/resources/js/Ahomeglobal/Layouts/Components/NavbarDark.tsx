@@ -21,7 +21,6 @@ export function NavbarDark({ navStyles, }: { navStyles?: string }) {
 			<div className="flex flex-wrap items-center justify-between gap-y-4 text-white">
 				<Link href={'/ahome/homes'}>
 					<Typography
-						as="a"
 						variant="h6"
 						className="mr-4 ml-2 cursor-pointer py-1.5"
 					>

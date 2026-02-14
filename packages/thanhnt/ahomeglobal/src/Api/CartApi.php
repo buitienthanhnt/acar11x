@@ -5,7 +5,7 @@ namespace Thanhnt\Ahomeglobal\Api;
 use Exception;
 use Illuminate\Contracts\Session\Session;
 use Thanhnt\Ahomeglobal\Events\CartSaveEvent;
-use Thanhnt\Ahomeglobal\Helper\DateTimeHelper;
+use Thanhnt\Amuaglobal\Helper\DateTimeHelper;
 use Thanhnt\Ahomeglobal\Models\Order;
 use Thanhnt\Ahomeglobal\Models\OrderTime;
 use Thanhnt\Ahomeglobal\Models\Repository\OrderRepository;

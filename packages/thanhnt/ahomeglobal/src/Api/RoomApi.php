@@ -3,10 +3,10 @@
 namespace Thanhnt\Ahomeglobal\Api;
 
 use Illuminate\Support\Facades\DB;
-use Thanhnt\Ahomeglobal\Models\Attr;
+use Thanhnt\Amuaglobal\Models\Attr;
 use Thanhnt\Ahomeglobal\Models\OrderTime;
 use Thanhnt\Ahomeglobal\Models\Room;
-use Thanhnt\Ahomeglobal\Models\Types\AttrInterface;
+use Thanhnt\Amuaglobal\Models\Types\AttrInterface;
 use Thanhnt\Ahomeglobal\Models\Types\RoomInterface;
 
 final class RoomApi

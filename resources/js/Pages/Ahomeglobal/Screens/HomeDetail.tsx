@@ -138,11 +138,11 @@ const HomeInfo = ({ homeDetail }: { homeDetail: HomeDetailType }) => {
 			</div>
 			<div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-2 rounded-md gap-x-2'>
 				<div className='md:col-span-2 lg:col-span-1'>
-					<SwiperImage images={homeDetail.gallery}></SwiperImage>
+					{homeDetail.gallery && <SwiperImage images={homeDetail.gallery} />}
 				</div>
 				<div className='flex flex-col gap-y-2 p-1 md:p-2 rounded-md col-span-1'>
 					<div className='flex space-x-1'>
-						<SparklesIcon className="size-5 text-gray-800"></SparklesIcon>
+						<SparklesIcon className="size-5 text-gray-800" />
 						<p className='text-sm md:text-base font-semibold text-gray-800'>Mô tả: {homeDetail.description}</p>
 					</div>
 					{
@@ -154,9 +154,7 @@ const HomeInfo = ({ homeDetail }: { homeDetail: HomeDetailType }) => {
 						/>
 					}
 					{location &&
-						<Location
-							style='h-full w-full flex-1 lg:h-40'
-							url={location.value}></Location>
+						<Location style='h-full w-full flex-1 lg:h-40' url={location.value} />
 					}
 				</div>
 			</div>

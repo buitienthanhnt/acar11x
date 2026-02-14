@@ -39,7 +39,7 @@ const steps = [
 
 type CheckoutProps = {
 	dateSelected: string[];
-	homeDetail: HomeDetail;
+	homeDetail?: HomeDetail;
 	roomSelected?: RoomItem;
 	totalPrice?: number;
 };
@@ -85,7 +85,7 @@ const Checkout: FunctionComponent<Props> = ({ dateSelected, home, room, totalPri
 			}}>
 				<div className="flex-1 bg-[url('/ahome/assets/img-1.jpg')] bg-cover bg-center">
 					<div className="w-full p-1 md:p-2 space-y-2">
-						<OrderInfomation homeSelected={home} roomSelected={room} dateSelected={dateSelected} totalPrice={totalPrice}></OrderInfomation>
+						<OrderInfomation homeSelected={home} roomSelected={room} dateSelected={dateSelected} totalPrice={totalPrice as unknown as number}></OrderInfomation>
 						<div className="flex flex-col gap-y-10">
 							<div className="w-full justify-center flex">
 								<div className="w-10/12 md:w-8/12 px-8">
@@ -98,7 +98,7 @@ const Checkout: FunctionComponent<Props> = ({ dateSelected, home, room, totalPri
 												// @ts-ignore
 												<Step key={step.key}
 													onClick={() => {
-														if (step.position < selectedStep.position) {
+														if (selectedStep && step.position < selectedStep.position) {
 															setActiveStep(step.position)
 														}
 													}}
@@ -122,7 +122,7 @@ const Checkout: FunctionComponent<Props> = ({ dateSelected, home, room, totalPri
 								</div>
 							</div>
 							<div id="checkout-content">
-								{React.cloneElement(selectedStep?.component, {
+								{selectedStep && React.cloneElement(selectedStep?.component, {
 									onSuccess: () => {
 										setActiveStep(selectedStep.position + 1);
 									},
@@ -143,7 +143,7 @@ const OrderInfomation = ({ homeSelected, roomSelected, dateSelected, totalPrice 
 	return (
 		<div className="grid grid-cols-1 md:grid-cols-3 gap-y-2 gap-x-1">
 			<HomeInfo home={homeSelected}></HomeInfo>
-			<RoomInfo room={roomSelected}></RoomInfo>
+			{roomSelected && <RoomInfo room={roomSelected}></RoomInfo>}
 			<DatesInfo dateSelected={convertStringServerToDates(dateSelected)} totalPrice={totalPrice}></DatesInfo>
 		</div>
 	);

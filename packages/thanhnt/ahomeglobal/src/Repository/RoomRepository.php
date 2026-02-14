@@ -2,10 +2,10 @@
 
 namespace Thanhnt\Ahomeglobal\Repository;
 
-use Thanhnt\Ahomeglobal\Helper\ModelHelper;
-use Thanhnt\Ahomeglobal\Models\Attr;
+use Thanhnt\Amuaglobal\Helper\ModelHelper;
+use Thanhnt\Amuaglobal\Models\Attr;
 use Thanhnt\Ahomeglobal\Models\Room;
-use Thanhnt\Ahomeglobal\Models\Types\AttrInterface;
+use Thanhnt\Amuaglobal\Models\Types\AttrInterface;
 use Thanhnt\Ahomeglobal\Models\Types\RoomInterface;
 
 final class RoomRepository

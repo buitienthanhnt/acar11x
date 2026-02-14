@@ -3,6 +3,7 @@
 namespace Thanhnt\Amuaglobal\Api;
 
 use Illuminate\Contracts\Session\Session;
+use Illuminate\Database\Eloquent\Model;
 use Thanhnt\Amuaglobal\Helper\DateTimeHelper;
 
 final class CartApi
@@ -34,37 +35,37 @@ final class CartApi
 	}
 
 	/**
-	 * @param int $bookId
+	 * @param Model $product
 	 * @param string[] $dateSelected
 	 * @param int $qty
 	 */
 	public function addToCart(
-		int $bookId,
+		Model $product,
 		array $dateSelected,
 		int $qty = 1,
 	) {
-		$cartData = $this->caculateCartData($bookId, $dateSelected, $qty);
+		$cartData = $this->caculateCartData($product, $dateSelected, $qty);
 		return $this->saveCart($cartData);
 	}
 
 	/**
 	 * caculate cart data
-	 * @param int $bookId
+	 * @param Model $product
 	 * @param string[] $dateSelected
 	 * @param int $qty
 	 * @return array
 	 */
 	protected function caculateCartData(
-		int $bookId,
+		Model $product,
 		array $dateSelected,
 		int $qty = 1,
 	) {
-		$cartItemData = $this->formatCartItem($bookId);
+		$cartItemData = $this->formatCartItem($product);
 		$cartData =  [
 			self::STATUS => 'pending',
 			self::TYPE => 'product',
 			self::CART_ITEM => [...$cartItemData, 'qty' => $qty],
-			self::CURRENCY_CODE => config('ahomeglobal.currency_code'),
+			self::CURRENCY_CODE => config('amuaglobal.currency_code'),
 			self::ORDER_TIME => [
 				self::ORDER_DATE_FROM => min($dateSelected),
 				self::ORDER_DATE_TO => max($dateSelected),
@@ -95,7 +96,7 @@ final class CartApi
 
 		$currentCart = $this->getCart();
 		/**
-		 * caculate book qty
+		 * caculate item qty
 		 */
 		// $this->caculateQty($cartData);
 		/**
@@ -105,31 +106,21 @@ final class CartApi
 		return $cartData;
 	}
 
-	/*
-	 * @param int $bookId
-	 * @return \Thanhnt\Abookglobal\Models\Book
-	 */
-	protected function getCartItemModel(int $bookId)
-	{
-		return \Thanhnt\Abookglobal\Models\Book::findOrFail($bookId);
-	}
-
 	/**
 	 * format cart item date
-	 * @param int $id
+	 * @param Model $product
 	 * @return array{id: int, image_url: string, name: string, price: float, qty: int, description: string, url: string}
 	 */
-	protected function formatCartItem(int $id)
+	protected function formatCartItem($product)
 	{
-		$product = $this->getCartItemModel($id);
 		return [
-			'id' => $id,
+			'id' => $product->id,
 			'image_url' => $product->image_path,
 			'name' => $product->name,
 			'price' => $product->price,
 			'qty' => 1,
 			'description' => $product->description,
-			'url' => $product->url,
+			'url' => $product?->url,
 		];
 	}
 
@@ -184,6 +175,7 @@ final class CartApi
 				break;
 			case 'home':
 				break;
+			case 'product':
 			default:
 				$cartData[self::CART_ITEM]['qty'] = $cartData[self::CART_ITEM]['qty'];
 				break;

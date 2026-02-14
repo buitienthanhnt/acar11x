@@ -10,7 +10,7 @@ use Inertia\Inertia;
 use Thanhnt\Ahomeglobal\Api\CartApi;
 use Thanhnt\Ahomeglobal\Api\HomeApi;
 use Thanhnt\Ahomeglobal\Api\RoomApi;
-use Thanhnt\Ahomeglobal\Helper\DateTimeHelper;
+use Thanhnt\Amuaglobal\Helper\DateTimeHelper;
 use Thanhnt\Ahomeglobal\Models\Order;
 use Thanhnt\Ahomeglobal\Models\Room;
 use Thanhnt\Ahomeglobal\Models\Types\RoomInterface;

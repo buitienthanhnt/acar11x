@@ -64,7 +64,7 @@ type DateItemProp = {
 
 const DateItem: FunctionComponent<DateItemProp> = ({ date }) => {
 	const { listDates, minDate, maxDate, disableString, onClickDate, listDateChoose, today, } = useContext(CustomTimeContext);
-	const isDisable = disableString.includes(date.toLocaleDateString());
+	const isDisable = disableString?.includes(date.toLocaleDateString());
 	const isOutOfDate = useMemo(() => {
 		if (minDate && new Date(minDate.getFullYear(), minDate.getMonth(), minDate.getDate()) > date) {
 			return true;
@@ -107,7 +107,7 @@ const CustomTimeContext = createContext<{
 }>({ listDates: [], today: new Date(), onClickDate: () => { }, });
 
 type CustomTimeProp = {
-	selected?: Date[];
+	selected: Date[];
 	onChange?: (values: Date[]) => void;
 	minDate?: Date;
 	maxDate?: Date;
@@ -192,7 +192,7 @@ const CustomTimeTable: FunctionComponent<CustomTimeProp> = ({ selected, onChange
 			 * if mode === date_range selectedDates only have 2 date.
 			 */
 
-			onChange(selectedString?.includes(date.toLocaleDateString()) ?
+			onChange?.(selectedString?.includes(date.toLocaleDateString()) ?
 				[...selected.filter(i => {
 					return i.toLocaleDateString() !== date.toLocaleDateString();
 				})] :

@@ -2,7 +2,7 @@
 
 namespace Thanhnt\Amuaglobal\Api;
 
-use Thanhnt\Ahomeglobal\Helper\ModelHelper;
+use Thanhnt\Amuaglobal\Helper\ModelHelper;
 use Thanhnt\Amuaglobal\Events\OrderSave;
 use Thanhnt\Amuaglobal\Models\ExpectOrder;
 use Thanhnt\Amuaglobal\Models\Order;

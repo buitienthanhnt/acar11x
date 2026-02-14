@@ -4,12 +4,12 @@ namespace Thanhnt\Ahomeglobal\Database\Seeders;
 
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Database\Seeder;
-use Thanhnt\Ahomeglobal\Models\Attr;
-use Thanhnt\Ahomeglobal\Models\Gallery;
+use Thanhnt\Amuaglobal\Models\Attr;
+use Thanhnt\Amuaglobal\Models\Gallery;
 use Thanhnt\Ahomeglobal\Models\Home;
 use Thanhnt\Ahomeglobal\Models\Room;
-use Thanhnt\Ahomeglobal\Models\Types\AttrInterface;
-use Thanhnt\Ahomeglobal\Models\Types\GalleryInterface;
+use Thanhnt\Amuaglobal\Models\Types\AttrInterface;
+use Thanhnt\Amuaglobal\Models\Types\GalleryInterface;
 use Thanhnt\Ahomeglobal\Models\Types\HomeInterface;
 use Thanhnt\Ahomeglobal\Models\Types\RoomInterface;
 
