@@ -62,7 +62,8 @@ final class PageApiController extends Controller
 	 * return page has most os comment
 	 * @return \App\Models\Page
 	 */
-	public function topComment() {
+	public function topComment()
+	{
 		$page = $this->pageApi->topComment();
 		return $page;
 	}
@@ -70,7 +71,8 @@ final class PageApiController extends Controller
 	/**
 	 * get 3 newest page for TopPage Component.
 	 */
-	public function topPages() {
+	public function topPages()
+	{
 		return $this->pageApi->topPage();
 	}
 }
