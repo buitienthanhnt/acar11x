@@ -5,6 +5,7 @@ namespace Thanhnt\Amuaglobal\Models\Types;
 interface GalleryInterface
 {
 	const TABLE_NAME = 'amua_galleries';
+	
 	const SOURCE_ID = 'source_id';
 	const TYPE = 'type';
 	const PATH = 'path';

@@ -59,7 +59,7 @@ final class Book extends Model implements BookInterface
 	protected function url(): Attribute
 	{
 		return new Attribute(
-			get: fn() => route('abook.detail', ['id' => $this->id]),
+			get: fn() =>  $this->{self::ALIAS} ? route('abook.detail', ['alias' => $this->{self::ALIAS}]) : '',
 		);
 	}
 }

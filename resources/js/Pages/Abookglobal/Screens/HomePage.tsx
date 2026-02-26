@@ -9,13 +9,15 @@ import { useMessage } from '@/Pages/Amuaglobal/hooks';
 import data from '../data/centercate';
 import Urls from '../network/Urls';
 import { sprintf } from 'sprintf-js';
+import { PaginateInterface } from '@/Pages/Amuaglobal/types/Paginate';
+import { BookItemType } from '../Types/BookType';
 
 /**
  * 
  * https://www.npmjs.com/package/react-multi-carousel 
  */
 
-const HomePage = ({ filters, books }) => {
+const HomePage = ({ filters, books }: {filters: any, books: PaginateInterface}) => {
 	const { error, success } = useMessage();
 
 	return (
@@ -65,7 +67,7 @@ const HomePage = ({ filters, books }) => {
 								}}></Paginate>
 						</div>
 						<HorizonSlick items={books?.data} onClick={(item) => {
-							router.get(sprintf(Urls.bookDetail, item.id))
+							router.get(item.url)
 						}}></HorizonSlick>
 						<div className='space-y-4'>
 							<Title title='Tổng hợp'></Title>
@@ -80,7 +82,7 @@ const HomePage = ({ filters, books }) => {
 	);
 }
 
-const BookFilter = ({ filters }) => {
+const BookFilter = ({ filters }: any) => {
 
 	const [formState, setFormState] = useRemember({
 		search: filters?.district || '',

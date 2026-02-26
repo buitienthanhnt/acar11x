@@ -21,18 +21,19 @@ final class AbookController extends Controller
 	}
 	public function index()
 	{
-		$books = Book::paginate(12);
-		// dd($books);
 		return Inertia::render('Abookglobal/Screens/HomePage', [
-			'books' => $books
+			'books' => fn() => Book::paginate(12),
 		]);
 	}
 
-	public function bookDetail(int $id)
+	/**
+	 * @param string $alias
+	 * @return \Inertia\Response
+	 */
+	public function bookDetail(string $alias)
 	{
 		// swipe image: https://react-slick.neostack.com/docs/example/custom-paging
-		$book = $this->bookRepository->getBookDetail($id);
-
+		$book = $this->bookRepository->getBookDetailByAlias($alias);
 		/**
 		 * get booked times
 		 */

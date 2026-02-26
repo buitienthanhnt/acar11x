@@ -1,7 +1,5 @@
 import { CurrencyDollarIcon, SparklesIcon } from "@heroicons/react/24/solid"
 import { Link } from "@inertiajs/react"
-import { sprintf } from "sprintf-js"
-import Urls from "../network/Urls"
 import { formatCurrency } from "@/Pages/Amuaglobal/Helper"
 
 const BookGridItem = ({ book, selectedDates }: { book: any, selectedDates?: any }) => {
@@ -10,7 +8,7 @@ const BookGridItem = ({ book, selectedDates }: { book: any, selectedDates?: any 
 		<Link className="shadow-sm md:shadow-md hover:shadow-lg rounded-md gap-x-1 md:gap-x-4 flex md:flex-col 
 			bg-gradient-to-r from-blue-gray-200 to-blue-gray-100 md:bg-transparent md:from-transparent md:to-transparent"
 			queryStringArrayFormat={'brackets'}
-			href={sprintf(Urls.bookDetail, [book.id])}
+			href={ book.url}
 			data={{ selectedDates: selectedDates }}>
 			<div >
 				<img src={book.image_path} alt="avata hotel" className="max-w-40 md:max-w-60 object-contain lg:max-w-full h-full md:min-h-48 lg:min-h-60 rounded-md md:rounded-t-md md:rounded-b-none" />
