@@ -24,6 +24,6 @@ final class BookRepository
 	 */
 	public function getBookDetailByAlias(string $alias)
 	{
-		return $this->book->with(['bookCate', 'attr', 'gallery', 'bookOrders'])->where('alias', $alias)->firstOrFail();
+		return $this->book->with(['bookCate', 'attr', 'gallery', 'bookOrders'])->where('alias', $alias)->first();
 	}
 }

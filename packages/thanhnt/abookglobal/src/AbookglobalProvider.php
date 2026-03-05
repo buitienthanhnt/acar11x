@@ -31,6 +31,7 @@ final class AbookglobalProvider extends ServiceProvider
 		Route::middleware([
 			...Route::getMiddlewareGroups()['web'],
 			\Thanhnt\Amuaglobal\Middleware\MergeInertiaConfig::class,
+			\Thanhnt\Amuaglobal\Middleware\PreventBackHistory::class, // for force browser cache page but it's not work with inertiaJs now.
 		])->group(function () {
 			$this->loadRoutesFrom(__DIR__ . '/routes/adminhtml.php');
 			$this->loadRoutesFrom(__DIR__ . '/routes/front.php');

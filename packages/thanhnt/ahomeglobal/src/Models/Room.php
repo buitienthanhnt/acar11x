@@ -17,6 +17,7 @@ use Thanhnt\Amuaglobal\Models\Types\AttrInterface;
 use Thanhnt\Ahomeglobal\Models\Types\OrderInterface;
 use Thanhnt\Ahomeglobal\Models\Types\OrderTimeInterface;
 use Thanhnt\Ahomeglobal\Models\Types\RoomInterface;
+use Thanhnt\Amuaglobal\Models\Attr;
 
 #[UseFactory(RoomFactory::class)] // define class attribute by using #(https://www.php.net/manual/en/language.attributes.overview.php)
 class Room extends Model implements RoomInterface

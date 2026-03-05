@@ -34,6 +34,9 @@ final class AbookController extends Controller
 	{
 		// swipe image: https://react-slick.neostack.com/docs/example/custom-paging
 		$book = $this->bookRepository->getBookDetailByAlias($alias);
+		if (!$book) {
+			return redirect()->back()->with('error', 'Không tìm thấy sách');
+		}
 		/**
 		 * get booked times
 		 */

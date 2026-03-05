@@ -8,7 +8,9 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Str;
 use Thanhnt\Abookglobal\Models\Types\BookInterface;
+use Thanhnt\Amuaglobal\Helper\StringHelper;
 use Thanhnt\Amuaglobal\Models\Attr;
 use Thanhnt\Amuaglobal\Models\Gallery;
 use Thanhnt\Amuaglobal\Models\Order;
@@ -59,7 +61,7 @@ final class Book extends Model implements BookInterface
 	protected function url(): Attribute
 	{
 		return new Attribute(
-			get: fn() =>  $this->{self::ALIAS} ? route('abook.detail', ['alias' => $this->{self::ALIAS}]) : '',
+			get: fn() => route('abook.detail', ['alias' => $this->{self::ALIAS} ?: Str::slug(StringHelper::vn_to_str($this->{self::NAME}, true))]),
 		);
 	}
 }
