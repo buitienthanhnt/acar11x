@@ -19,6 +19,8 @@ class Gallery  extends Model implements GalleryInterface
 	 */
 	protected $fillable = self::FILLED_FILEDS;
 
+    protected $table = self::TABLE_NAME;
+
 	/**
 	 * define for hidden field
 	 */
