@@ -17,7 +17,7 @@ type PaginateLink = {
   active: boolean;
 }
 
-export interface PagePaginate {
+export interface PaginateInterface {
   current_page: number;
   data: DataType[];
   from: number;
@@ -32,5 +32,3 @@ export interface PagePaginate {
   prev_page_url?: string;
   to?: number;
 }
-
-export interface PaginateInterface extends PagePaginate { };

@@ -1,11 +1,11 @@
 import { Head, Link } from '@inertiajs/react';
 import BodyLayout from '../Layouts/BodyLayout';
-import { Paginate } from '@/Pages/Amuaglobal/Components';
-import { sprintf } from 'sprintf-js';
-import Urls from '../network/Urls';
+import { PaginateInterface } from '@/Pages/Amuaglobal/types/Paginate';
 import { formatCurrency, } from "@/Pages/Amuaglobal/Helper";
+import { FunctionComponent } from 'react';
+import { Paginate } from '@/Pages/Amuaglobal/Components';
 
-const BookByCategory = ({ category, bookPaginate }) => {
+const BookByCategory = ({ category, bookPaginate }: {category: any, bookPaginate: PaginateInterface}) => {
 	return (
 		<BodyLayout>
 			<Head>
@@ -19,7 +19,7 @@ const BookByCategory = ({ category, bookPaginate }) => {
 	);
 }
 
-const CategoryInfo = ({ category }) => {
+const CategoryInfo: FunctionComponent<any> = ({ category }) => {
 	return (
 		<div className='flex gap-2 md:gap-4'>
 			<div>
@@ -33,14 +33,14 @@ const CategoryInfo = ({ category }) => {
 	)
 }
 
-const BookPaginate = ({ bookPaginate }) => {
+const BookPaginate: FunctionComponent<{bookPaginate: PaginateInterface}> = ({ bookPaginate }) => {
 
 	return (
 		<div>
 			<div className='p-1 md:p-0 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-1 md:gap-2'>
 				{bookPaginate.data.map((book) => {
 					return (
-						<Link href={sprintf(Urls.bookDetail, [book.id])}
+						<Link href={book.url}
 							className='grid grid-cols-2 md:grid-cols-1 bg-gray-100 space-y-1 gap-1 hover:border-1 hover:border-gray-400 hover:shadow-md rounded-md' key={book.id}>
 							<img src={book.image_path} alt="image" className='w-full h-auto md:h-60 rounded-t-md col-span-1 object-cover' />
 							<div className='space-y-1 col-span-1 p-1'>

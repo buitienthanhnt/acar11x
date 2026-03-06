@@ -1,9 +1,10 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from 'swiper/modules';
 import ImagePage from "./ImagePage";
+import { GalleryInterface } from '@/Pages/Amuaglobal/types/Gallery';
 
 type Props = {
-	images: { path: string }[],
+	images: { path: string }[] | GalleryInterface[],
 	className?: string,
 }
 // https://swiperjs.com/react
@@ -16,7 +17,7 @@ export default function SwiperImage({ className, images }: Props) {
 		},
 	};
 
-	if (!images) {
+	if (!images || images.length === 0) {
 		return null;
 	}
 

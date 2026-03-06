@@ -14,7 +14,8 @@ export type BookItemType = {
 
 export type BookDetailType = {
   attr: AttrInterface[];
-  bookCate?: BookCateInterface[];
+  book_cate?: BookCateInterface[];
   gallery?: GalleryInterface[];
+  qty: number;
   // bookOrders?: OrderInterface[];
 } & BookItemType

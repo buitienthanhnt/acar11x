@@ -7,11 +7,16 @@ import Urls from '../network/Urls';
 import BookCalenda from '../Components/BookCalenda';
 import { sprintf } from 'sprintf-js';
 import SwiperImage from '@/Components/Custom/SwiperImage';
-import { BookItemType } from '../Types/BookType';
+import { BookDetailType, BookItemType } from '../Types/BookType';
 import {usePageProps, useMode} from '@/Pages/Amuaglobal/hooks';
 import { formatCurrency, isDateInRange, listDateToArrayString, dateToServerString } from "@/Pages/Amuaglobal/Helper";
+import { GalleryInterface } from '@/Pages/Amuaglobal/types/Gallery';
 
-const BookDetail = ({ book, bookedTimes }) => {
+type Props = {
+  book: BookDetailType,
+  bookedTimes: Record<string, number>,
+}
+const BookDetail = ({ book, bookedTimes }: Props) => {
 	const { isDateRangeMode } = useMode();
 	const [dateSelected, setDateSelected] = useRemember<Date[]>([], 'abookglobal/bookDetail');
 
@@ -113,7 +118,7 @@ const BookRelated = () => {
 				{relatedBooks && <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-2' >
 					{relatedBooks.map(book => {
 						return (
-							<Link key={book.id} href={sprintf(Urls.bookDetail, [book.id])} className='flex-1 flex flex-col border border-gray-400 rounded-md space-y-1 justify-between'>
+							<Link key={book.id} href={book.url} className='flex-1 flex flex-col border border-gray-400 rounded-md space-y-1 justify-between'>
 								<img src={book.image_path} alt="image" className='w-full h-auto rounded-t-md object-contain' />
 								<div className='p-1 space-y-[2px]'>
 									<p className='font-semibold text-md '>{book.name}</p>
@@ -137,12 +142,12 @@ const BookRelated = () => {
 	)
 }
 
-const BookInfo = ({ book }) => {
+const BookInfo = ({ book }: {book: BookDetailType}) => {
 	return (
 		<div className='space-y-1 py-4'>
 			<div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-2 rounded-md gap-x-2'>
 				<div className='md:col-span-2 lg:col-span-1'>
-					<SwiperImage images={book.gallery}></SwiperImage>
+					<SwiperImage images={book.gallery as unknown as GalleryInterface[]}></SwiperImage>
 				</div>
 				<div className='flex flex-col gap-y-2 p-1 md:p-2 rounded-md col-span-1'>
 					<p className='text-lg md:text-3xl font-bold text-blue-gray-800'>Tác phẩm: {book.name}</p>
