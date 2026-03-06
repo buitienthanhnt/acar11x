@@ -118,7 +118,7 @@ const BookRelated = () => {
 				{relatedBooks && <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-2' >
 					{relatedBooks.map(book => {
 						return (
-							<Link key={book.id} href={book.url} className='flex-1 flex flex-col border border-gray-400 rounded-md space-y-1 justify-between'>
+							<Link key={book.id} href={book.url} prefetch={['hover']} cacheFor="5m" className='flex-1 flex flex-col border border-gray-400 rounded-md space-y-1 justify-between'>
 								<img src={book.image_path} alt="image" className='w-full h-auto rounded-t-md object-contain' />
 								<div className='p-1 space-y-[2px]'>
 									<p className='font-semibold text-md '>{book.name}</p>
