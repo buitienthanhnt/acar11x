@@ -1,0 +1,16 @@
+{
+    "name": "thanhnt/agameglobal",
+    "description": "packeage for demo game before use for react native",
+    "autoload": {
+        "psr-4": {
+            "Thanhnt\\Agameglobal\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "thanhnt",
+            "email": "buitienthanhnt@gmail.com"
+        }
+    ],
+    "require": {}
+}
