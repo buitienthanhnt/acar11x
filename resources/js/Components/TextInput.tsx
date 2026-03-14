@@ -4,7 +4,7 @@ export default forwardRef(function TextInput(
     { type = 'text', className = '', isFocused = false, ...props },
     ref,
 ) {
-    const localRef = useRef(null);
+    const localRef = useRef(null as unknown as HTMLInputElement);
 
     useImperativeHandle(ref, () => ({
         focus: () => localRef.current?.focus(),
@@ -22,7 +22,8 @@ export default forwardRef(function TextInput(
             type={type}
             className={
                 'rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 ' +
-                className
+                className +
+                (props.disabled ? ' bg-gray-100 cursor-not-allowed' : '')
             }
             ref={localRef}
         />

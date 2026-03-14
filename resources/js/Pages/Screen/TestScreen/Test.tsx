@@ -16,6 +16,10 @@ const Test = () => {
         Abook global
       </Link>
 
+       <Link href={'/agame'} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded">
+        agame global
+      </Link>
+
       <span className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded"
         onClick={toMergeScreen}>test merge prop
       </span>
