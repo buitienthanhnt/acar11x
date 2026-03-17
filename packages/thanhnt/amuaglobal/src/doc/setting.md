@@ -107,3 +107,5 @@ json
 		"editor.defaultFormatter": "vscode.css-language-features"
 	}
 }
+# ==============================================================================
+# fix when press tab key not work: Ctrl + Shift + p -> user setting -> remove: "editor.tabFocusMode": true,
