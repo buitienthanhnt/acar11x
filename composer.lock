@@ -10372,17 +10372,17 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "thanhnt/abookglobal": 20,
         "thanhnt/acarglobal": 20,
-        "thanhnt/agameglobal": 20,
         "thanhnt/ahomeglobal": 20,
-        "thanhnt/amuaglobal": 20
+        "thanhnt/amuaglobal": 20,
+        "thanhnt/abookglobal": 20,
+        "thanhnt/agameglobal": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
         "php": "^8.2"
     },
-    "platform-dev": {},
-    "plugin-api-version": "2.9.0"
+    "platform-dev": [],
+    "plugin-api-version": "2.6.0"
 }
