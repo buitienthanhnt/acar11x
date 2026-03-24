@@ -30,3 +30,5 @@
 
 
 # blob:https video: https://www.youtube.com/watch?v=WqBs_msUOXY
+
+# Sac dell m6800: https://www.google.com/search?q=dell+m6800+lag+when+charging&oq=dell+m6800+lag+when+chagre&aqs=chrome.1.69i57j33i10i160.17562j0j7&sourceid=chrome&ie=UTF-8
