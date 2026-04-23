@@ -31,6 +31,7 @@
         "@vis.gl/react-google-maps": "^1.7.1",
         "apexcharts": "^5.3.5",
         "lodash": "^4.17.23",
+        "lodash.debounce": "^4.0.8",
         "react-apexcharts": "^1.7.0",
         "react-calendar": "^6.0.0",
         "react-player": "^2.16.0",

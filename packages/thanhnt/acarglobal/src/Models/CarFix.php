@@ -7,21 +7,18 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Thanhnt\Acarglobal\Models\Types\CarFixInterface;
 use Thanhnt\Acarglobal\Models\Types\CarInterface;
 
-class Car extends Model implements CarInterface
+final class CarFix extends Model implements CarFixInterface
 {
 	use SoftDeletes;
 
 	protected $table = self::TABLE_NAME;
-
 	protected $fillable = self::FILLED_FIELDS;
-	protected $hidden = self::HIDDEN_FIELDS;
 
 	/**
-	 * link to car fix(has many car fix)
-	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
+	 * link to car info
 	 */
-	public function carFix(): \Illuminate\Database\Eloquent\Relations\HasMany
+	public function car(): \Illuminate\Database\Eloquent\Relations\BelongsTo
 	{
-		return $this->hasMany(CarFix::class, CarFixInterface::CAR_ID, CarInterface::ID);
+		return $this->belongsTo(Car::class, self::CAR_ID, CarInterface::ID);
 	}
 }

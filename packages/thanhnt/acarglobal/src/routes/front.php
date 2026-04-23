@@ -11,3 +11,13 @@ use Thanhnt\Acarglobal\Controllers\AcarController;
 // Route::get('acar', AcarController::class,);
 
 Route::get('add-car', [AcarController::class, 'addCar']);
+
+Route::prefix('acar')->group(function () {
+		Route::get('/', [AcarController::class, 'index']);
+
+		// Route::get('detail/{id}', [AcarController::class, 'detail']);
+
+		Route::get('xe-vao', [AcarController::class, 'import']);
+
+		Route::post('import-car', [AcarController::class, 'register']);
+});
