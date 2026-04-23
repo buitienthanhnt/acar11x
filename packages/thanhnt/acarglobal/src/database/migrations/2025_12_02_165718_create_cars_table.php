@@ -7,31 +7,34 @@ use Thanhnt\Acarglobal\Models\Types\CarInterface;
 
 return new class extends Migration
 {
-    /**
-     * Make migration: php artisan make:migration create_cars_table --path=packages/thanhnt/acarglobal/src/database/migrations
-     * Run the migrations.
-     */
-    public function up(): void
-    {
-        Schema::create(CarInterface::TABLE_NAME, function (Blueprint $table) {
-            $table->id();
-            $table->char('key');                // bien so
-            $table->char('suspension');         // hang xe
-            $table->char('type');               // dong xe
+	/**
+	 * Make migration: php artisan make:migration create_cars_table --path=packages/thanhnt/acarglobal/src/database/migrations
+	 * Run the migrations.
+	 */
+	public function up(): void
+	{
+		Schema::create(CarInterface::TABLE_NAME, function (Blueprint $table) {
+			$table->id();
+			$table->char(CarInterface::KEY);                            // bien so
+			$table->char(CarInterface::SUSPENSION)->nullable();         // hang xe
+			$table->char(CarInterface::TYPE)->nullable();               // dong xe
+			$table->bigInteger(CarInterface::KM)->nullable();
+			$table->dateTime(CarInterface::YEAR)->nullable(); //->useCurrent(); hien tai cho thoi gian
+			$table->char(CarInterface::VIN)->nullable();
+			$table->char(CarInterface::CUSTOMER)->nullable();
+			$table->char(CarInterface::PHONE)->nullable();
+			$table->char(CarInterface::ADDRESS)->nullable();
 
-            $table->bigInteger('km')->nullable();
-            $table->dateTime('year')->nullable();
-            $table->char('vin')->nullable();
-            $table->timestamps();
-            $table->softDeletes();
-        });
-    }
+			$table->timestamps();
+			$table->softDeletes();
+		});
+	}
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
-    {
-        Schema::dropIfExists(CarInterface::TABLE_NAME);
-    }
+	/**
+	 * Reverse the migrations.
+	 */
+	public function down(): void
+	{
+		Schema::dropIfExists(CarInterface::TABLE_NAME);
+	}
 };
