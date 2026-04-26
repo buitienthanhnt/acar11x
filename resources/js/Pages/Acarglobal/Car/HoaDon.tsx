@@ -1,12 +1,10 @@
-import { Button } from "@material-tailwind/react";
 import ContentLayout from "../Layout/ContentLayout";
 import { Head } from "@inertiajs/react";
 import { CarFix } from "../types/CarType";
-import { CarFixInfo } from "./CarFix";
 import { useCallback, useMemo, useState } from "react";
 import { formatPrice } from '@/Helper/StringHelper';
 
-export default function HoaDon({ car_fix }: any) {
+export default function HoaDon({ car_fix }: {car_fix: CarFix}) {
 
   const onPrint = useCallback(() => {
     window.print();
@@ -14,7 +12,8 @@ export default function HoaDon({ car_fix }: any) {
 
   return (
     <ContentLayout>
-      <Head title="báo giá"></Head>
+      <Head title={`báo giá ${car_fix.car.key}`}>
+      </Head>
       <div className="px-10 py-2 mx-auto bg-gray-300 flex flex-col min-w-full flex-1">
         <CompanyInfo></CompanyInfo>
         <p className="text-center text-xl font-bold uppercase my-1">báo giá sửa chữa</p>
@@ -51,9 +50,9 @@ const CompanyInfo = () => {
         </p>
         <b>MST:</b>
       </div>
-      <div className="flex flex-col justify-end">
+      <div className="flex flex-col justify-end items-end">
         {/* <p className="text-center text-xl font-semibold">Logo cong ty</p> */}
-        <i >Hà Nội, ngày &nbsp; &nbsp; &nbsp; &nbsp; tháng &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; năm</i>
+        <i >Hà Nội, ngày &nbsp; &nbsp; tháng &nbsp; &nbsp; &nbsp; &nbsp; năm &nbsp; &nbsp; &nbsp; &nbsp;</i>
       </div>
     </div>
   )

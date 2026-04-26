@@ -6,6 +6,7 @@ use Thanhnt\Acarglobal\Helper\FormData;
 use Thanhnt\Acarglobal\Models\Car;
 use Thanhnt\Acarglobal\Models\CarFix;
 use Thanhnt\Acarglobal\Models\Types\CarFixInterface;
+use Thanhnt\Acarglobal\Models\Types\CarInterface;
 use Thanhnt\Acarglobal\Request\ImportCarRequest;
 
 final class CarImport
@@ -32,7 +33,12 @@ final class CarImport
 	 */
 	public function registerCarinfo($requestInfo)
 	{
-		$newCar = Car::create($this->formData(Car::FORM_FIELDS, $requestInfo));
+		$newCar = Car::updateOrCreate(
+			[
+				CarInterface::KEY => $requestInfo[CarInterface::KEY],
+			],
+			$this->formData(Car::FORM_FIELDS, $requestInfo),
+		);
 		return $newCar;
 	}
 

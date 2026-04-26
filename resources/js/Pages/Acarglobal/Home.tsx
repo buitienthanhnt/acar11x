@@ -17,6 +17,11 @@ export default function Home() {
         }}>
           Xe vào
         </Button>
+        <Button variant="filled" onClick={() => {
+          router.visit('/acar/car-list');
+        }}>
+          Danh sách xe
+        </Button>
       </div>
       <WhenVisible data="car_fixs" fallback={null}>
         <CarfixList></CarfixList>
@@ -43,8 +48,8 @@ const CarfixList = ({ }: any) => {
 
   return (
     <div className="flex flex-col gap-1 mt-4">
-      <TextInputField placeholder="Nhập biển số" defaultValue={params.search} displayClass="justify-center w-fit!important" 
-      onChange={(e: any) => onSearch(e.target.value)}></TextInputField>
+      <TextInputField placeholder="Nhập biển số" defaultValue={params.search} displayClass="justify-center w-fit!important"
+        onChange={(e: any) => onSearch(e.target.value)}></TextInputField>
       <CarfixFilter></CarfixFilter>
       {!!car_fixs?.data.length ?
         car_fixs.data.map((car_fix: CarFix, index: number) => <CarfixItem key={index} {...car_fix}></CarfixItem>) :

@@ -15,6 +15,10 @@ export type Car = {
   // description: string
 }
 
+export type CarDetail = {
+  car_fix: CarFix[],
+} & Car;
+
 export type Activity = {
   id: number,
   car_id: number,

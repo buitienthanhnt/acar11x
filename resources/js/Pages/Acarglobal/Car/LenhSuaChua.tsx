@@ -13,10 +13,10 @@ export default function LenhSuaChua({ car_fix }: any) {
 
   return (
     <ContentLayout>
-      <Head title="lệnh sửa chữa"></Head>
+      <Head title={`lệnh sửa chữa ${car_fix.id}`}></Head>
       <div className="px-10 py-2 mx-auto bg-gray-300 flex flex-col min-w-full flex-1">
         <CompanyInfo></CompanyInfo>
-        <p className="text-center text-xl font-bold uppercase my-1">lệnh sửa chữa</p>
+        <p className="text-center text-xl font-bold uppercase my-1">lệnh sửa chữa(số: {car_fix.id})</p>
         <hr className="my-1" style={{
           backgroundColor: 'black',
           height: 2,

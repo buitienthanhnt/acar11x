@@ -33,6 +33,20 @@ final class AcarController extends Controller
 		]);
 	}
 
+	public function carList()
+	{
+		return Inertia::render('Acarglobal/Car/CarList', [
+			'cars' => Car::paginate(12),
+		]);
+	}
+
+	public function carHistory(string $key)
+	{
+		return Inertia::render('Acarglobal/Car/CarHistory', [
+			'car' => Car::where(CarInterface::KEY, $key)->with('carFix')->first(),
+		]);
+	}
+
 	/**
 	 * Khởi tạo hồ sơ thông tin xe vào
 	 */

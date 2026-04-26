@@ -19,6 +19,10 @@ Route::prefix('acar')->group(function () {
 
 	Route::get('xe-vao', [AcarController::class, 'import']);
 
+	Route::get('car-list', [AcarController::class, 'carList']);
+
+	Route::get('car-history/{key}', [AcarController::class, 'carHistory'])->name('car.history');
+
 	Route::post('import-car', [AcarController::class, 'register']);
 
 	Route::get('car_fix/{id}', [AcarController::class, 'carFixDetail'])->name('car.fix.detail');

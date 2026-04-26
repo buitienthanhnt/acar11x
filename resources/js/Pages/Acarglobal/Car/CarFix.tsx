@@ -1,10 +1,11 @@
-import React, { FunctionComponent, useMemo } from "react";
+import React, { FunctionComponent, useCallback, useMemo } from "react";
 import ContentLayout from "../Layout/ContentLayout";
 import { Activity, CarFix as CarFixType } from "../types/CarType";
 import { PlusCircleIcon, TrashIcon } from "@heroicons/react/24/solid";
 import TextInputField from "../components/form/TextInputField";
-import { Head, Link, useForm } from "@inertiajs/react";
+import { Head, Link, router, useForm } from "@inertiajs/react";
 import { formatPrice } from "@/Helper/StringHelper";
+import { Step, Stepper } from "@material-tailwind/react";
 
 const CarFix: FunctionComponent<{ carFix: CarFixType }> = ({ carFix }) => {
 
@@ -145,6 +146,65 @@ const ActivityList = ({ activities }: { activities: Activity[] }) => {
 }
 
 const CarFixStatus = ({ id, status }: CarFixType) => {
+
+  const changeProgress = useCallback(() => {
+    if (status === 'processing') {
+      return;
+    }
+    router.visit('/acar/update-status/' + id, {
+      method: 'put',
+      data: {
+        status: 'processing',
+      },
+      onBefore: () => confirm('Bạn có chắc chắn bắt đầu làm không?'),
+      preserveScroll: true,
+    })
+  }, [status])
+
+  const changeDone = useCallback(() => {
+    if (status === 'done') {
+      return;
+    }
+
+    router.visit('/acar/update-status/' + id, {
+      method: 'put',
+      data: {
+        status: 'done',
+      },
+      onBefore: () => confirm('Bạn có chắc chắn chuyển trạng thái hoàn thành không?'),
+      preserveScroll: true,
+    })
+  }, [status])
+
+  return (
+    <div className="mt-2 p-2 bg-gray-300 rounded-md">
+      <Stepper
+        lineClassName={'bg-gray-400'}
+        // activeLineClassName="bg-blue-600"
+        activeStep={status === 'processing' ? 1 : (status === 'done' ? 2 : 0)}
+      >
+        <Step
+          // activeClassName="bg-blue-600"
+          // completedClassName="bg-blue-600"
+          className="w-20 h-20 justify-center flex bg-gray-400"
+        >
+          <p className="text-sm text-center">{status === 'wait' ? 'đang chờ' : 'đã'} báo giá</p>
+        </Step>
+        <Step
+          // activeClassName="bg-blue-600"
+          // completedClassName="bg-blue-600"
+          className="w-20 h-20 justify-center flex bg-gray-400" onClick={changeProgress}>
+          <p className="text-sm text-center">{status === 'processing' ? 'đang' : ''} thực hiện</p>
+        </Step>
+        <Step
+          // activeClassName="bg-blue-600"
+          // completedClassName="bg-blue-600"
+          className="w-20 h-20 justify-center bg-gray-400" onClick={changeDone}>
+          <p className="text-sm text-center">{status === 'done' ? 'đã hoàn' : 'Hoàn'} thành</p>
+        </Step>
+      </Stepper>
+    </div>
+  )
 
   return (
     <div className="flex gap-2 justify-between">
