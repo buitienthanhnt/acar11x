@@ -19,7 +19,7 @@
     @inertiaHead
 </head>
 
-<body class="font-sans antialiased 
+<body class="font-sans antialiased  no-scrollbar overflow-auto
     {{-- bg-gradient-to-r from-blue-gray-300 to-blue-gray-400 md:from-blue-gray-500 md:to-blue-gray-700 --}}
     ">
     {{-- default app id is 'app' (<div id='app'></div>) --}}

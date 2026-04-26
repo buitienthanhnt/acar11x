@@ -1,3 +1,35 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer utilities {
+	.no-scrollbar::-webkit-scrollbar {
+		display: none;
+		/* Chrome, Safari and Opera */
+	}
+
+	.no-scrollbar {
+		-ms-overflow-style: none;
+		/* IE and Edge */
+		scrollbar-width: none;
+		/* Firefox */
+	}
+}
+
+@media print {
+	.no-print {
+		display: none;
+		/* Những phần có class này sẽ không hiện trong PDF */
+	}
+
+	body {
+		font-size: 12pt;
+		/* Sau đó thêm lề cho nội dung để văn bản không dính sát mép giấy */
+		padding-top: 32px;
+	}
+
+	@page {
+		/* Đặt lề bằng 0 để trình duyệt không có chỗ chèn tiêu đề/URL */
+		margin: 0;
+	}
+}

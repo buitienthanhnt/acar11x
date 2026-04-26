@@ -13,11 +13,23 @@ use Thanhnt\Acarglobal\Controllers\AcarController;
 Route::get('add-car', [AcarController::class, 'addCar']);
 
 Route::prefix('acar')->group(function () {
-		Route::get('/', [AcarController::class, 'index']);
+	Route::get('/', [AcarController::class, 'index']);
 
-		// Route::get('detail/{id}', [AcarController::class, 'detail']);
+	// Route::get('detail/{id}', [AcarController::class, 'detail']);
 
-		Route::get('xe-vao', [AcarController::class, 'import']);
+	Route::get('xe-vao', [AcarController::class, 'import']);
 
-		Route::post('import-car', [AcarController::class, 'register']);
+	Route::post('import-car', [AcarController::class, 'register']);
+
+	Route::get('car_fix/{id}', [AcarController::class, 'carFixDetail'])->name('car.fix.detail');
+
+	Route::post('add-activity', [AcarController::class, 'addActivity']);
+
+	Route::put('update-status/{id}', [AcarController::class, 'updateStatus']);
+
+	Route::delete('remove-activity/{id}', [AcarController::class, 'deleteActivity'])->name('activities.destroy');
+
+	Route::get('lenh-sua-chua/{car_fix}', [AcarController::class, 'xuatLenh']);
+
+	Route::get('hoa-don/{car_fix}', [AcarController::class, 'xuatHoaDon']);
 });

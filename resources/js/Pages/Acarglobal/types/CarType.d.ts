@@ -15,9 +15,27 @@ export type Car = {
   // description: string
 }
 
-export type CarFix = {
-  car_info: Car,
+export type Activity = {
+  id: number,
+  car_id: number,
+  car_fix_id: number,
   status: string,
+  title: string,
+  price: number,
+  qty: number,
+  note?: string,
+  product_id?: number,
+  created_at: string,
+  updated_at: string,
+  deleted_at: string,
+}
+
+export type CarFix = {
+  id: number,
+  car: Car,
+  activities: Activity[],
+  status: string,
+  status_label: string,
   created_at: string,
   updated_at: string,
   deleted_at: string,

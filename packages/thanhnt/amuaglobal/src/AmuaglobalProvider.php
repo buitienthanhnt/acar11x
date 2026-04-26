@@ -33,6 +33,7 @@ class AmuaglobalProvider extends ServiceProvider
 		Route::middleware([
 			...Route::getMiddlewareGroups()['web'],
 			\Thanhnt\Amuaglobal\Middleware\MergeInertiaConfig::class,
+			// \Thanhnt\Amuaglobal\Middleware\PreventBackHistory::class,
 		])->group(function () {
 			// Load views, routes, migrations, publish assets, etc.
 			$this->loadRoutesFrom(__DIR__ . '/routes/front.php');

@@ -3,7 +3,7 @@ import ContentLayout from "../Layout/ContentLayout"
 import FormRender from "../components/form/FormRender"
 import { FormField } from "../types/FormField"
 import TextInputField from "../components/form/TextInputField"
-import { useCallback, useEffect, useRef, useState } from "react"
+import { useCallback, useRef, } from "react"
 import debounce from 'lodash/debounce';
 import { Car } from "../types/CarType";
 import PrimaryButton from "@/Components/PrimaryButton"
@@ -63,7 +63,6 @@ const ImportCar = ({ form_fields, cars, selected }: Props) => {
   return (
     <>
       <Head title="xe vào"></Head>
-      <div>Xe vao: </div>
       <div className="container mx-auto p-2">
         <form className="px-2 py-8 grid grid-cols-2 space-x-2 justify-center relative bg-white shadow-md overflow-hidden sm:rounded-lg " onSubmit={onSubmit} autoComplete="true">
           <XMarkIcon className='size-9 absolute left-2 hover:rotate-12 hover:text-orange-800' onClick={() => {
@@ -72,13 +71,17 @@ const ImportCar = ({ form_fields, cars, selected }: Props) => {
               suspension: '',
               type: '',
               vin: '',
+              customer: '',
+              phone: '',
+              address: '',
             });
+
           }}></XMarkIcon>
           <div className="flex-1 space-y-2 sm:max-w-md md:max-w-2xl">
             <div >
               <div className="flex space-x-2 w-full items-center justify-between ">
-                <span className="font-semibold text-info text-md w-1/5">Biển số: </span>
-                <input type={"text"} placeholder="key" value={data.key} className={
+                <span className="font-semibold text-info text-md w-1/5 flex-1">Biển số: </span>
+                <input required type={"text"} placeholder="key" value={data.key} className={
                   'flex rounded-md bg-transparent border-gray-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 w-3/5 ' +
                   (processing ? ' bg-gray-100 cursor-not-allowed' : '')
                 }
@@ -100,27 +103,27 @@ const ImportCar = ({ form_fields, cars, selected }: Props) => {
 
             <TextInputField
               value={data.suspension}
-              label={'hãng xe(vd: Audi):'}
+              label={'hãng xe(vd: Audi)'}
               onChange={(e) => setData('suspension', e.target.value)}
               placeholder={'suspension'}
             />
 
             <TextInputField
               value={data.type}
-              label={'loại xe(vd: A4):'}
+              label={'loại xe(vd: A4)'}
               onChange={(e) => setData('type', e.target.value)}
               placeholder={'type'}
             />
 
             <TextInputField
               value={data.vin}
-              label={'mã VIN:'}
+              label={'mã VIN'}
               onChange={(e) => setData('vin', e.target.value)}
               placeholder={'vin'}
             />
             <div>
-              <PrimaryButton className="w-full content-center text-center justify-center mt-6" disabled={processing}>
-                Gui di
+              <PrimaryButton className="w-full content-center text-center justify-center mt-6" disabled={processing || !data.key}>
+                Tiếp tục
               </PrimaryButton>
             </div>
           </div>

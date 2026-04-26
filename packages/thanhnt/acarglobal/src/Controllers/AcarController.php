@@ -3,11 +3,14 @@
 namespace Thanhnt\Acarglobal\Controllers;
 
 use App\Http\Controllers\Controller;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Thanhnt\Acarglobal\Actions\ActivityAction;
 use Thanhnt\Acarglobal\Actions\CarImport;
 use Thanhnt\Acarglobal\Models\Car;
+use Thanhnt\Acarglobal\Models\Repository\CarFixRepository;
+use Thanhnt\Acarglobal\Models\Types\ActivityInterface;
+use Thanhnt\Acarglobal\Models\Types\CarFixInterface;
 use Thanhnt\Acarglobal\Models\Types\CarInterface;
 use Thanhnt\Acarglobal\Request\ImportCarRequest;
 
@@ -15,16 +18,24 @@ final class AcarController extends Controller
 {
 
 	public function __construct(
-		protected CarImport $carImport
+		protected CarImport $carImport,
+		protected CarFixRepository $carFixRepository,
+		protected ActivityAction $activityAction,
 	) {
 		// throw new \Exception('Not implemented');
 	}
 
 	function index()
 	{
-		return Inertia::render('Acarglobal/Home');
+		return Inertia::render('Acarglobal/Home', [
+			'car_fixs' => Inertia::optional(fn() => $this->carFixRepository->all()),
+			// 'car_fixs' => $this->carFixRepository->all(),
+		]);
 	}
 
+	/**
+	 * Khởi tạo hồ sơ thông tin xe vào
+	 */
 	public function import(Request $request)
 	{
 		$selected = null;
@@ -33,7 +44,7 @@ final class AcarController extends Controller
 				[CarInterface::KEY, CarInterface::VIN, CarInterface::YEAR, CarInterface::SUSPENSION, CarInterface::TYPE],
 				'LIKE',
 				"%" . $request->get('search') . "%"
-			)->get();
+			)->get()->unique(CarInterface::KEY);
 		}
 
 		if ($request->get('selected')) {
@@ -54,30 +65,83 @@ final class AcarController extends Controller
 		]);
 	}
 
+	/**
+	 * Khởi tạo hồ sơ thông tin xe vào
+	 */
 	public function register(ImportCarRequest $request)
 	{
 		/**
 		 * @var \Thanhnt\Acarglobal\Models\CarFix $carFix
 		 */
 		$carFix = $this->carImport->execute($request);
-		
+		return redirect()->route('car.fix.detail', ['id' => $carFix->{CarFixInterface::ID}]);
+
 		return Inertia::render('Acarglobal/Car/CarFix', [
-			'carFix' => $carFix->query()->with('car')->first(),
+			'carFix' => $this->carFixRepository->carFixDetail($carFix->{CarFixInterface::ID}),
 		]);
 	}
 
-	public function addCar()
+	/**
+	 * Chi tiết hồ sơ thông tin xe và báo giá
+	 */
+	public function carFixDetail(int $id)
 	{
-		Car::insert([
-			CarInterface::KEY => '30k-33333',
-			CarInterface::SUSPENSION => 'kia',
-			CarInterface::TYPE => 'morning',
-			CarInterface::KM => 12000,
-			CarInterface::YEAR => Carbon::create(2020),
-			CarInterface::VIN => 'klasnbdjbuabsdipp',
+		/**
+		 * @var \Thanhnt\Acarglobal\Models\CarFix $carFix
+		 */
+		return Inertia::render('Acarglobal/Car/CarFix', [
+			'carFix' => $this->carFixRepository->carFixDetail($id),
 		]);
+	}
 
-		return Car::all();
+	/**
+	 * Thêm nội dung công việc bao gồm khai báo chi phí
+	 */
+	public function addActivity(Request $request)
+	{
+		$carFixId = $request->get(ActivityInterface::CAR_FIX_ID);
+
+		$this->activityAction->onAddActivity($request->all());
+		return redirect()->route('car.fix.detail', ['id' => $carFixId]);
+	}
+
+
+
+	public function updateStatus($id, Request $request): \Illuminate\Http\RedirectResponse
+	{
+		/**
+		 * update status of carFix
+		 */
+		$this->carFixRepository->updateStatus($id, $request->get(ActivityInterface::STATUS));
+		/**
+		 * redirect to previous page
+		 * luu tru url truoc khi chuyen trang
+		 */
+		return redirect()->to(url()->previous())->setStatusCode(303);
+	}
+
+	public function deleteActivity(int $id)
+	{
+		$act = $this->activityAction->removeActivity($id);
+		return redirect()->to(url()->previous())->setStatusCode(303);
+		// return redirect()->route('car.fix.detail', ['id' => $car_fix])->setStatusCode(303);
+	}
+
+	public function xuatLenh(int $car_fix)
+	{
+		$car_fix = $this->carFixRepository->carFixDetail($car_fix);
+		return Inertia::render("Acarglobal/Car/LenhSuaChua", [
+			'car_fix' => $car_fix,
+		]);
+	}
+
+	// xuatHoaDon
+	public function xuatHoaDon(int $car_fix)
+	{
+		$car_fix = $this->carFixRepository->carFixDetail($car_fix);
+		return Inertia::render("Acarglobal/Car/HoaDon", [
+			'car_fix' => $car_fix,
+		]);
 	}
 
 

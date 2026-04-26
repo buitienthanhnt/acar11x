@@ -17,6 +17,15 @@ class PreventBackHistory
 	 */
 	public function handle(Request $request, Closure $next): Response
 	{
+		 $response = $next($request);
+
+    // Ép trình duyệt không được lưu cache trang này
+    $response->headers->set('Cache-Control', 'no-cache, no-store, max-age=0, must-revalidate');
+    $response->headers->set('Pragma', 'no-cache');
+
+		// dd(123);
+    return $response;
+
 		return $next($request);
 		// return $response->header('Cache-Control', 'no-cache, no-store, max-age=0, must-revalidate')
 		// 	->header('Pragma', 'no-cache')
