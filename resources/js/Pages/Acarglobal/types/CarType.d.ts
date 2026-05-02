@@ -39,8 +39,10 @@ export type CarFix = {
   car: Car,
   activities: Activity[],
   status: string,
+  vat: number,
   status_label: string,
   created_at: string,
   updated_at: string,
   deleted_at: string,
+  km?: number,
 }

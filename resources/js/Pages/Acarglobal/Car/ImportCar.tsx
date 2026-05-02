@@ -53,7 +53,7 @@ const ImportCar = ({ form_fields, cars, selected }: Props) => {
   );
 
   const onSelectCar = (car: Car) => {
-    console.log(car, inputRef.current);
+    // console.log(car, inputRef.current);
 
     if (inputRef.current) {
       inputRef.current.value = car.key
@@ -74,6 +74,7 @@ const ImportCar = ({ form_fields, cars, selected }: Props) => {
               customer: '',
               phone: '',
               address: '',
+              km: 0,
             });
 
           }}></XMarkIcon>
@@ -103,24 +104,34 @@ const ImportCar = ({ form_fields, cars, selected }: Props) => {
 
             <TextInputField
               value={data.suspension}
-              label={'hãng xe(vd: Audi)'}
+              label={'Hãng xe(vd: Audi)'}
               onChange={(e) => setData('suspension', e.target.value)}
               placeholder={'suspension'}
             />
 
             <TextInputField
               value={data.type}
-              label={'loại xe(vd: A4)'}
+              label={'Loại xe(vd: A4)'}
               onChange={(e) => setData('type', e.target.value)}
               placeholder={'type'}
             />
 
             <TextInputField
               value={data.vin}
-              label={'mã VIN'}
+              label={'Mã VIN'}
               onChange={(e) => setData('vin', e.target.value)}
               placeholder={'vin'}
             />
+
+            <TextInputField
+              value={data.vin}
+              label={'Số km hiện tại'}
+              onChange={(e) => setData('km', e.target.value)}
+              placeholder={'km'}
+              type={'number'}
+              min={0}
+            />
+
             <div>
               <PrimaryButton className="w-full content-center text-center justify-center mt-6" disabled={processing || !data.key}>
                 Tiếp tục
@@ -130,21 +141,21 @@ const ImportCar = ({ form_fields, cars, selected }: Props) => {
           <div className="flex flex-col flex-1 space-y-2 items-end justify-end">
             <TextInputField
               value={data.customer}
-              label={'khách hàng'}
+              label={'Khách hàng'}
               onChange={(e) => setData('customer', e.target.value)}
               placeholder={'customer'}
             />
 
             <TextInputField
               value={data.phone}
-              label={'sđt'}
+              label={'SĐT'}
               onChange={(e) => setData('phone', e.target.value)}
               placeholder={'phone'}
             />
 
             <TextInputField
               value={data.address}
-              label={'địa chỉ'}
+              label={'Địa chỉ'}
               onChange={(e) => setData('address', e.target.value)}
               placeholder={'address'}
             />

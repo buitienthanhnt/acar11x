@@ -9,7 +9,7 @@ interface CarInterface
 	const KEY = 'key'; // mã xe(biển số)
 	const SUSPENSION = 'suspension'; // hãng xe
 	const TYPE = 'type'; // dòng xe
-	const KM = 'km'; // số km đã đi
+	// const KM = 'km'; // số km đã đi
 	const YEAR = 'year'; // năm sản xuất
 	const VIN = 'vin'; // mã VIN
 
@@ -21,7 +21,7 @@ interface CarInterface
 		self::KEY,
 		self::SUSPENSION,
 		self::TYPE,
-		self::KM,
+		// self::KM,
 		self::YEAR,
 		self::VIN,
 		self::CUSTOMER,

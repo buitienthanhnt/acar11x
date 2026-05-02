@@ -5,6 +5,7 @@ import { Paginate } from "../Amuaglobal/Components";
 import TextInputField from "./components/form/TextInputField";
 import { useCallback, } from "react";
 import { debounce } from "lodash";
+import { Cog6ToothIcon, } from "@heroicons/react/24/solid";
 
 export default function Home() {
 
@@ -24,6 +25,9 @@ export default function Home() {
         </Button>
       </div>
       <CarfixList></CarfixList>
+      <Link href={'/acar/setting'} className="absolute left-10 bottom-10">
+        <Cog6ToothIcon className="size-10 text-gray-600 hover:text-gray-900"></Cog6ToothIcon>
+      </Link>
     </div>
   )
 }
@@ -56,7 +60,6 @@ const CarfixList = ({ }: any) => {
         }
         {car_fixs && <Paginate pageSize={car_fixs.last_page} currentPage={car_fixs.current_page}></Paginate>}
       </WhenVisible>
-
     </div>
   )
 }

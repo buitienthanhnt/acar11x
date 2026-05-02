@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Thanhnt\Acarglobal\Actions\ActivityAction;
 use Thanhnt\Acarglobal\Actions\CarImport;
+use Thanhnt\Acarglobal\Models\AcarConfig;
 use Thanhnt\Acarglobal\Models\Car;
 use Thanhnt\Acarglobal\Models\Repository\CarFixRepository;
 use Thanhnt\Acarglobal\Models\Types\ActivityInterface;
@@ -30,6 +31,12 @@ final class AcarController extends Controller
 		return Inertia::render('Acarglobal/Home', [
 			'car_fixs' => Inertia::optional(fn() => $this->carFixRepository->all()),
 			// 'car_fixs' => $this->carFixRepository->all(),
+		]);
+	}
+
+	public function setting() {
+		return Inertia::render('Acarglobal/Setting', [
+			'configs' => AcarConfig::all(),
 		]);
 	}
 

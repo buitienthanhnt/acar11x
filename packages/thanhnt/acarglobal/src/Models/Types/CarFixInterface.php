@@ -21,6 +21,8 @@ interface CarFixInterface
 	const CUSTOMER = 'customer';
 	const PHONE = 'phone';
 	const ADDRESS = 'address';
+	const VAT = 'vat';
+	const KM = 'km';
 
 	const FILLED_FIELDS = [
 		self::STATUS,
@@ -28,5 +30,6 @@ interface CarFixInterface
 		self::CUSTOMER,
 		self::PHONE,
 		self::ADDRESS,
+		self::KM,
 	];
 }

@@ -1,6 +1,7 @@
 import { HomeIcon } from "@heroicons/react/24/solid";
 import { Link } from "@inertiajs/react";
 
+
 export default function ContentLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex flex-col flex-1 min-h-screen w-full">
