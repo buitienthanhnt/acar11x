@@ -1,0 +1,114 @@
+<?php
+PHP 7: Một số điều bạn cần biết
+Bài đăng này đã không được cập nhật trong 4 năm
+
+Bạn là một web developer hay là chủ sở hữu một trang web? Website của bạn đang chạy trên các PHP CMS như WordPress, Drupal, Joomla hay Magento? Các tính năng hoàn thiện trên bản PHP 7 hoàn toàn mới đã được phát hành gần đây. Phiên bản 7.0.0 có rất nhiều tính năng hấp dẫn.
+
+Phiên bản ổn định hiện nay sử dụng số phiên bản là PHP5.6. Sau một số tranh chấp, nhóm phát triển quyết định, họ sẽ bỏ qua tên PHP 6 cho phiên bản tiếp theo. PHP 6 thực sự tồn tại trong quá khứ chỉ là một dự án thử nghiệm, nhưng không bao giờ đạt đến giai đoạn sản xuất.
+
+Để tránh người dùng nhầm lẫn giữa các bản thử nghiệm trước đây với phiên bản phát triển mới nhất, bản phát hành chính thức mới sẽ chạy theo tên gọi PHP7.
+
+Đi kèm một cỗ máy đáng gờm mới: PHPNG
+
+Zend engine bắt đầu hỗ trợ PHP từ 1999 khi nó được gới thiệu cùng với bản PHP 4 mới lúc đó. Zend – không nhầm lẫn với Zend Framework – là một engine thông dịch PHP, mã nguồn mở viết bằng ngôn ngữ C. Các phiên bản PHP5.X sử dụng Zend Engine II, được tăng cường chức năng so với phiên bản đầu tiên, được bổ sung thêm mô hình đối tượng mở rộng và cải thiện đáng kể hiệu năng của ngôn ngữ.
+
+PHP 7 nhận được một nhãn hiệu mới cho phiên bản engine tiếp theo, dưới tên mã PHP#NG (PHP Next Generation)
+
+Tốc độ gấp đôi
+
+Ưu điểm dễ nhận biết nhất của engine PHPNG mới là sự cải thiện hiệu suất đáng kể. Đội ngũ phát triển của PHPNG tái cơ cấu Zend Engine, sử dụng bộ nhớ tối ưu hóa đáng kể và thêm vào kỹ thuật just-in-time (JIT) cho phép việc biên dịch diễn ra khi cần chạy đoạn code đó chứ không phải biên dịch toàn bộ mã nguồn trước khi thực hiện.
+
+Kết quả ư? Bạn có thể thấy hiệu năng benchmarks cung cấp bởi Zend Performance Team ở bên dưới. Khi sử dụng PHP7, không chỉ code của bạn sẽ thực thi nhanh hơn mà còn tốn ít tài nguyên hơn để phục vụ cùng một số lượng người dùng.
+
+wp-php7-performance.jpg
+
+frameworks-php7-performance.jpg
+
+Xử lý lỗi thuận tiện hơn
+
+Rõ ràng, điều khiển và “bắt” lỗi chưa bao giờ dễ dàng đối với coder PHP. Các Engine Exception – xử lý ngoại lệ – mới sẽ cho phép bạn thay thế những lỗi kiểu này với các trường hợp ngoại lệ. Nếu ngoại lệ không phù hợp, PHP sẽ tiếp tục trả về cùng mã lỗi fatal erros như các phiên bản 5.X.
+
+Các đối tượng \EngineException không kế thừa từ lớp cơ bản \Exception. Điều này đảm bảo tính tương thích ngược và kết quả trong hai kiểu xử lý lỗi ngoại lệ: kiểu truyền thống (5.X) và engine exceptions (7.X).
+
+Để khuyến khích lập trình viên dùng cả 2, PHP 7 giới thiệu một lớp chia sẻ cha dưới cái tên \BaseException.
+
+try {
+    call_method(null); // oops!
+} catch (EngineException $e) {
+    echo "Exception: {$e->getMessage()}\n";
+}
+
+Hỗ trợ hệ thống Windows 64-Bit
+
+PHP là một thành viên của LAMP Stack, do đó đương nhiên nó ưu tiên môi trường Linux – Nhưng không có nghĩa là không thể chạy trên Windows. Các phiên bản 5.x chưa hỗ trợ số nguyên 64-bit hay file dung lượng lớn, cho đến tận bây giờ, các bản build x64 cũng chỉ được xem là thử nghiệm.
+
+PHP 7 thay đổi điều này, giới thiệu hỗ trợ 64-bit, có nghĩa là cả số số nguyên 64-bit và các file dung lượng siêu lớn sẽ được hỗ trợ, cho phép bạn tự tin chạy ngôn ngữ này trên hệ thống Windows 64-bit trong tương lai.
+
+Giới thiệu hai toán tử mới So Sánh Kết Hợp và Hợp nhất rỗng
+
+Ký hiệu của toán tử So Sánh Kết Hợp trông như thế này: <=>
+
+Toán tử So Sánh Kết Hợp trả về 0 nếu hai vế bằng nhau, 1 nếu vế trái lớn hơn, và -1 nếu về phải lớn hơn. Nó cũng được gọi là Toán Tử So Sánh Ba Trạng Thái, toán tử này đã xuất hiện từ lâu trong các ngôn ngữ phổ biến như Perl hay Ruby.
+
+spaceship-operator.jpg
+
+Toán tử “Hợp nhất rỗng” được ký hiệu với hai dấu hỏi ( ?? ). Bạn có thể sử dụng nó khi bạn muốn kiểm tra thứ gì đó có tồn tại thì trả về giá trị chính nó, không thì trả về giá trị mặc định.
+
+Dưới đây mô tả toán tử mới giảm giúp bạn tiết kiệm thời gian như thế nào:
+
+// Cách hiện nay khi lấy tên người dùng từ HTTP/form request
+if (isset($_GET['username']) {
+    $username = $_GET['username'];
+} else {
+    $username = "Nobody";
+}
+// Cách sử dụng toán tử "Hợp nhất rỗng" trong PHP 7
+$username = $_GET['username'] ?? 'Nobody';
+
+
+Cho phép khai báo chính xác kiểu dữ liệu trả về
+
+Có bao giờ bạn muốn tránh dữ liệu trả về không mong muốn bằng cách khai báo kiểu dữ liệu của hàm? Tuyệt vời, PHP 7 cho phép lập trình viên tăng cường chất lượng code của họ với việc khai báo kiểu dữ liệu trả về.
+
+Đoạn code bên dới mô tả đơn giản trường hợp khai báo chính xác dữ liệu mong muốn trả về của hàm foo() là mảng. Xem thêm nhiều ví dụ phức tạp ở đây.
+
+function foo():array {
+    return [];
+}
+
+Để tăng cường tính năng này hơn nữa, PHP 7 giới thiệu 4 kiểu khai báo cho các kiểu vô hướng: int, float, string, và bool. Các kiểu dữ liệu vô hướng cho phép lập trình viên biểu thị rằng họ mong đợi dữ liệu trả về là integer, float, string hay boolean. Các kiểu dữ liệu vô hướng mới giới thiệu trong PHP 7 cũng sẽ hỗ trợ trong khai báo kiểu dữ liệu cho tham số đầu vào, cho phép lập trình viên ràng buộc kiểu dữ liệu của tham số hàm từ những phiên bản 5.X.
+
+Thêm vào các lớp ẩn danh
+
+PHP 7 cho phép bạn sử dụng các lớp ẩn danh – anonymous classes, đã sớm có mặt trong các ngôn ngữ hướng đối tượng khác như C# hay Java. Một lớp ẩn danh là một class không có tên. Các thực thể của lớp đối tượng này vẫn có đầy đủ chức năng/tính năng như một thực thể của các lớp có tên.
+
+Cú pháp tương tự như sử dụng lớp PHP truyền thống, chỉ thiếu khai báo tên. Nếu sử dụng tốt các lớp ẩn danh, chúng có thể giúp tăng tốc coding cũng như thời gian thực thi. Các lớp ẩn danh rất hợp lý khi cần dùng một class chỉ một lần duy nhất trong thời gian thực thi, hoặc trong trường hợp class không cần phải có tài liệu mô tả.
+
+var_dump(new class($i){
+    public function __construct($i) {
+        $this->i = $i;
+    }
+})
+
+Thuận tiện khi import từ các Namespace tương tự nhau.
+
+Tính năng “Khai Báo Nhóm Sử Dụng” mới sẽ là một món quà quí giá cho bạn, người muốn import nhiều lớp có namespace tương tự nhau. Cú pháp mới cắt giảm bớt rườm rà, làm cho code của bạn gọn gàng và dễ nhìn hơn, cũng như tiết kiệm thời gian gõ phím hơn.
+
+Điều này cũng giúp code trở nên dễ đọc và debug hơn, “khai báo sử dụng nhóm”giúp bạn nhanh chóng nhận diện được các thành phần import trong cùng module.
+
+// Cú pháp PHP 7
+use FooLibrary\Bar\Baz\{ClassA, ClassB, ClassC, ClassD as Fizbo}
+
+// Cú pháp hiện nay
+use FooLibrary\Bar\Baz\ClassA;
+use FooLibrary\Bar\Baz\ClassB;
+use FooLibrary\Bar\Baz\ClassC;
+use FooLibrary\Bar\Baz\ClassD as Fizbo;
+
+Dọn dẹp bộ nhớ
+
+Mục tiêu của PHP 7 là giải phóng thật nhiều bộ nhớ để cải thiện hiệu năng, do đó cần thiết phải loại bỏ những chức năng cũ, không còn phù hợp trên các hệ thống API Server hay extension hiện nay.
+
+Tất cả các mục bị gỡ bỏ đều là các chức năng đã bị dừng và ngưng hỗ trợ từ PHP 5, do đó có thể lâu lắm rồi bạn cũng không động tới chúng. Tuy nhiên xin lưu ý, nếu bạn có một ứng dụng, là di sản để lại từ các phiên bản PHP cũ hơn, PHP 7 có khả năng sẽ không hoạt động.
+
+Tham khảo:http://webfaver.com/
