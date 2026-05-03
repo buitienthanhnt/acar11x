@@ -5,14 +5,14 @@ import { CarFix } from "../types/CarType";
 import { CarFixInfo } from "./CarFix";
 import { useCallback } from "react";
 
-export default function LenhSuaChua({ car_fix }: any) {
+function LenhSuaChua({ car_fix }: any) {
 
   const onPrint = useCallback(() => {
     window.print();
   }, [])
 
   return (
-    <ContentLayout>
+    <>
       <Head title={`lệnh sửa chữa ${car_fix.id}`}></Head>
       <div className="px-10 py-2 mx-auto bg-gray-300 flex flex-col min-w-full flex-1">
         <CompanyInfo></CompanyInfo>
@@ -34,10 +34,13 @@ export default function LenhSuaChua({ car_fix }: any) {
           onClick={onPrint}>
           In lệnh
         </div>
-      </div>
-    </ContentLayout>
+      </div></>
   )
 }
+
+LenhSuaChua.layout = (page: React.ReactNode) => <ContentLayout children={page}></ContentLayout>
+
+export default LenhSuaChua;
 
 const CompanyInfo = () => {
   return (
@@ -138,8 +141,8 @@ const CarInfo = ({ car, status_label }: CarFix) => {
   )
 }
 
-const Signature = ()=>{
-  return(
+const Signature = () => {
+  return (
     <div className="grid grid-cols-2 mt-4">
       <div className="font-semibold text-center uppercase">Phụ trách kỹ thuật</div>
       <div className="font-semibold text-center uppercase">Trưởng phòng dịch vụ</div>

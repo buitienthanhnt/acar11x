@@ -5,6 +5,7 @@ import { Paginate } from "../Amuaglobal/Components";
 import TextInputField from "./components/form/TextInputField";
 import { useCallback, } from "react";
 import { debounce } from "lodash";
+import { Cog6ToothIcon, } from "@heroicons/react/24/solid";
 
 export default function Home() {
 
@@ -23,9 +24,10 @@ export default function Home() {
           Danh sách xe
         </Button>
       </div>
-      <WhenVisible data="car_fixs" fallback={null}>
-        <CarfixList></CarfixList>
-      </WhenVisible>
+      <CarfixList></CarfixList>
+      <Link href={'/acar/setting'} className="absolute left-10 bottom-10">
+        <Cog6ToothIcon className="size-10 text-gray-600 hover:text-gray-900"></Cog6ToothIcon>
+      </Link>
     </div>
   )
 }
@@ -51,11 +53,13 @@ const CarfixList = ({ }: any) => {
       <TextInputField placeholder="Nhập biển số" defaultValue={params.search} displayClass="justify-center w-fit!important"
         onChange={(e: any) => onSearch(e.target.value)}></TextInputField>
       <CarfixFilter></CarfixFilter>
-      {!!car_fixs?.data.length ?
-        car_fixs.data.map((car_fix: CarFix, index: number) => <CarfixItem key={index} {...car_fix}></CarfixItem>) :
-        <div className="text-gray-700 flex justify-center font-semibold text-lg p-4">!không có thông tin tìm kiếm</div>
-      }
-      {car_fixs && <Paginate pageSize={car_fixs.last_page} currentPage={car_fixs.current_page}></Paginate>}
+      <WhenVisible data="car_fixs" fallback={null}>
+        {!!car_fixs?.data.length ?
+          car_fixs.data.map((car_fix: CarFix, index: number) => <CarfixItem key={index} {...car_fix}></CarfixItem>) :
+          <div className="text-gray-700 flex justify-center font-semibold text-lg p-4">!không có thông tin tìm kiếm</div>
+        }
+        {car_fixs && <Paginate pageSize={car_fixs.last_page} currentPage={car_fixs.current_page}></Paginate>}
+      </WhenVisible>
     </div>
   )
 }

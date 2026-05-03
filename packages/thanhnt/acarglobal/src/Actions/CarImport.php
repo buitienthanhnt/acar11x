@@ -20,10 +20,11 @@ final class CarImport
 		 * Register car info
 		 */
 		$carInfo = $this->registerCarinfo($request->all());
+
 		/**
 		 * Register car fix
 		 */
-		return $this->registerCarFix($carInfo);
+		return $this->registerCarFix($carInfo, $request->all());
 	}
 
 	/**
@@ -46,13 +47,15 @@ final class CarImport
 	 * Register car fix
 	 * @param ImportCarRequest $request
 	 * @param \Thanhnt\Acarglobal\Models\Car $carInfo
+	 * @param array $requestInfo
 	 * @return \Thanhnt\Acarglobal\Models\CarFix
 	 */
-	public function registerCarFix($carInfo)
+	public function registerCarFix($carInfo, array $requestInfo)
 	{
 		$carFix = CarFix::create([
 			CarFixInterface::STATUS => CarFixInterface::STATUS_WAIT,
 			CarFixInterface::CAR_ID => $carInfo->id,
+			CarFixInterface::KM => $requestInfo[CarFixInterface::KM],
 		]);
 		return $carFix;
 	}

@@ -28,7 +28,7 @@ CarFix.layout = (page: React.ReactNode) => <ContentLayout children={page} />
 
 export default CarFix;
 
-export const CarFixInfo = ({ car, status, status_label }: CarFixType) => {
+export const CarFixInfo = ({ car, status, status_label, km }: CarFixType) => {
   return (
     <div className="flex bg-gray-300 p-2 rounded-md">
       <div className="flex flex-col flex-1">
@@ -41,8 +41,9 @@ export const CarFixInfo = ({ car, status, status_label }: CarFixType) => {
         <b>Thông tin xe:</b>
         <b>Biển số: {car.key}</b>
         <b>Loại: {car.suspension}-{car.type}</b>
-        <b>VIN: {car.vin}</b>
-        <b className="text-purple-700">Trạng thái: {status_label}</b>
+        {car.vin && <b>VIN: {car.vin}</b>}
+        <b>Số Km đã đi: {km} (km)</b>
+        {/* <b className="text-purple-700">Trạng thái: {status_label}</b> */}
       </div>
     </div>
   )
@@ -188,19 +189,19 @@ const CarFixStatus = ({ id, status }: CarFixType) => {
           // completedClassName="bg-blue-600"
           className="w-20 h-20 justify-center flex bg-gray-400"
         >
-          <p className="text-sm text-center">{status === 'wait' ? 'đang chờ' : 'đã'} báo giá</p>
+          <p className="text-sm text-center">{status === 'wait' ? 'Đang chờ' : 'Đã'} báo giá</p>
         </Step>
         <Step
           // activeClassName="bg-blue-600"
           // completedClassName="bg-blue-600"
           className="w-20 h-20 justify-center flex bg-gray-400" onClick={changeProgress}>
-          <p className="text-sm text-center">{status === 'processing' ? 'đang' : ''} thực hiện</p>
+          <p className="text-sm text-center">{status === 'processing' ? 'Đang thực hiện' : 'Thực hiện'}</p>
         </Step>
         <Step
           // activeClassName="bg-blue-600"
           // completedClassName="bg-blue-600"
           className="w-20 h-20 justify-center bg-gray-400" onClick={changeDone}>
-          <p className="text-sm text-center">{status === 'done' ? 'đã hoàn' : 'Hoàn'} thành</p>
+          <p className="text-sm text-center">{status === 'done' ? 'Đã hoàn' : 'Hoàn'} thành</p>
         </Step>
       </Stepper>
     </div>

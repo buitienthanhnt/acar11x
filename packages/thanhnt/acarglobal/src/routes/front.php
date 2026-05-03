@@ -15,7 +15,7 @@ Route::get('add-car', [AcarController::class, 'addCar']);
 Route::prefix('acar')->group(function () {
 	Route::get('/', [AcarController::class, 'index']);
 
-	// Route::get('detail/{id}', [AcarController::class, 'detail']);
+	Route::get('setting', [AcarController::class, 'setting']);
 
 	Route::get('xe-vao', [AcarController::class, 'import']);
 
