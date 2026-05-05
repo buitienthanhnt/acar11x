@@ -24,7 +24,7 @@ Route::prefix('ahome')->group(function () {
 
 	Route::get('location/{location}', [AhomeController::class, 'homeLocation']);
 
-	Route::post('login', [AuthController::class, 'loginAction'])->name('login');
+	Route::post('login', [AuthController::class, 'loginAction'])->name('home.login');
 
 	Route::prefix('test')->group(function () {
 		Route::get('filter-order', [AhomeController::class, 'orderFiler']);
@@ -47,4 +47,4 @@ Route::prefix('ahome')->group(function () {
 
 Route::get('account-create', [AuthController::class, 'createAccount']);
 
-Route::post('account-register', [AuthController::class, 'registerAccount'])->name('register');
+Route::post('account-register', [AuthController::class, 'registerAccount'])->name('ahome.register');

@@ -13,27 +13,33 @@ use Thanhnt\Acarglobal\Controllers\AcarController;
 Route::get('add-car', [AcarController::class, 'addCar']);
 
 Route::prefix('acar')->group(function () {
-	Route::get('/', [AcarController::class, 'index']);
+    Route::get('/', [AcarController::class, 'index']);
 
-	Route::get('setting', [AcarController::class, 'setting']);
+    Route::get('setting', [AcarController::class, 'setting']);
 
-	Route::get('xe-vao', [AcarController::class, 'import']);
+    Route::post('setting-store', [AcarController::class, 'settingStore']);
 
-	Route::get('car-list', [AcarController::class, 'carList']);
+    Route::post('apply-vat/{id}', [AcarController::class, 'applyVat'])->name('acar.apply.vat');
 
-	Route::get('car-history/{key}', [AcarController::class, 'carHistory'])->name('car.history');
+    Route::get('xe-vao', [AcarController::class, 'import']);
 
-	Route::post('import-car', [AcarController::class, 'register']);
+    Route::get('car-list', [AcarController::class, 'carList']);
 
-	Route::get('car_fix/{id}', [AcarController::class, 'carFixDetail'])->name('car.fix.detail');
+    Route::get('car-history/{key}', [AcarController::class, 'carHistory'])->name('car.history');
 
-	Route::post('add-activity', [AcarController::class, 'addActivity']);
+    Route::post('import-car', [AcarController::class, 'register']);
 
-	Route::put('update-status/{id}', [AcarController::class, 'updateStatus']);
+    Route::get('car_fix/{id}', [AcarController::class, 'carFixDetail'])->name('car.fix.detail');
 
-	Route::delete('remove-activity/{id}', [AcarController::class, 'deleteActivity'])->name('activities.destroy');
+    Route::post('add-activity', [AcarController::class, 'addActivity']);
 
-	Route::get('lenh-sua-chua/{car_fix}', [AcarController::class, 'xuatLenh']);
+    Route::put('update-status/{id}', [AcarController::class, 'updateStatus']);
 
-	Route::get('hoa-don/{car_fix}', [AcarController::class, 'xuatHoaDon']);
+    Route::delete('remove-activity/{id}', [AcarController::class, 'deleteActivity'])->name('activities.destroy');
+
+    Route::get('lenh-sua-chua/{car_fix}', [AcarController::class, 'xuatLenh']);
+
+    Route::get('hoa-don/{car_fix}', [AcarController::class, 'xuatHoaDon']);
+
+    Route::get('thong-ke', [AcarController::class, 'thongke']);
 });

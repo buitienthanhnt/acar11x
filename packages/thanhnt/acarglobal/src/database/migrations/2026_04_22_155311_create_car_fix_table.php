@@ -16,7 +16,7 @@ return new class extends Migration
 			$table->id();
 			$table->char(CarFixInterface::STATUS)->default(CarFixInterface::STATUS_WAIT);
 			$table->integer(CarFixInterface::CAR_ID);
-			$table->bigInteger(CarFixInterface::KM);
+			$table->bigInteger(CarFixInterface::KM)->nullable();
 			$table->float(CarFixInterface::VAT)->default(0);
 			$table->softDeletes();
 			$table->timestamps();

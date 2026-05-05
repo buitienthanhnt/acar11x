@@ -11,7 +11,7 @@ export default function Home() {
 
   return (
     <div className="container mx-auto p-4">
-      <div className="grid grid-cols-2 flex-1 p-4 bg-blue-gray-100 flex-col gap-2 rounded-lg">
+      <div className="grid grid-cols-3 flex-1 p-4 bg-blue-gray-100 flex-col gap-2 rounded-lg">
         <Head title="acar home" />
         <Button variant="filled" onClick={() => {
           router.visit('/acar/xe-vao');
@@ -22,6 +22,12 @@ export default function Home() {
           router.visit('/acar/car-list');
         }}>
           Danh sách xe
+        </Button>
+
+        <Button variant="filled" onClick={() => {
+          router.visit('/acar/thong-ke');
+        }}>
+          Thống kê
         </Button>
       </div>
       <CarfixList></CarfixList>
@@ -72,8 +78,8 @@ const CarfixFilter = () => {
   return (
     <div className="flex justify-between mt-2">
       <Link data={{ status: undefined, page: 1, }} className={`text-white p-2 px-3 rounded-lg ${status === undefined ? 'bg-blue-600' : 'bg-gray-800'}`}>Tất cả xe</Link>
-      <Link data={{ status: 'wait', page: 1, }} className={`text-white p-2 px-3 rounded-lg ${status === 'wait' ? 'bg-blue-600' : 'bg-gray-800'}`}>đang chờ báo giá</Link>
-      <Link data={{ status: 'processing', page: 1, }} className={`text-white p-2 px-3 rounded-lg ${status === 'processing' ? 'bg-blue-600' : 'bg-gray-800'}`}>đang thực hiện</Link>
+      <Link data={{ status: 'wait', page: 1, }} className={`text-white p-2 px-3 rounded-lg ${status === 'wait' ? 'bg-blue-600' : 'bg-gray-800'}`}>Đang chờ báo giá</Link>
+      <Link data={{ status: 'processing', page: 1, }} className={`text-white p-2 px-3 rounded-lg ${status === 'processing' ? 'bg-blue-600' : 'bg-gray-800'}`}>Đang thực hiện</Link>
       <Link data={{ status: 'done', page: 1, }} className={`text-white p-2 px-3 rounded-lg ${status === 'done' ? 'bg-blue-600' : 'bg-gray-800'}`}>Hoàn thành</Link>
     </div>
   )

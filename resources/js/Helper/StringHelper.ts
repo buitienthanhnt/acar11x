@@ -13,7 +13,7 @@ export const formatPrice = (price: number, currency = 'vnđ'): string => {
   let sodu = giaTri - ty * 1000000;
   const trieu = Math.floor(sodu / 1000);
   sodu = sodu - trieu * 1000;
-  const nghin = sodu;
+  const nghin = Math.round(sodu);
   return `${ty ? ty + ' tỷ ' : ''}${trieu ? trieu + ' triệu ' : ''}${nghin ? nghin + ' nghìn' : ''
     } ${currency}`;
 };

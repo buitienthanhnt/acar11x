@@ -17,6 +17,11 @@ final class CarFix extends Model implements CarFixInterface
 	protected $fillable = self::FILLED_FIELDS;
 	protected $appends = ['status_label'];
 
+    protected $casts = [
+    'created_at' => 'datetime:d/m/Y H:i',
+    'updated_at' => 'datetime:d/m/Y',
+];
+
 	protected function statusLabel(): Attribute
 	{
 		return Attribute::make(

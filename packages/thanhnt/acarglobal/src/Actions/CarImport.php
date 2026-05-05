@@ -55,7 +55,7 @@ final class CarImport
 		$carFix = CarFix::create([
 			CarFixInterface::STATUS => CarFixInterface::STATUS_WAIT,
 			CarFixInterface::CAR_ID => $carInfo->id,
-			CarFixInterface::KM => $requestInfo[CarFixInterface::KM],
+			CarFixInterface::KM => $requestInfo[CarFixInterface::KM] ?? null,
 		]);
 		return $carFix;
 	}

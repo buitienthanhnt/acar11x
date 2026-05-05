@@ -14,7 +14,7 @@ return new class extends Migration
 	{
 		Schema::create(AcarConfigInterface::TABLE_NAME, function (Blueprint $table) {
 			$table->char(AcarConfigInterface::KEY)->unique();
-			$table->string(AcarConfigInterface::VALUE);
+			$table->string(AcarConfigInterface::VALUE)->nullable();
 		});
 	}
 
