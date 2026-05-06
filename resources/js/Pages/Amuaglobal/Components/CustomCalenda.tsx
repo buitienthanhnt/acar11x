@@ -18,7 +18,6 @@ const NavigationMonth: FunctionComponent<NavigationMonthProp> = ({ forcusDate, o
 	const minMonth = minDate?.getMonth(); const minYear = minDate?.getFullYear();
 	const maxMonth = maxDate?.getMonth(); const maxYear = maxDate?.getFullYear();
 
-
 	const nextMonth = useCallback(() => {
 		const nextYear = month === 11 ? year + 1 : year;
 		const nextMonth = month === 11 ? 0 : month + 1;

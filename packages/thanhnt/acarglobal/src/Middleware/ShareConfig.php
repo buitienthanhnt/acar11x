@@ -29,6 +29,10 @@ class ShareConfig
         });
 
         Inertia::share('acar_config', $configs);
+				/**
+				 * set date_range mode for filter carFix by time
+				 */
+				Inertia::share('mode', 'date_range');
         return $next($request);
     }
 }

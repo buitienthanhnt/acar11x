@@ -1,11 +1,12 @@
 import { Head, Link, router, usePage, WhenVisible, } from "@inertiajs/react";
 import { Button } from "@material-tailwind/react";
 import { CarFix } from "./types/CarType";
-import { Paginate } from "../Amuaglobal/Components";
+import { CustomTimeTable, Paginate } from "../Amuaglobal/Components";
 import TextInputField from "./components/form/TextInputField";
-import { useCallback, } from "react";
+import { useCallback, useEffect, useState, } from "react";
 import { debounce } from "lodash";
 import { Cog6ToothIcon, } from "@heroicons/react/24/solid";
+import { listDateToArrayString } from "../Amuaglobal/Helper";
 
 export default function Home() {
 
@@ -39,10 +40,22 @@ export default function Home() {
 }
 
 const CarfixList = ({ }: any) => {
-  const { props: { car_fixs }, } = usePage() as any;
-
   const urlParams = new URLSearchParams(window.location.search);
   const params = Object.fromEntries(urlParams.entries());
+
+  const { props: { car_fixs }, } = usePage() as any;
+  const [seletedDate, setSelectedDate] = useState<Date[]>([]);
+
+  useEffect(() => {
+    const defaultDate = [];
+    if (params.from) {
+      defaultDate.push(new Date(params.from));
+    }
+    if (params.to) {
+      defaultDate.push(new Date(params.to));
+    }
+    setSelectedDate(defaultDate);
+  }, [])
 
   const onSearch = useCallback(debounce((value: string) => {
     if (!value || value.length > 2) {
@@ -54,10 +67,25 @@ const CarfixList = ({ }: any) => {
     }
   }, 260), [])
 
+  useEffect(() => {
+    let formatDate = listDateToArrayString(seletedDate.sort((a, b) => a - b));
+    router.get('/acar', { ...params, from: formatDate[0], to: formatDate[1] }, {
+      preserveState: true,
+      preserveScroll: true,
+      only: ['car_fixs'],
+    });
+  }, [seletedDate])
+
   return (
     <div className="flex flex-col gap-1 mt-4">
       <TextInputField placeholder="Nhập biển số" defaultValue={params.search} displayClass="justify-center w-fit!important"
-        onChange={(e: any) => onSearch(e.target.value)}></TextInputField>
+        onChange={(e: any) => onSearch(e.target.value)}>
+      </TextInputField>
+      <CustomTimeTable
+        selected={seletedDate}
+        onChange={setSelectedDate}
+      >
+      </CustomTimeTable>
       <CarfixFilter></CarfixFilter>
       <WhenVisible data="car_fixs" fallback={null}>
         {!!car_fixs?.data.length ?
