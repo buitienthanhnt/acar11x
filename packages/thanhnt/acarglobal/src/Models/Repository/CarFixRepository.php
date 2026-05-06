@@ -42,27 +42,43 @@ final class CarFixRepository
 			}
 		})->when($this->request->get('from'), function ($query) use ($status) { // filter by date
 			if (!$this->request->get('to')) {
-				if ($status) {
+				/**
+				 * nếu chỉ có from mà không có to nghĩa là người dùng đang xem theo ngày.
+				 * Cái này lưu ý cho trạng thái processing bời vì:
+				 * Nó cần lấy cả các xe đang có trạng thái processing đã cập nhập trước đó(nghĩa là bao gồm các xe đang sửa từ trước nhưng chưa xong)
+				 */
+				if ($status === 'done') {
 					$query->whereDate('updated_at', '=', $this->request->get('from'));
-				} else {
-					$query->whereDate('updated_at', '=', $this->request->get('from'))
-						->orWhereDate('created_at', '=', $this->request->get('from'));
 				}
+				// if ($status) {
+				// 	$query->whereDate('updated_at', '=', $this->request->get('from'));
+				// } else {
+				// 	$query->whereDate('updated_at', '=', $this->request->get('from'))
+				// 		->orWhereDate('created_at', '=', $this->request->get('from'));
+				// }
 			}
 		})
 			->when($this->request->get('to'), function ($query) use ($status) {   // filter by date
-				if ($status) {
+				/**
+				 * Nếu có cả from và to thì sẽ lấy các xe có thời gian theo upated_at trong khoảng thời gian đó.
+				 * Cho nên cả trạng thái done hay process đều sẽ hoạt động được
+				 */
+				if ($status === 'done') {
 					$query->whereDate('updated_at', '>=', $this->request->get('from'))
 						->whereDate('updated_at', '<=', $this->request->get('to'));
-				} else {
-					$query->where(function ($query) {
-						$query->whereDate('created_at', '>=', $this->request->get('from'))
-							->whereDate('created_at', '<=', $this->request->get('to'));
-					})->orWhere(function ($query) {
-						$query->whereDate('updated_at', '>=', $this->request->get('from'))
-							->whereDate('updated_at', '<=', $this->request->get('to'));
-					});
 				}
+				// if ($status) {
+				// 	$query->whereDate('updated_at', '>=', $this->request->get('from'))
+				// 		->whereDate('updated_at', '<=', $this->request->get('to'));
+				// } else {
+				// 	$query->where(function ($query) {
+				// 		$query->whereDate('created_at', '>=', $this->request->get('from'))
+				// 			->whereDate('created_at', '<=', $this->request->get('to'));
+				// 	})->orWhere(function ($query) {
+				// 		$query->whereDate('updated_at', '>=', $this->request->get('from'))
+				// 			->whereDate('updated_at', '<=', $this->request->get('to'));
+				// 	});
+				// }
 
 				// $query->whereDate($status === 'done' ? 'updated_at' : 'created_at', [$this->request->get('from'), $this->request->get('to')]);
 			})
