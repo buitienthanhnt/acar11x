@@ -47,8 +47,8 @@ final class CarFixRepository
 				 * Cái này lưu ý cho trạng thái processing bời vì:
 				 * Nó cần lấy cả các xe đang có trạng thái processing đã cập nhập trước đó(nghĩa là bao gồm các xe đang sửa từ trước nhưng chưa xong)
 				 */
-				if ($status === 'done') {
-					$query->whereDate('updated_at', '=', $this->request->get('from'));
+				if (!$status || $status === 'done') {
+					$query->whereDate(!$status ? 'created_at' : 'updated_at', '=', $this->request->get('from'));
 				}
 				// if ($status) {
 				// 	$query->whereDate('updated_at', '=', $this->request->get('from'));
@@ -63,9 +63,9 @@ final class CarFixRepository
 				 * Nếu có cả from và to thì sẽ lấy các xe có thời gian theo upated_at trong khoảng thời gian đó.
 				 * Cho nên cả trạng thái done hay process đều sẽ hoạt động được
 				 */
-				if ($status === 'done') {
-					$query->whereDate('updated_at', '>=', $this->request->get('from'))
-						->whereDate('updated_at', '<=', $this->request->get('to'));
+				if (!$status || $status === 'done') {
+					$query->whereDate(!$status ? 'created_at' : 'updated_at', '>=', $this->request->get('from'))
+						->whereDate(!$status ? 'created_at' : 'updated_at', '<=', $this->request->get('to'));
 				}
 				// if ($status) {
 				// 	$query->whereDate('updated_at', '>=', $this->request->get('from'))
