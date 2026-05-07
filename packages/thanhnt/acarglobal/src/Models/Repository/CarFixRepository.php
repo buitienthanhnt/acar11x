@@ -112,8 +112,12 @@ final class CarFixRepository
 		} else {
 			if ($from || $to) {
 				$carFixDones = $this->carFix->where(CarFixInterface::STATUS, '=', CarFixInterface::STATUS_DONE)
-					->when($from, function ($query) use ($from,) {
-						$query->whereDate('updated_at', '>=', $from);
+					->when($from, function ($query) use ($from, $to) {
+						if ($to) {
+							$query->whereDate('updated_at', '>=', $from);
+						} else {
+							$query->whereDate('updated_at', '=', $from);
+						}
 					})->when($to, function ($query) use ($to) {
 						$query->whereDate('updated_at', '<=', $to);
 					})->with('car')
