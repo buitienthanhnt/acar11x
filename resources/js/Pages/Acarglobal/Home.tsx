@@ -13,7 +13,7 @@ export default function Home() {
   return (
     <div className="container mx-auto p-4">
       <div className="grid grid-cols-3 flex-1 p-4 bg-blue-gray-100 flex-col gap-2 rounded-lg">
-        <Head title="acar home" />
+        <Head title="trang chủ" />
         <Button variant="filled" onClick={() => {
           router.visit('/acar/xe-vao');
         }}>
@@ -43,7 +43,7 @@ const CarfixList = ({ }: any) => {
   const urlParams = new URLSearchParams(window.location.search);
   const params = Object.fromEntries(urlParams.entries());
 
-  const { props: { car_fixs }, } = usePage() as any;
+  const { props: { car_fixs, calendar }, } = usePage() as any;
   const [seletedDate, setSelectedDate] = useState<Date[]>([]);
 
   useEffect(() => {
@@ -81,11 +81,11 @@ const CarfixList = ({ }: any) => {
       <TextInputField placeholder="Nhập biển số" defaultValue={params.search} displayClass="justify-center w-fit!important"
         onChange={(e: any) => onSearch(e.target.value)}>
       </TextInputField>
-      <CustomTimeTable
+      {calendar && <CustomTimeTable
         selected={seletedDate}
         onChange={setSelectedDate}
       >
-      </CustomTimeTable>
+      </CustomTimeTable>}
       <CarfixFilter></CarfixFilter>
       <WhenVisible data="car_fixs" fallback={null}>
         {!!car_fixs?.data.length ?
@@ -128,8 +128,8 @@ const CarfixItem = ({ id, car, created_at, updated_at, status_label, status }: C
       </div>
       <div className="flex flex-col">
         <p className="font-semibold text-indigo-700">{status_label}</p>
-        <p>Xe vào: {created_at.slice(0, 10)}</p>
-        <p>Cập nhật: {updated_at.slice(0, 10)}</p>
+        <p className="text-white font-semibold">Xe vào: {created_at.slice(0, 10)}</p>
+        <p className="font-semibold">Cập nhật: {updated_at.slice(0, 10)}</p>
       </div>
     </Link>
   )

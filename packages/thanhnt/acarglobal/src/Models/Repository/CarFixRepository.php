@@ -82,7 +82,7 @@ final class CarFixRepository
 
 				// $query->whereDate($status === 'done' ? 'updated_at' : 'created_at', [$this->request->get('from'), $this->request->get('to')]);
 			})
-			->orderBy('created_at', 'desc')->with('car')->with('activities')->paginate(8);
+			->orderBy('updated_at', 'desc')->with('car')->with('activities')->paginate(8);
 	}
 
 	/**
@@ -95,54 +95,42 @@ final class CarFixRepository
 	 */
 	public function carFixDone(string $from = '', string $to = '', $month = null, $year = null)
 	{
-		if ($year) {
-			$carFixDones = $this->carFix->where(CarFixInterface::STATUS, '=', CarFixInterface::STATUS_DONE)
-				->whereYear('updated_at', $year)
-				->with('car')
-				->with('activities')
-				->get();
-		} else if ($month) {
-			$date = Carbon::createFromFormat('Y-m', $month);
-			$carFixDones = $this->carFix->where(CarFixInterface::STATUS, '=', CarFixInterface::STATUS_DONE)
-				->whereMonth('updated_at', $date->month)
-				->whereYear('updated_at', $date->year)
-				->with('car')
-				->with('activities')
-				->get();
+		$query = $this->carFix->where(CarFixInterface::STATUS, '=', CarFixInterface::STATUS_DONE)
+			->whereYear('updated_at', $year ?: Carbon::now())
+			->with('car')
+			->with('activities');
+		if ($month) {
+			$query->whereMonth('updated_at', $month ?: Carbon::now());
 		} else {
 			if ($from || $to) {
-				$carFixDones = $this->carFix->where(CarFixInterface::STATUS, '=', CarFixInterface::STATUS_DONE)
-					->when($from, function ($query) use ($from, $to) {
-						if ($to) {
-							$query->whereDate('updated_at', '>=', $from);
-						} else {
-							$query->whereDate('updated_at', '=', $from);
-						}
-					})->when($to, function ($query) use ($to) {
-						$query->whereDate('updated_at', '<=', $to);
-					})->with('car')
-					->with('activities')
-					->get();
+				$query->when($from, function ($query) use ($from, $to) {
+					if ($to) {
+						$query->whereDate('updated_at', '>=', $from);
+					} else {
+						$query->whereDate('updated_at', '=', $from);
+					}
+				})->when($to, function ($query) use ($to) {
+					$query->whereDate('updated_at', '<=', $to);
+				});
 			} else {
 				/**
 				 * Theo mặc định sẽ lấy các xe đã hoàn thành trong tuần hiện tại.
 				 */
-				$carFixDones = $this->carFix->where(CarFixInterface::STATUS, '=', CarFixInterface::STATUS_DONE)
-					->whereBetween('updated_at', [
-						Carbon::now()->startOfWeek(),
-						Carbon::now()->endOfWeek(),
-					])->with('car')
-					->with('activities')
-					->get();
+				$query->whereBetween('updated_at', [
+					Carbon::now()->startOfWeek(),
+					Carbon::now()->endOfWeek(),
+				]);
 			}
 		}
+
+		$carFixDones = $query->orderBy('updated_at', 'asc')->get();
 
 		$carFixDones->each(function ($item) {
 			$item->totalCost = $this->cafixTotalCost($item);
 		});
 
-		$grouped = $carFixDones->groupBy(function ($item) use ($year) {
-			if ($year) {
+		$grouped = $carFixDones->groupBy(function ($item) use ($year, $month) {
+			if ($year && !$month) {
 				// Nhóm theo định dạng theo tháng Y-m (Năm-Tháng)
 				return $item->updated_at->format('Y-m');
 			}

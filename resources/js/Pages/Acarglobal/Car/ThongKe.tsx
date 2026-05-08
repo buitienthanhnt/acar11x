@@ -5,13 +5,18 @@ import ReactApexChart from "react-apexcharts";
 import { formatPrice } from "@/Helper/StringHelper";
 import { listDateToArrayString } from "@/Pages/Amuaglobal/Helper";
 import { CustomTimeTable } from "@/Pages/Amuaglobal/Components";
+import TextInput from "@/Components/TextInput";
+import TextInputField from "../components/form/TextInputField";
 
 const ThongKe = ({ car_fix_dones }: any) => {
 
   const urlParams = new URLSearchParams(window.location.search);
   const params = Object.fromEntries(urlParams.entries());
 
-  const { props: { car_fixs }, } = usePage() as any;
+  const [m, setM] = useState(params.m || new Date().getMonth() + 1);
+  const [y, setY] = useState(params.y || new Date().getFullYear());
+
+  const { props: { calendar }, } = usePage() as any;
   const [seletedDate, setSelectedDate] = useState<Date[]>([]);
 
   useEffect(() => {
@@ -34,14 +39,21 @@ const ThongKe = ({ car_fix_dones }: any) => {
     });
   }, [seletedDate])
 
+  useEffect(() => {
+    router.get('/acar/thong-ke', { ...params, m, y }, {
+      preserveState: true,
+      preserveScroll: true,
+    });
+  }, [m, y])
+
   return (
     <ContentLayout>
       <Head title="thống kê"></Head>
-      <CustomTimeTable
-        selected={seletedDate}
-        onChange={setSelectedDate}
-      >
-      </CustomTimeTable>
+      <div className="flex gap-2 p-4">
+        <TextInputField label={'Tìm theo tháng'} type='number' min={1} max={12} value={m} onChange={(e) => setM(e.target.value)}></TextInputField>
+        <TextInputField label={'Tìm theo năm'} type='number' min={2025} max={2050} value={y} onChange={(e) => setY(e.target.value)}></TextInputField>
+      </div>
+      {calendar && <CustomTimeTable selected={seletedDate} onChange={setSelectedDate}></CustomTimeTable>}
       <div className="p-4 bg-gray-100">
         {/* <ApexChart></ApexChart>
                 <ApexChartColumn></ApexChartColumn> */}
@@ -293,6 +305,7 @@ const StackedColumnChart = ({ data }: { [key: string]: any[] }) => {
     });
 
   })
+
   const state = {
     series: formatData,
     options: {
@@ -369,7 +382,7 @@ const StackedColumnChart = ({ data }: { [key: string]: any[] }) => {
   return (
     <div>
       <div id="chart">
-        <ReactApexChart options={state.options} series={state.series} type="bar" height={350} />
+        <ReactApexChart options={state.options} series={state.series} type="bar" height={240} />
       </div>
       <div id="html-dist"></div>
     </div>
@@ -409,7 +422,7 @@ const CarNumberChart = ({ data }: { [key: string]: any[] }) => {
       },
       chart: {
         type: 'bar',
-        height: 350,
+        height: 220,
         stacked: true,
         toolbar: {
           show: true
@@ -466,7 +479,7 @@ const CarNumberChart = ({ data }: { [key: string]: any[] }) => {
   return (
     <div>
       <div id="chart">
-        <ReactApexChart options={state.options} series={state.series} type="bar" height={350} />
+        <ReactApexChart options={state.options} series={state.series} type="bar" height={240} />
       </div>
       <div id="html-dist"></div>
     </div>

@@ -69,7 +69,7 @@ final class AcarController extends Controller
     public function carList()
     {
         return Inertia::render('Acarglobal/Car/CarList', [
-            'cars' => Car::paginate(12),
+            'cars' => Car::orderBy('created_at', 'desc')->paginate(12),
         ]);
     }
 
@@ -196,8 +196,8 @@ final class AcarController extends Controller
         $car_fix_dones = $this->carFixRepository->carFixDone(
             from: $request->get('from', ''),
             to: $request->get('to', ''),
-            month: $request->get('month', ''),
-            year: $request->get('year', '')
+            month: $request->get('m', ''),
+            year: $request->get('y', '')
         );
 
         return Inertia::render("Acarglobal/Car/ThongKe", [

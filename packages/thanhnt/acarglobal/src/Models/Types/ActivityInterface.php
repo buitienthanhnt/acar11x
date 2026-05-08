@@ -9,7 +9,7 @@ interface ActivityInterface
 	const ID = 'id';
 	const CAR_ID = 'car_id';
 	const CAR_FIX_ID = 'car_fix_id';
-	
+
 	const STATUS = 'status';
 	const STATUS_ACTIVE = 'active';
 	const STATUS_INACTIVE = 'inactive';
@@ -28,6 +28,7 @@ interface ActivityInterface
 	const QTY = 'qty';
 	const PRICE = 'price';
 	const PRODUCT_ID = 'product_id';
+	const DVT = 'dvt';
 	/**
 	 * vi du:
 	 * dau may | 10 | 80 | 
@@ -42,6 +43,7 @@ interface ActivityInterface
 		self::QTY,
 		self::PRICE,
 		self::PRODUCT_ID,
+		self::DVT,
 	];
 
 	const HIDDEN_FIELDS = ['created_at', 'updated_at', 'deleted_at'];
@@ -93,6 +95,12 @@ interface ActivityInterface
 			'type' => 'number',
 			'value' => '',
 			'label' => 'id ho so',
-		]
+		],
+		[
+			'name' => self::DVT,
+			'type' => 'text',
+			'value' => '',
+			'label' => 'Đơn vị tính',
+		],
 	];
 }
