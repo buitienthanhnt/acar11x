@@ -5,7 +5,6 @@ import ReactApexChart from "react-apexcharts";
 import { formatPrice } from "@/Helper/StringHelper";
 import { listDateToArrayString } from "@/Pages/Amuaglobal/Helper";
 import { CustomTimeTable } from "@/Pages/Amuaglobal/Components";
-import TextInput from "@/Components/TextInput";
 import TextInputField from "../components/form/TextInputField";
 
 const ThongKe = ({ car_fix_dones }: any) => {
@@ -49,17 +48,19 @@ const ThongKe = ({ car_fix_dones }: any) => {
   return (
     <ContentLayout>
       <Head title="thống kê"></Head>
-      <div className="flex gap-2 p-4">
-        <TextInputField label={'Tìm theo tháng'} type='number' min={1} max={12} value={m} onChange={(e) => setM(e.target.value)}></TextInputField>
-        <TextInputField label={'Tìm theo năm'} type='number' min={2025} max={2050} value={y} onChange={(e) => setY(e.target.value)}></TextInputField>
-      </div>
-      {calendar && <CustomTimeTable selected={seletedDate} onChange={setSelectedDate}></CustomTimeTable>}
-      <div className="p-4 bg-gray-100">
-        {/* <ApexChart></ApexChart>
+      <div className="min-h-screen">
+        <div className="flex gap-2 p-4">
+          <TextInputField label={'Tìm theo tháng'} type='number' min={1} max={12} value={m} onChange={(e) => setM(e.target.value)}></TextInputField>
+          <TextInputField label={'Tìm theo năm'} type='number' min={2025} max={2050} value={y} onChange={(e) => setY(e.target.value)}></TextInputField>
+        </div>
+        {calendar && <CustomTimeTable selected={seletedDate} onChange={setSelectedDate}></CustomTimeTable>}
+        <div className="p-4 bg-gray-100">
+          {/* <ApexChart></ApexChart>
                 <ApexChartColumn></ApexChartColumn> */}
-        <ApexChartLineColumn data={car_fix_dones}></ApexChartLineColumn>
-        <CarNumberChart data={car_fix_dones}></CarNumberChart>
-        <StackedColumnChart data={car_fix_dones}></StackedColumnChart>
+          <ApexChartLineColumn data={car_fix_dones}></ApexChartLineColumn>
+          <CarNumberChart data={car_fix_dones}></CarNumberChart>
+          <StackedColumnChart data={car_fix_dones}></StackedColumnChart>
+        </div>
       </div>
     </ContentLayout>
   )

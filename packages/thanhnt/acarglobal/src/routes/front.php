@@ -13,33 +13,41 @@ use Thanhnt\Acarglobal\Controllers\AcarController;
 Route::get('add-car', [AcarController::class, 'addCar']);
 
 Route::prefix('acar')->group(function () {
-    Route::get('/', [AcarController::class, 'index']);
+	Route::get('/', [AcarController::class, 'index']);
 
-    Route::get('setting', [AcarController::class, 'setting']);
+	Route::get('setting', [AcarController::class, 'setting']);
 
-    Route::post('setting-store', [AcarController::class, 'settingStore']);
+	Route::post('setting-store', [AcarController::class, 'settingStore']);
 
-    Route::post('apply-vat/{id}', [AcarController::class, 'applyVat'])->name('acar.apply.vat');
+	Route::post('apply-vat/{id}', [AcarController::class, 'applyVat'])->name('acar.apply.vat');
 
-    Route::get('xe-vao', [AcarController::class, 'import']);
+	Route::get('xe-vao', [AcarController::class, 'import']);
 
-    Route::get('car-list', [AcarController::class, 'carList']);
+	Route::get('car-list', [AcarController::class, 'carList']);
 
-    Route::get('car-history/{key}', [AcarController::class, 'carHistory'])->name('car.history');
+	Route::get('car-history/{key}', [AcarController::class, 'carHistory'])->name('car.history');
 
-    Route::post('import-car', [AcarController::class, 'register']);
+	Route::post('import-car', [AcarController::class, 'register']);
 
-    Route::get('car_fix/{id}', [AcarController::class, 'carFixDetail'])->name('car.fix.detail');
+	Route::get('car_fix/{id}', [AcarController::class, 'carFixDetail'])->name('car.fix.detail');
 
-    Route::post('add-activity', [AcarController::class, 'addActivity']);
+	Route::post('add-activity', [AcarController::class, 'addActivity']);
 
-    Route::put('update-status/{id}', [AcarController::class, 'updateStatus']);
+	Route::put('update-status/{id}', [AcarController::class, 'updateStatus']);
 
-    Route::delete('remove-activity/{id}', [AcarController::class, 'deleteActivity'])->name('activities.destroy');
+	Route::delete('remove-activity/{id}', [AcarController::class, 'deleteActivity'])->name('activities.destroy');
 
-    Route::get('lenh-sua-chua/{car_fix}', [AcarController::class, 'xuatLenh']);
+	Route::get('lenh-sua-chua/{car_fix}', [AcarController::class, 'xuatLenh']);
 
-    Route::get('hoa-don/{car_fix}', [AcarController::class, 'xuatHoaDon']);
+	Route::get('hoa-don/{car_fix}', [AcarController::class, 'xuatHoaDon']);
 
-    Route::get('thong-ke', [AcarController::class, 'thongke']);
+	Route::get('thong-ke', [AcarController::class, 'thongke']);
+
+	Route::get('cham-cong', [AcarController::class, 'chamCong']);
+
+	Route::get('work-history', [AcarController::class, 'workHistory']);
+
+	Route::post('add-employee', [AcarController::class, 'addEmployee']);
+
+	Route::post('save-work-time', [AcarController::class, 'saveWorkTime']);
 });

@@ -7,30 +7,14 @@ import { useCallback, useEffect, useState, } from "react";
 import { debounce } from "lodash";
 import { Cog6ToothIcon, } from "@heroicons/react/24/solid";
 import { listDateToArrayString } from "../Amuaglobal/Helper";
+import TopBar from "./Layout/TopBar";
 
 export default function Home() {
 
   return (
     <div className="container mx-auto p-4">
-      <div className="grid grid-cols-3 flex-1 p-4 bg-blue-gray-100 flex-col gap-2 rounded-lg">
-        <Head title="trang chủ" />
-        <Button variant="filled" onClick={() => {
-          router.visit('/acar/xe-vao');
-        }}>
-          Xe vào
-        </Button>
-        <Button variant="filled" onClick={() => {
-          router.visit('/acar/car-list');
-        }}>
-          Danh sách xe
-        </Button>
-
-        <Button variant="filled" onClick={() => {
-          router.visit('/acar/thong-ke');
-        }}>
-          Thống kê
-        </Button>
-      </div>
+      <Head title="trang chủ" />
+      <TopBar></TopBar>
       <CarfixList></CarfixList>
       <Link href={'/acar/setting'} className="absolute left-10 bottom-10">
         <Cog6ToothIcon className="size-10 text-gray-600 hover:text-gray-900"></Cog6ToothIcon>
@@ -78,7 +62,7 @@ const CarfixList = ({ }: any) => {
 
   return (
     <div className="flex flex-col gap-1 mt-4">
-      <TextInputField placeholder="Nhập biển số" defaultValue={params.search} displayClass="justify-center w-fit!important"
+      <TextInputField placeholder="Nhập biển số" defaultValue={params.search} displayClass="justify-center"
         onChange={(e: any) => onSearch(e.target.value)}>
       </TextInputField>
       {calendar && <CustomTimeTable
