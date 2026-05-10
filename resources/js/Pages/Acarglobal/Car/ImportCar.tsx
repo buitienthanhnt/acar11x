@@ -63,7 +63,7 @@ const ImportCar = ({ form_fields, cars, selected }: Props) => {
   return (
     <>
       <Head title="xe vào"></Head>
-      <div className="container mx-auto p-2 min-h-screen">
+      <div className="container mx-auto p-2">
         <form className="px-2 py-8 grid grid-cols-2 space-x-2 justify-center relative bg-gray-200 shadow-md overflow-hidden sm:rounded-lg " onSubmit={onSubmit} autoComplete="true">
           <XMarkIcon className='size-9 absolute left-2 hover:rotate-12 hover:text-orange-800' onClick={() => {
             setData({

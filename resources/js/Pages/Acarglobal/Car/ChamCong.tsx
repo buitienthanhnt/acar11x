@@ -15,7 +15,7 @@ const ChamCong = ({ employess, date, workTimes }: any) => {
   return (
     <ContentLayout>
       <Head title="chấm công"></Head>
-      <div className="p-4 bg-blue-gray-100 min-h-screen relative">
+      <div className="p-4 bg-blue-gray-100 flex-1">
         <EmployeeMap employess={employess}></EmployeeMap>
         <PlusCircleIcon
           className="w-10 h-10 absolute l-10 bottom-10"
