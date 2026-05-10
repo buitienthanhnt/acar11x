@@ -3,12 +3,9 @@ import { Head, usePage } from "@inertiajs/react";
 import { CarFix } from "../types/CarType";
 import { useCallback, useMemo, useState } from "react";
 import { formatPrice } from '@/Helper/StringHelper';
+import PrintBtn from "../components/element/PrintBtn";
 
 export default function HoaDon({ car_fix }: { car_fix: CarFix }) {
-
-  const onPrint = useCallback(() => {
-    window.print();
-  }, [])
 
   return (
     <ContentLayout>
@@ -30,10 +27,7 @@ export default function HoaDon({ car_fix }: { car_fix: CarFix }) {
         }}></hr>
         <WorkList {...car_fix}></WorkList>
         <Signature></Signature>
-        <div className="no-print absolute right-1 top-1 bg-gray-600 hover:bg-gray-900 px-4 p-1 rounded-md text-white"
-          onClick={onPrint}>
-          In lệnh
-        </div>
+        <PrintBtn title="In lệnh"></PrintBtn>
       </div>
     </ContentLayout>
   )

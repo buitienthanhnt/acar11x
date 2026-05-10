@@ -4,12 +4,9 @@ import { Head, usePage } from "@inertiajs/react";
 import { CarFix } from "../types/CarType";
 import { CarFixInfo } from "./CarFix";
 import { useCallback } from "react";
+import PrintBtn from "../components/element/PrintBtn";
 
 function LenhSuaChua({ car_fix }: any) {
-
-  const onPrint = useCallback(() => {
-    window.print();
-  }, [])
 
   return (
     <>
@@ -30,11 +27,9 @@ function LenhSuaChua({ car_fix }: any) {
         }}></hr>
         <WorkList {...car_fix}></WorkList>
         <Signature></Signature>
-        <div className="no-print absolute right-1 top-1 bg-gray-600 hover:bg-gray-900 px-4 p-1 rounded-md text-white"
-          onClick={onPrint}>
-          In lệnh
-        </div>
-      </div></>
+        <PrintBtn title="In lệnh"></PrintBtn>
+      </div>
+    </>
   )
 }
 

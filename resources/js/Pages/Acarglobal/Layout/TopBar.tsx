@@ -5,7 +5,7 @@ export default function TopBar() {
   const path = window.location.pathname;
 
   return (
-    <div className="grid grid-cols-5 flex-1 p-2 bg-blue-gray-100 gap-1 rounded-lg">
+    <div className="grid grid-cols-5 flex-1 p-2 bg-blue-gray-100 gap-1 rounded-lg no-print">
       <Button variant="filled" color={path === '/acar' ? "blue" : "gray"} onClick={() => {
         router.visit('/acar');
       }}>

@@ -4,6 +4,7 @@ import TextInputField from "../components/form/TextInputField";
 import { useEffect, useRef, useState } from "react";
 import { formatCurrency } from "@/Pages/Amuaglobal/Helper";
 import { formatPrice } from "@/Helper/StringHelper";
+import PrintBtn from "../components/element/PrintBtn";
 
 const WorkHistory = ({ workTimes, employees }: any) => {
   const urlParams = new URLSearchParams(window.location.search);
@@ -36,7 +37,8 @@ const WorkHistory = ({ workTimes, employees }: any) => {
   return (
     <ContentLayout>
       <Head title="tổng hợp chấm công"></Head>
-      <div className="flex gap-2 p-4">
+      <PrintBtn title="In"></PrintBtn>
+      <div className="flex gap-2 p-4 no-print">
         <TextInputField label={'Tìm theo tháng'} type='number' min={1} max={12} value={m} onChange={(e) => setM(e.target.value)}></TextInputField>
         <TextInputField label={'Tìm theo năm'} type='number' min={2025} max={2050} value={y} onChange={(e) => setY(e.target.value)}></TextInputField>
       </div>
@@ -48,8 +50,8 @@ const WorkHistory = ({ workTimes, employees }: any) => {
             Object.entries(workTimes).forEach(
               ([key, value]) => {
                 elements.push(<Link
-                href={'/acar/cham-cong'}
-                data={{date: key}}
+                  href={'/acar/cham-cong'}
+                  data={{ date: key }}
                   key={key}
                   className={`bg-blue-gray-100 rounded-md p-2 space-y-1 ${toDayString === key ? 'bg-purple-400' : ''}`}>
                   <p className="font-semibold ">Ngày: {key} </p>
@@ -72,7 +74,12 @@ const WorkHistory = ({ workTimes, employees }: any) => {
                 </div>
                 <div className="bg-purple-100 p-2 rounded-md mt-2">
                   <p className="font-semibold text-xl">Tổng hợp:</p>
-                  <div className="font-semibold grid grid-cols-4 gap-3">
+                  <div className="font-semibold grid grid-cols-5 gap-3">
+                    <div className="col-span-1 text-white">Nhân viên</div>
+                    <div className="col-span-1 text-white">Giờ</div>
+                    <div className="col-span-1 text-white">Số ngày công</div>
+                    <div className="col-span-1 text-white">1 công</div>
+                    <div className="col-span-1 text-white">Tổng lương</div>
                     {
                       (
                         () => {
@@ -85,7 +92,10 @@ const WorkHistory = ({ workTimes, employees }: any) => {
                                   {value}(giờ)
                                 </div>
                                 <div className="col-span-1">
-                                  = {value / 8}(công)
+                                  {value / 8}(công)
+                                </div>
+                                <div lassName="col-span-1">
+                                  {employees[key].date_s}/công
                                 </div>
                                 <div className="col-span-1">
                                   = {formatPrice(value / 8 * employees[key].date_s)}
