@@ -103,11 +103,43 @@ const ImportCar = ({ form_fields, cars, selected }: Props) => {
             </div>
 
             <TextInputField
+              list="browserx"
               value={data.suspension}
               label={'Hãng xe(vd: Audi)'}
               onChange={(e) => setData('suspension', e.target.value)}
               placeholder={'suspension'}
             />
+            <datalist id="browserx">
+              <option value="BMW" />
+              <option value="Audi" />
+              <option value="Mercedes" />
+              <option value="Honda" />
+              <option value="Toyota" />
+              <option value="Nissan" />
+              <option value="Mazda" />
+              <option value="Subaru" />
+              <option value="Mitsubishi" />
+              <option value="Kia" />
+              <option value="Hyundai" />
+              <option value="Suzuki" />
+              <option value="Isuzu" />
+              <option value="Volkswagen" />
+              <option value="Ford" />
+              <option value="Chevrolet" />
+              <option value="Vinfast" />
+              <option value="Bentley" />
+              <option value="Porsche" />
+              <option value="Ferrari" />
+              <option value="Lamborghini" />
+              <option value="Bugatti" />
+              <option value="Rolls-Royce" />
+              <option value="Maserati" />
+              <option value="Lexus" />
+              <option value="Tesla" />
+              <option value="Jaguar" />
+              <option value="Land Rover" />
+              <option value="Aston Martin" />
+            </datalist>
 
             <TextInputField
               value={data.type}
