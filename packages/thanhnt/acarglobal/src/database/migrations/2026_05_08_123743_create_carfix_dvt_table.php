@@ -14,7 +14,7 @@ return new class extends Migration
 	{
 		if (!Schema::hasColumns(ActivityInterface::TABLE_NAME, [ActivityInterface::DVT])) {
 			Schema::table(ActivityInterface::TABLE_NAME, function (Blueprint $table) {
-				$table->addColumn('char', ActivityInterface::DVT)->nullable();
+				$table->addColumn('char', ActivityInterface::DVT, ['length' => 255])->nullable();
 			});
 		};
 	}

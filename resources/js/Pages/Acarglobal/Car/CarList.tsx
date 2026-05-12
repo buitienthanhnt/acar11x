@@ -2,7 +2,6 @@ import { PaginateInterface } from "@/Pages/Amuaglobal/types/Paginate";
 import { Head, Link } from "@inertiajs/react";
 import ContentLayout from "../Layout/ContentLayout";
 import { Paginate } from "@/Components/Custom";
-import { Car } from "../types/CarType";
 
 const CarList = ({ cars: { data, current_page, last_page } }: { cars: PaginateInterface }) => {
 

@@ -18,7 +18,6 @@ return new class extends Migration
 			$table->char(CarInterface::KEY);                            // bien so
 			$table->char(CarInterface::SUSPENSION)->nullable();         // hang xe
 			$table->char(CarInterface::TYPE)->nullable();               // dong xe
-			$table->bigInteger(CarInterface::KM)->nullable();
 			$table->dateTime(CarInterface::YEAR)->nullable(); //->useCurrent(); hien tai cho thoi gian
 			$table->char(CarInterface::VIN)->nullable();
 			$table->char(CarInterface::CUSTOMER)->nullable();

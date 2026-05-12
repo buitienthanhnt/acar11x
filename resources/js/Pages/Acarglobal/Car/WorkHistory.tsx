@@ -2,7 +2,6 @@ import { Head, Link, router } from "@inertiajs/react";
 import ContentLayout from "../Layout/ContentLayout"
 import TextInputField from "../components/form/TextInputField";
 import { useEffect, useRef, useState } from "react";
-import { formatCurrency } from "@/Pages/Amuaglobal/Helper";
 import { formatPrice } from "@/Helper/StringHelper";
 import PrintBtn from "../components/element/PrintBtn";
 

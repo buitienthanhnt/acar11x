@@ -8,9 +8,8 @@ import {
 	Typography,
 } from "@material-tailwind/react";
 import { BellIcon } from "@heroicons/react/24/solid";
-import { Link, usePage, WhenVisible } from "@inertiajs/react";
+import { Link, } from "@inertiajs/react";
 import { stringConvert } from "@/Helper/DateTime";
-import { Loading } from "../Skeleton";
 
 
 const TimeList = ({ name, data }) => {

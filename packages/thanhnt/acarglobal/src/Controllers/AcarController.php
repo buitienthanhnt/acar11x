@@ -214,7 +214,6 @@ final class AcarController extends Controller
 	public function chamCong(Request $request)
 	{
 		$date = $request->get(WorkTimeInterface::DATE, date('Y-m-d'));
-
 		$employess = Employee::all();
 		return Inertia::render('Acarglobal/Car/ChamCong', [
 			'employess' => $employess,
