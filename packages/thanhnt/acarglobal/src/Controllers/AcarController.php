@@ -251,6 +251,11 @@ final class AcarController extends Controller
 		]);
 	}
 
+    public function removeCarFix(int $id){
+        $this->carFixRepository->removeCarFix($id);
+        return redirect()->to(route('acar.home'));
+    }
+
 
 	// public function __invoke()
 	// {

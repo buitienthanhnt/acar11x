@@ -13,7 +13,7 @@ use Thanhnt\Acarglobal\Controllers\AcarController;
 Route::get('add-car', [AcarController::class, 'addCar']);
 
 Route::prefix('acar')->group(function () {
-	Route::get('/', [AcarController::class, 'index']);
+	Route::get('/', [AcarController::class, 'index'])->name('acar.home');
 
 	Route::get('setting', [AcarController::class, 'setting']);
 
@@ -50,4 +50,6 @@ Route::prefix('acar')->group(function () {
 	Route::post('add-employee', [AcarController::class, 'addEmployee']);
 
 	Route::post('save-work-time', [AcarController::class, 'saveWorkTime']);
+
+    Route::delete('car-fix-delete/{id}', [AcarController::class, 'removeCarFix'])->name('car.fix.remove');
 });
