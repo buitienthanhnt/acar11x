@@ -4,6 +4,9 @@ namespace Thanhnt\Acarglobal\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Thanhnt\Acarglobal\Models\Types\{ActivityInterface, CarFixInterface, CarInterface};
+use Thanhnt\Amuaglobal\Models\Product;
+use Thanhnt\Amuaglobal\Models\Types\ProductInterface;
+
 // use Thanhnt\Amuaglobal\Models\Product;
 // use Thanhnt\Amuaglobal\Models\Types\ProductInterface;
 
@@ -33,8 +36,8 @@ final class Activity extends Model implements ActivityInterface
 	/**
 	 * link to product
 	 */
-	// public function product()
-	// {
-	// 	return $this->belongsTo(Product::class, self::PRODUCT_ID, ProductInterface::ID);
-	// }
+	public function product()
+	{
+		return $this->belongsTo(Product::class, self::PRODUCT_ID, ProductInterface::ID);
+	}
 }

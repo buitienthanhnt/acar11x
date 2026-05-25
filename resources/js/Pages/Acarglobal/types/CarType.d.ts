@@ -33,6 +33,7 @@ export type Activity = {
   updated_at: string,
   deleted_at: string,
   dvt?: string,
+  product?: any,
 }
 
 export type CarFix = {

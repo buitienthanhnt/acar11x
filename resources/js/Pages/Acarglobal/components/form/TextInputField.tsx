@@ -1,5 +1,13 @@
 
-const TextInputField = ({ name, value, label, type, displayClass, error, ...props }: any) => {
+const TextInputField = ({ name, value, label, type, displayClass, error, ...props }: {
+  name: string;
+  value?: any;
+  label?: string;
+  type?: string;
+  displayClass?: string;
+  error?: string;
+  [key: string]: any,
+}) => {
   return (
     <div className={`flex space-x-2 w-full items-center ${displayClass}`}>
       {label && <div className="w-auto flex-1 flex-col">

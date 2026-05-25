@@ -18,6 +18,10 @@ return new class extends Migration
             $table->string(ProductInterface::DESCRIPTION)->nullable();
             $table->string(ProductInterface::IMAGE_PATH)->nullable();
             $table->string(ProductInterface::ALIAS);
+						$table->char(ProductInterface::SKU, 50)->unique();
+						$table->decimal(ProductInterface::PRICE, 12, 2);
+						$table->decimal(ProductInterface::BASE_PRICE, 12, 2)->nullable();
+						$table->integer(ProductInterface::QTY)->default(0);
             $table->timestamps();
             $table->softDeletes();
         });

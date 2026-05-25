@@ -1,11 +1,17 @@
-import React, { FunctionComponent, useCallback, useMemo } from "react";
+import React, { FunctionComponent, useCallback, useMemo, useState } from "react";
 import ContentLayout from "../Layout/ContentLayout";
 import { Activity, CarFix as CarFixType } from "../types/CarType";
-import { CheckCircleIcon, PlusCircleIcon, TrashIcon } from "@heroicons/react/24/solid";
+import { CheckCircleIcon, PlusCircleIcon, TrashIcon, WrenchScrewdriverIcon, XCircleIcon } from "@heroicons/react/24/solid";
 import TextInputField from "../components/form/TextInputField";
-import { Head, Link, router, useForm, usePage } from "@inertiajs/react";
+import { Head, Link, router, useForm, usePage, WhenVisible } from "@inertiajs/react";
 import { formatPrice } from "@/Helper/StringHelper";
 import { Step, Stepper } from "@material-tailwind/react";
+import Modal from "@/Components/Modal";
+import { Paginate } from "@/Components/Custom";
+import { ProductItem } from "@/Pages/Amuaglobal/Screens/ProductList";
+import { ProductType } from "@/Pages/Amuaglobal/types/Product";
+import { useUrlParam } from "@/Pages/Amuaglobal/hooks/useUrlParam";
+import { debounce } from "lodash";
 
 const CarFix: FunctionComponent<{ carFix: CarFixType }> = ({ carFix }) => {
 
@@ -59,7 +65,22 @@ const ActivityForm = ({ id, car }: CarFixType) => {
     status: 'wait',
     car_id: car.id,
     dvt: '',
+    product: null as ProductType | null,
   });
+
+  const onSelectProduct = (product: ProductType) => {
+    setData('title', product.name);
+    setData('price', product.price);
+    setData('dvt', product?.dvt || '');
+    setData('product', product);
+  }
+
+  const onClearSelectedProduct = () => {
+    setData('title', '');
+    setData('price', 0);
+    setData('dvt', '');
+    setData('product', null);
+  }
 
   /**
    * add activity
@@ -80,19 +101,34 @@ const ActivityForm = ({ id, car }: CarFixType) => {
       <div className="flex space-x-2 items-end">
         <div className="flex flex-1 justify-center flex-col">
           <b>Nội dung:</b>
-          <textarea rows={4} onChange={e => setData('title', e.target.value)} placeholder="nội dung thực hiện" className="w-full rounded-md overflow-hidden border-gray-800 bg-transparent"></textarea>
+          <textarea rows={4} value={data.title} onChange={e => setData('title', e.target.value)} placeholder="nội dung thực hiện" className="w-full rounded-md overflow-hidden border-gray-800 bg-transparent"></textarea>
         </div>
 
         <div className="flex flex-1 flex-col gap-1">
-          <div className="flex flex-1 justify-center flex-col">
+          <div className="flex justify-end">
+            <WrenchModal onSelectProduct={onSelectProduct}></WrenchModal>
+          </div>
+          <div className="flex flex-1 justify-center flex-col gap-2">
+            {data.product && <>
+              <b className="text-green-500">Phụ tùng đang chọn:  </b>
+              <div className="gap-2 flex relative">
+                <XCircleIcon className="size-8 absolute -top-1 -right-1 text-gray-900 hover:text-red-900"
+                  onClick={onClearSelectedProduct}></XCircleIcon>
+                <img src={data?.product.image_path} className="size-20 rounded-md object-cover" alt="" />
+                <div className="flex flex-col">
+                  <b>{data?.product.name} (Moidel: {data?.product.sku})</b>
+                  <b className="text-purple-500">{formatPrice(data?.product.price)}</b>
+                </div>
+              </div>
+            </>}
             <b>Chi phí(đơn vị nghìn vnđ):</b>
-            <TextInputField type="number" onChange={e => setData('price', e.target.value)} className="w-full" placeholder="chi phí"></TextInputField>
+            <TextInputField type="number" value={data.price} onChange={e => setData('price', e.target.value)} className="w-full" placeholder="chi phí"></TextInputField>
           </div>
 
           <div className="flex space-x-1">
             <div className="flex flex-1 justify-center flex-col">
               <b>Số lượng:</b>
-              <TextInputField type="number" min={1} onChange={e => setData('qty', e.target.value)} className="w-full" placeholder="số lượng"></TextInputField>
+              <TextInputField type="number" value={data.qty} min={1} onChange={e => setData('qty', e.target.value)} className="w-full" placeholder="số lượng"></TextInputField>
             </div>
 
             <div className="flex flex-1 justify-center flex-col">
@@ -135,6 +171,68 @@ const ActivityForm = ({ id, car }: CarFixType) => {
   )
 }
 
+const WrenchModal = ({ onSelectProduct }: { onSelectProduct?: (product: any) => void }) => {
+  const k_search = useUrlParam('k_search');
+  const { products, } = usePage().props as unknown as { products: any };
+  const [showForm, setShowForm] = useState(false);
+
+  const onSeacch = debounce((value: string) => {
+    if (value.length > 2 || value.length === 0) {
+      router.visit(window.location.href, {
+        method: 'get',
+        data: {
+          k_search: value,
+          product_page: 1
+        },
+        preserveState: true,
+        only: ['products'],
+      });
+    }
+  }, 300);
+
+  return (
+    <>
+      <p className="text-xl font-semibold mr-2 text-purple-600">Chọn phụ tùng:</p>
+      <WrenchScrewdriverIcon className="size-7 inline-block " color="#8e24aa" onClick={() => setShowForm(true)}></WrenchScrewdriverIcon>
+      <Modal
+        show={showForm}
+      >
+        <div className="flex justify-between items-center p-2">
+          <h2 className="font-semibold text-xl">Chọn phụ tùng:</h2>
+          <XCircleIcon className="w-10 h-10" onClick={() => {
+            setShowForm(false)
+          }}></XCircleIcon>
+        </div>
+        <WhenVisible fallback={<div>Loading...</div>} data={'products'}>
+          <div className="p-4 h-[60vh] flex flex-col flex-1 w-auto overflow-y-scroll [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            <div className="my-2">
+              <TextInputField name="" defaultValue={k_search} onChange={e => {
+                onSeacch(e.target.value);
+              }} placeholder="tìm kiếm"></TextInputField>
+            </div>
+            <div className="flex-1 flex-col">
+              {products?.data?.map(product => <ProductItem key={product.id} product={product} onSelectProduct={(p: any) => {
+                onSelectProduct?.(p);
+                setShowForm(false);
+              }} />)}
+            </div>
+            <Paginate
+              pageSize={products?.last_page}
+              currentPage={products?.current_page}
+              url={window.location.href}
+              pageName={'product_page'}
+              options={{
+                only: ['products'],
+                preserveState: true,
+              }}
+            />
+          </div>
+        </WhenVisible>
+      </Modal>
+    </>
+  );
+}
+
 const ActivityList = ({ activities }: { activities: Activity[] }) => {
   const { carFix: { vat, id } } = usePage().props as unknown as { carFix: CarFixType };
   const totalPrice = useMemo(() => {
@@ -150,11 +248,20 @@ const ActivityList = ({ activities }: { activities: Activity[] }) => {
       <div className="flex justify-center font-semibold text-xl">
         Chi tiết công việc và báo giá
       </div>
-      <div className="space-y-2">
+      <div className="">
         {activities.map((activity, index) => {
-          return <div key={index} className="flex justify-between border-b border-gray-900 py-1">
-            <p className="text-gray-900 font-semibold">[{index + 1}]. {activity.title}: {activity.price < 0 ? '-' : ''}{formatPrice(activity.price)} X {activity.qty} {activity.dvt ? `(${activity.dvt})` : ''} =</p>
-            <div className="flex space-x-2">
+          return <div key={index} className="flex justify-between border-b border-gray-900 py-2">
+            <div className="text-gray-900 font-semibold text-lg">
+              [{index + 1}].
+              {activity.product &&
+                <img src={activity.product.image_path}
+                  alt={activity.product.name}
+                  className="w-16 h-16 rounded-md inline-block object-cover mr-2" />
+              }
+              {activity.title}(<Link href={`/adminhtml/product/${activity.product?.id}`}>{activity.product?.alias}</Link>): {activity.price < 0 ? '-' : ''}
+              {formatPrice(activity.price)} X {activity.qty} {activity.dvt ? `(${activity.dvt})` : ''} =
+            </div>
+            <div className="flex space-x-2 items-center">
               <p>{activity.price < 0 ? '-' : ''}{formatPrice(activity.price * activity.qty)}</p>
               <Link href={'/acar/remove-activity/' + activity.id} method="delete"
                 as="button" // cần có method=delete và as=button và type=button trên link này thì mới dùng được cho các method như post,delete

@@ -19,6 +19,7 @@ use Thanhnt\Acarglobal\Models\Types\CarFixInterface;
 use Thanhnt\Acarglobal\Models\Types\CarInterface;
 use Thanhnt\Acarglobal\Models\Types\WorkTimeInterface;
 use Thanhnt\Acarglobal\Request\ImportCarRequest;
+use Thanhnt\Amuaglobal\Models\Product;
 
 final class AcarController extends Controller
 {
@@ -144,6 +145,12 @@ final class AcarController extends Controller
 		 */
 		return Inertia::render('Acarglobal/Car/CarFix', [
 			'carFix' => $this->carFixRepository->carFixDetail($id),
+			'products' => Inertia::optional(fn() => Product::when(
+				request('k_search'),
+				function ($query, $search) {
+					$query->whereAny(['name', 'sku'], 'like', '%' . $search . '%');
+				}
+			)->paginate(6, ['*'], 'product_page')),
 		]);
 	}
 
@@ -251,10 +258,18 @@ final class AcarController extends Controller
 		]);
 	}
 
-    public function removeCarFix(int $id){
-        $this->carFixRepository->removeCarFix($id);
-        return redirect()->to(route('acar.home'));
-    }
+	public function removeCarFix(int $id)
+	{
+		$this->carFixRepository->removeCarFix($id);
+		return redirect()->to(route('acar.home'));
+	}
+
+	public function phuTung()
+	{
+		return Inertia::render('Acarglobal/Car/PhuTung');
+	}
+
+	public function addPhuTung(Request $request) {}
 
 
 	// public function __invoke()

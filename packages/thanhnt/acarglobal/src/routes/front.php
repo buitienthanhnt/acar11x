@@ -51,5 +51,9 @@ Route::prefix('acar')->group(function () {
 
 	Route::post('save-work-time', [AcarController::class, 'saveWorkTime']);
 
-    Route::delete('car-fix-delete/{id}', [AcarController::class, 'removeCarFix'])->name('car.fix.remove');
+	Route::delete('car-fix-delete/{id}', [AcarController::class, 'removeCarFix'])->name('car.fix.remove');
+
+	Route::get('phu-tung', [AcarController::class, 'phuTung']);
+
+	// Route::get('product/create-product', [AcarController::class, 'createPhuTung']);
 });
