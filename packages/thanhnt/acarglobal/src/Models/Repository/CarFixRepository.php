@@ -169,7 +169,7 @@ final class CarFixRepository
 	{
 		$carFix = $this->carFix->find($carFixId);
 		$vatConfig = AcarConfig::where(AcarConfig::KEY, '=', CarFixInterface::VAT)->first();
-		$carFix->{CarFixInterface::VAT} = $carFix->{CarFixInterface::VAT} ? 0 : ($vatConfig->{AcarConfigInterface::VALUE} ?: 8);
+		$carFix->{CarFixInterface::VAT} = $carFix->{CarFixInterface::VAT} ? 0 : ($vatConfig->{AcarConfigInterface::VALUE} ?? 8);
 		$carFix->save();
 		return $carFix;
 	}

@@ -258,7 +258,9 @@ const ActivityList = ({ activities }: { activities: Activity[] }) => {
                   alt={activity.product.name}
                   className="w-16 h-16 rounded-md inline-block object-cover mr-2" />
               }
-              {activity.title}(<Link href={`/adminhtml/product/${activity.product?.id}`}>{activity.product?.alias}</Link>): {activity.price < 0 ? '-' : ''}
+              {activity.title}{
+                activity?.product && (<Link href={`/adminhtml/product/${activity.product?.id}`}>{activity.product?.alias}</Link>)
+              }: {activity.price < 0 ? '-' : ''}
               {formatPrice(activity.price)} X {activity.qty} {activity.dvt ? `(${activity.dvt})` : ''} =
             </div>
             <div className="flex space-x-2 items-center">
