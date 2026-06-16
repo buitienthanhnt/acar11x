@@ -193,7 +193,7 @@ const WrenchModal = ({ onSelectProduct }: { onSelectProduct?: (product: any) => 
   return (
     <>
       <p className="text-xl font-semibold mr-2 text-purple-600">Chọn phụ tùng:</p>
-      <WrenchScrewdriverIcon className="size-7 inline-block " color="#8e24aa" onClick={() => setShowForm(true)}></WrenchScrewdriverIcon>
+      <WrenchScrewdriverIcon className="size-7 inline-block hover:cursor-pointer" color="#8e24aa" onClick={() => setShowForm(true)}></WrenchScrewdriverIcon>
       <Modal
         show={showForm}
       >
@@ -259,7 +259,7 @@ const ActivityList = ({ activities }: { activities: Activity[] }) => {
                   className="w-16 h-16 rounded-md inline-block object-cover mr-2" />
               }
               {activity.title}{
-                activity?.product && (<Link href={`/adminhtml/product/${activity.product?.id}`}>{activity.product?.alias}</Link>)
+                activity?.product && <Link href={`/adminhtml/product/${activity.product?.id}`}>({activity.product?.alias})</Link>
               }: {activity.price < 0 ? '-' : ''}
               {formatPrice(activity.price)} X {activity.qty} {activity.dvt ? `(${activity.dvt})` : ''} =
             </div>
