@@ -2,7 +2,6 @@ import { PaginateInterface } from "@/Pages/Amuaglobal/types/Paginate";
 import { Head, Link } from "@inertiajs/react";
 import ContentLayout from "../Layout/ContentLayout";
 import { Paginate } from "@/Components/Custom";
-import { Car } from "../types/CarType";
 
 const CarList = ({ cars: { data, current_page, last_page } }: { cars: PaginateInterface }) => {
 
@@ -13,7 +12,7 @@ const CarList = ({ cars: { data, current_page, last_page } }: { cars: PaginateIn
         <div className="grid grid-cols-2 bg-white rounded-xl p-2 gap-2">
           {data.map((item, index: number) => {
             return <Link href={route('car.history', { key: item.key })} key={index} className="bg-gray-400 p-2 rounded-md">
-              <b className="bg-orange-200 flex p-1 rounded-md">Biển số: {item.key}</b>
+              <b className="bg-gray-100 flex p-1 rounded-md">Biển số: {item.key}</b>
               <p>Loại xe:{item.suspension} - {item.type}</p>
               <p className="italic">VIN: {item.vin}</p>
               <b className="text-brown-700">Họ tên: {item.customer}({item.address})</b>

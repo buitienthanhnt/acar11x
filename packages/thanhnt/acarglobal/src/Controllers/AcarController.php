@@ -12,11 +12,13 @@ use Thanhnt\Acarglobal\Actions\EmployeeAction;
 use Thanhnt\Acarglobal\Actions\WorkTimeAction;
 use Thanhnt\Acarglobal\Models\AcarConfig;
 use Thanhnt\Acarglobal\Models\Car;
+use Thanhnt\Acarglobal\Models\Customer;
 use Thanhnt\Acarglobal\Models\Employee;
 use Thanhnt\Acarglobal\Models\Repository\CarFixRepository;
 use Thanhnt\Acarglobal\Models\Types\ActivityInterface;
 use Thanhnt\Acarglobal\Models\Types\CarFixInterface;
 use Thanhnt\Acarglobal\Models\Types\CarInterface;
+use Thanhnt\Acarglobal\Models\Types\CustomerInterface;
 use Thanhnt\Acarglobal\Models\Types\WorkTimeInterface;
 use Thanhnt\Acarglobal\Request\ImportCarRequest;
 use Thanhnt\Amuaglobal\Models\Product;
@@ -93,16 +95,22 @@ final class AcarController extends Controller
 	public function import(Request $request)
 	{
 		$selected = null;
-		if ($request->get('search') && strlen($request->get('search')) > 2) {
-			$cars = Car::whereAny(
-				[CarInterface::KEY, CarInterface::VIN, CarInterface::YEAR, CarInterface::SUSPENSION, CarInterface::TYPE],
-				'LIKE',
-				"%" . $request->get('search') . "%"
-			)->get()->unique(CarInterface::KEY);
+		// if ($request->get('search') && strlen($request->get('search')) > 2) {
+		// 	$cars = Car::whereAny(
+		// 		[CarInterface::KEY, CarInterface::VIN, CarInterface::YEAR, CarInterface::SUSPENSION, CarInterface::TYPE],
+		// 		'LIKE',
+		// 		"%" . $request->get('search') . "%"
+		// 	)->get()->unique(CarInterface::KEY)->values();
+
+		// 	dd($cars->toArray());
+		// }
+
+		if ($request->get('customer')) {
+			$customers = Customer::where(CustomerInterface::NAME, 'LIKE', "%" . $request->get('customer') . "%")->get();
 		}
 
 		if ($request->get('selected')) {
-			$selected = Car::where(CarInterface::KEY, $request->get('selected'))->first();
+			$selected = Car::with('customer')->where(CarInterface::KEY, $request->get('selected'))->first();
 		}
 
 		$form_fields = Car::FORM_FIELDS;
@@ -114,7 +122,12 @@ final class AcarController extends Controller
 
 		return Inertia::render('Acarglobal/Car/ImportCar', [
 			'form_fields' => $form_fields,
-			'cars' => $cars ?? [],
+			'cars' => strlen($request->get('search')) > 2 ? Car::whereAny(
+				[CarInterface::KEY, CarInterface::VIN, CarInterface::YEAR, CarInterface::SUSPENSION, CarInterface::TYPE],
+				'LIKE',
+				"%" . $request->get('search') . "%"
+			)->get()->unique(CarInterface::KEY)->values() :  [],
+			'customers' => $customers ?? [],
 			'selected' => $selected,
 		]);
 	}

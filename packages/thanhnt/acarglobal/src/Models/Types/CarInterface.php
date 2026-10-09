@@ -16,6 +16,12 @@ interface CarInterface
 	const CUSTOMER = 'customer';
 	const PHONE = 'phone';
 	const ADDRESS = 'address';
+	const CUSTOMER_ID = 'customer_id';
+
+	/**
+	 * related to customer table
+	 */
+	const R_CUSTOMER = 'customer';
 
 	const FILLED_FIELDS = [
 		self::KEY,
@@ -27,6 +33,7 @@ interface CarInterface
 		self::CUSTOMER,
 		self::PHONE,
 		self::ADDRESS,
+		self::CUSTOMER_ID,
 	];
 
 	const HIDDEN_FIELDS = ['updated_at', 'deleted_at'];
@@ -38,8 +45,9 @@ interface CarInterface
 		// ['name' => self::KM, 'type' => 'number', 'label' => 'số km đã đi',],
 		['name' => self::YEAR, 'type' => 'time', 'label' => 'năm sản xuất',],
 		['name' => self::VIN, 'type' => 'text', 'label' => 'mã VIN',],
-		['name' => self::CUSTOMER, 'type' => 'text', 'label' => 'khách hàng',],
+		// ['name' => self::CUSTOMER, 'type' => 'text', 'label' => 'khách hàng',],
 		['name' => self::PHONE, 'type' => 'text', 'label' => 'sđt',],
 		['name' => self::ADDRESS, 'type' => 'text', 'label' => 'địa chỉ',],
+		['name' => self::CUSTOMER_ID, 'type' => 'number', 'label' => 'mã khách hàng',],
 	];
 }

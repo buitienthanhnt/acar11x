@@ -1,6 +1,5 @@
-import { Head, router, useForm, usePoll } from "@inertiajs/react"
+import { Head, router, useForm, usePage, usePoll } from "@inertiajs/react"
 import ContentLayout from "../Layout/ContentLayout"
-import FormRender from "../components/form/FormRender"
 import { FormField } from "../types/FormField"
 import TextInputField from "../components/form/TextInputField"
 import { useCallback, useRef, } from "react"
@@ -26,8 +25,28 @@ const ImportCar = ({ form_fields, cars, selected }: Props) => {
   })
   /**
    * init form data
+   * data: {
+   *   key: string,
+   *  suspension: string,
+   *  type: string,
+   *  vin: string,
+   *  customer: string,
+   *  phone: string,
+   *  address: string,
+   *  km: number,
+   * }
    */
-  const { data, setData, post, processing, errors, reset, recentlySuccessful } = useForm(_form_fields);
+  const { data, setData, post, processing, errors, reset, recentlySuccessful } = useForm({
+    key: '',
+    suspension: '',
+    type: '',
+    vin: '',
+    customer: null,
+    phone: '',
+    address: '',
+    km: 0,
+    ...selected,
+  });
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -35,7 +54,7 @@ const ImportCar = ({ form_fields, cars, selected }: Props) => {
   }
 
 
-  const inputRef = useRef(null);
+  const inputRef = useRef<HTMLInputElement>(null);
   /**
    * goi api lay danh sach xe vao sau 250ms moi qua trinh nhap gia tri tim kiem
    * @param value
@@ -54,7 +73,6 @@ const ImportCar = ({ form_fields, cars, selected }: Props) => {
 
   const onSelectCar = (car: Car) => {
     // console.log(car, inputRef.current);
-
     if (inputRef.current) {
       inputRef.current.value = car.key
     }
@@ -64,14 +82,16 @@ const ImportCar = ({ form_fields, cars, selected }: Props) => {
     <>
       <Head title="xe vào"></Head>
       <div className="container mx-auto p-2">
-        <form className="px-2 py-8 grid grid-cols-2 space-x-2 justify-center relative bg-gray-200 shadow-md overflow-hidden sm:rounded-lg " onSubmit={onSubmit} autoComplete="true">
+        <form className="px-2 py-8 grid grid-cols-2 space-x-2 justify-center relative bg-gray-200 shadow-md overflow-hidden sm:rounded-lg "
+          onSubmit={onSubmit}
+          autoComplete="true">
           <XMarkIcon className='size-9 absolute left-2 hover:rotate-12 hover:text-orange-800' onClick={() => {
             setData({
               key: '',
               suspension: '',
               type: '',
               vin: '',
-              customer: '',
+              customer: null,
               phone: '',
               address: '',
               km: 0,
@@ -91,7 +111,6 @@ const ImportCar = ({ form_fields, cars, selected }: Props) => {
                     handleSearch(e.target.value);
                   }}
                 />
-
               </div>
               <div className="flex absolute left-1/2 top-5 justify-end">
                 {
@@ -101,13 +120,13 @@ const ImportCar = ({ form_fields, cars, selected }: Props) => {
                 }
               </div>
             </div>
-
             <TextInputField
               list="browserx"
               value={data.suspension}
               label={'Hãng xe(vd: Audi)'}
-              onChange={(e) => setData('suspension', e.target.value)}
+              onChange={(e: { target: { value: any } }) => setData('suspension', e.target.value)}
               placeholder={'suspension'}
+              name={'suspension'}
             />
             <datalist id="browserx">
               <option value="BMW" />
@@ -143,55 +162,38 @@ const ImportCar = ({ form_fields, cars, selected }: Props) => {
 
             <TextInputField
               value={data.type}
+              name={'type'}
               label={'Loại xe(vd: A4)'}
-              onChange={(e) => setData('type', e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setData('type', e.target.value)}
               placeholder={'type'}
             />
 
             <TextInputField
               value={data.vin}
               label={'Mã VIN'}
-              onChange={(e) => setData('vin', e.target.value)}
+              name="vin"
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setData('vin', e.target.value)}
               placeholder={'vin'}
             />
 
             <TextInputField
               value={data.km}
               label={'Số km hiện tại'}
-              onChange={(e) => setData('km', e.target.value)}
+              name="km"
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setData('km', parseFloat(e.target.value) || 0)}
               placeholder={'km'}
               type={'number'}
               min={0}
             />
 
             <div>
-              <PrimaryButton className="w-full content-center text-center justify-center mt-6" disabled={processing || !data.key}>
+              <PrimaryButton className="w-full content-center text-center justify-center mt-6"
+                disabled={processing || !data.key}>
                 Tiếp tục
               </PrimaryButton>
             </div>
           </div>
-          <div className="flex flex-col flex-1 space-y-2 items-end justify-end">
-            <TextInputField
-              value={data.customer}
-              label={'Khách hàng'}
-              onChange={(e) => setData('customer', e.target.value)}
-              placeholder={'customer'}
-            />
-
-            <TextInputField
-              value={data.phone}
-              label={'SĐT'}
-              onChange={(e) => setData('phone', e.target.value)}
-              placeholder={'phone'}
-            />
-
-            <TextInputField
-              value={data.address}
-              label={'Địa chỉ'}
-              onChange={(e) => setData('address', e.target.value)}
-              placeholder={'address'}
-            />
-          </div>
+          <CustomerForm data={data} setData={setData} />
         </form>
       </div>
     </>
@@ -215,6 +217,67 @@ const CarItem = ({ car: { key, suspension, type, ...rest }, onCheck }: { car: Ca
     </div>
   );
 
+}
+
+const CustomerForm = ({ data, setData }: {
+  data: { [key: string]: any; };
+  setData: (key: string, value: any) => void;
+}) => {
+  console.log(data);
+  
+  const { customers } = usePage().props as any;
+
+  /**
+  * goi api lay danh sach xe vao sau 250ms moi qua trinh nhap gia tri tim kiem
+  * @param value
+  */
+  const searchCustomer = useCallback(
+    debounce((value) => {
+      if (!value || value.length > 2) {
+        router.get('/acar/xe-vao', { customer: value }, {
+          preserveState: true,
+          replace: true
+        });
+      }
+    }, 250),
+    []
+  );
+
+  return (
+    <div className="flex flex-col flex-1 space-y-2 items-end justify-end">
+      <TextInputField
+        value={data.customer?.name}
+        label={'Khách hàng'}
+        name="customer.name"
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+          setData('customer.name', e.target.value);
+          searchCustomer(e.target.value);
+        }}
+        placeholder={'name'}
+      />
+      {customers && customers.map((customer: any) => (
+        <div key={customer.id} className="p-2 hover:bg-gray-200" onClick={() => setData('customer.name', customer.name)}>
+          {customer.name}
+        </div>
+      ))}
+
+      <TextInputField
+        value={data.customer?.phone}
+        label={'SĐT'}
+        name='customer.phone'
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setData('customer.phone', e.target.value)}
+        placeholder={'phone'}
+      />
+
+      <TextInputField
+        value={data.customer?.address}
+        label={'Địa chỉ'}
+        name='customer.address'
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setData('customer.address', e.target.value)}
+        placeholder={'address'}
+      />
+    </div>
+  )
 }
 
 ImportCar.layout = (page: any) => <ContentLayout>{page}</ContentLayout>

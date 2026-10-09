@@ -14,8 +14,8 @@ const TextInputField = ({ name, value, label, type, displayClass, error, ...prop
         {label && <p className="font-semibold text-info text-md w-auto flex-1">{label}:</p>}
         {error && <p className="text-sm text-red-600">{error}</p>}
       </div>}
-
-      <input type={type || "text"} name={name} value={value} {...props} className={
+      {/* cần gán value={value || ''} nếu không với giá trị undefine trường này sẽ không nhận giá trị trống mà vẫn lưu giá trị cũ khi hiển thị */}
+      <input type={type || "text"} name={name} value={value || ''} {...props} className={
         'flex rounded-md bg-transparent border-gray-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 w-3/5 ' +
         props?.className +
         (props?.disabled ? ' bg-gray-100 cursor-not-allowed' : '')
