@@ -12,8 +12,8 @@ export default function CarHistory({ car }: { car: CarDetail }) {
           <b>Biển số: {car.key}</b>
           <p>Loại xe:{car.suspension} - {car.type}</p>
           <p className="italic">VIN: {car.vin}</p>
-          <b className="text-brown-700">Họ tên: {car.customer}({car.address})</b>
-          <p className="font-semibold text-brown-700">sđt: {car.phone}</p>
+          <b className="text-brown-700">Họ tên: {car.customer?.name}({car.customer?.address})</b>
+          <p className="font-semibold text-brown-700">sđt: {car?.customer?.phone}</p>
         </div>
 
         <div className="bg-gray-300 rounded-xl p-2 gap-2 space-y-1">

@@ -18,4 +18,13 @@ interface CustomerInterface
 		self::ADDRESS,
 		self::COMPANY,
 	];
+
+	const HIDDEN_FIELDS = ['updated_at', 'deleted_at', 'created_at'];
+
+	const FORM_FIELDS = [
+		['name' => self::NAME, 'type' => 'text', 'label' => 'Tên khách hàng', 'required' => true],
+		['name' => self::PHONE, 'type' => 'text', 'label' => 'Số điện thoại',],
+		['name' => self::ADDRESS, 'type' => 'text', 'label' => 'Địa chỉ',],
+		['name' => self::COMPANY, 'type' => 'text', 'label' => 'Công ty',],
+	];
 }

@@ -1,14 +1,16 @@
+import { CustomerType } from "./CustomerType";
+
 export type Car = {
   id: number,
   key: string,
   suspension: string,
   type: string,
-  // km: number,
+  km: number,
   year: string,
   vin: string,
-  customer?: string,
-  phone?: string,
-  address?: string,
+  customer?: CustomerType,
+  // phone?: string,
+  // address?: string,
   // color: string,
   // price: number,
   // image_path: string,

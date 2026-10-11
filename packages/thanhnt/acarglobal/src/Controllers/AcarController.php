@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Inertia\Inertia;
 use Thanhnt\Acarglobal\Actions\ActivityAction;
+use Thanhnt\Acarglobal\Actions\CarAction;
 use Thanhnt\Acarglobal\Actions\CarImport;
 use Thanhnt\Acarglobal\Actions\EmployeeAction;
 use Thanhnt\Acarglobal\Actions\WorkTimeAction;
@@ -32,6 +33,7 @@ final class AcarController extends Controller
 		protected ActivityAction $activityAction,
 		protected EmployeeAction $employeeAction,
 		protected WorkTimeAction $workTimeAction,
+		protected CarAction $carAction,
 	) {
 		// throw new \Exception('Not implemented');
 	}
@@ -75,17 +77,21 @@ final class AcarController extends Controller
 		return redirect()->to(url()->previous())->setStatusCode(303);
 	}
 
+	/**
+	 * Danh sách xe
+	 * @return \Inertia\Response
+	 */
 	public function carList()
 	{
 		return Inertia::render('Acarglobal/Car/CarList', [
-			'cars' => Car::orderBy('created_at', 'desc')->paginate(12),
+			'cars' => $this->carAction->carPaginate(),
 		]);
 	}
 
 	public function carHistory(string $key)
 	{
 		return Inertia::render('Acarglobal/Car/CarHistory', [
-			'car' => Car::where(CarInterface::KEY, $key)->with('carFix')->first(),
+			'car' => $this->carAction->carDetail($key),
 		]);
 	}
 
@@ -105,10 +111,16 @@ final class AcarController extends Controller
 		// 	dd($cars->toArray());
 		// }
 
+		/**
+		 * Tìm kiếm khách hàng theo tên, nếu có tham số 'customer' trong request
+		 */
 		if ($request->get('customer')) {
 			$customers = Customer::where(CustomerInterface::NAME, 'LIKE', "%" . $request->get('customer') . "%")->get();
 		}
 
+		/**
+		 * Tìm kiếm xe theo biển số xe, nếu có tham số 'selected' trong request
+		 */
 		if ($request->get('selected')) {
 			$selected = Car::with('customer')->where(CarInterface::KEY, $request->get('selected'))->first();
 		}

@@ -24,6 +24,9 @@ interface CarFixInterface
 	const VAT = 'vat';
 	const KM = 'km';
 
+	const R_ACTIVITIES = 'activities';
+	const R_CAR = 'car';
+
 	const FILLED_FIELDS = [
 		self::STATUS,
 		self::CAR_ID,

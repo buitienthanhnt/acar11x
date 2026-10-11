@@ -34,6 +34,8 @@ interface ActivityInterface
 	 * dau may | 10 | 80 | 
 	 */
 
+	const R_PRODUCT = 'product';
+
 	const FILLED_FIELDS = [
 		self::CAR_ID,
 		self::CAR_FIX_ID,
@@ -46,7 +48,7 @@ interface ActivityInterface
 		self::DVT,
 	];
 
-	const HIDDEN_FIELDS = ['created_at', 'updated_at', 'deleted_at'];
+	const HIDDEN_FIELDS = ['created_at', 'updated_at', 'deleted_at', self::PRODUCT_ID];
 
 	const FORM_FIELDS = [
 		[

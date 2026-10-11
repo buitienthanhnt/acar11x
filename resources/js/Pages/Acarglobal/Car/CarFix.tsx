@@ -34,14 +34,14 @@ CarFix.layout = (page: React.ReactNode) => <ContentLayout children={page} />
 
 export default CarFix;
 
-export const CarFixInfo = ({ car, status, status_label, km }: CarFixType) => {
+export const CarFixInfo = ({ car, km }: CarFixType) => {
   return (
     <div className="flex bg-gray-300 p-2 rounded-md">
       <div className="flex flex-col flex-1  p-2">
         <b>Thông tin khách hàng:</b>
-        <b>Khách hàng: {car.customer}</b>
-        <b>Số điện thoại: {car.phone}</b>
-        <i>Địa chỉ: {car.address}</i>
+        <b>Khách hàng: {car?.customer?.name}</b>
+        <b>Số điện thoại: {car?.customer?.phone}</b>
+        <i>Địa chỉ: {car?.customer?.address}</i>
       </div>
       <Link className="flex flex-col flex-1 bg-blue-gray-200 rounded-md p-2" href={route('car.history', { id: car.key })}>
         <b>Thông tin xe:</b>

@@ -9,7 +9,7 @@ interface CarInterface
 	const KEY = 'key'; // mã xe(biển số)
 	const SUSPENSION = 'suspension'; // hãng xe
 	const TYPE = 'type'; // dòng xe
-	// const KM = 'km'; // số km đã đi
+	const KM = 'km'; // số km đã đi
 	const YEAR = 'year'; // năm sản xuất
 	const VIN = 'vin'; // mã VIN
 
@@ -22,12 +22,13 @@ interface CarInterface
 	 * related to customer table
 	 */
 	const R_CUSTOMER = 'customer';
+	const R_CAR_FIX = 'carFix';
 
 	const FILLED_FIELDS = [
 		self::KEY,
 		self::SUSPENSION,
 		self::TYPE,
-		// self::KM,
+		self::KM,
 		self::YEAR,
 		self::VIN,
 		self::CUSTOMER,
@@ -36,18 +37,18 @@ interface CarInterface
 		self::CUSTOMER_ID,
 	];
 
-	const HIDDEN_FIELDS = ['updated_at', 'deleted_at'];
+	const HIDDEN_FIELDS = ['updated_at', 'deleted_at', self::CUSTOMER_ID];
 
 	const FORM_FIELDS = [
 		['name' => self::KEY, 'type' => 'text', 'label' => 'Biển số', 'required' => true],
 		['name' => self::SUSPENSION, 'type' => 'text', 'label' => 'hãng xe(vd: Audi)',],
 		['name' => self::TYPE, 'type' => 'text', 'label' => 'dòng xe(vd: Q7)',],
-		// ['name' => self::KM, 'type' => 'number', 'label' => 'số km đã đi',],
+		['name' => self::KM, 'type' => 'number', 'label' => 'số km đã đi',],
 		['name' => self::YEAR, 'type' => 'time', 'label' => 'năm sản xuất',],
 		['name' => self::VIN, 'type' => 'text', 'label' => 'mã VIN',],
 		// ['name' => self::CUSTOMER, 'type' => 'text', 'label' => 'khách hàng',],
-		['name' => self::PHONE, 'type' => 'text', 'label' => 'sđt',],
-		['name' => self::ADDRESS, 'type' => 'text', 'label' => 'địa chỉ',],
+		// ['name' => self::PHONE, 'type' => 'text', 'label' => 'sđt',],
+		// ['name' => self::ADDRESS, 'type' => 'text', 'label' => 'địa chỉ',],
 		['name' => self::CUSTOMER_ID, 'type' => 'number', 'label' => 'mã khách hàng',],
 	];
 }

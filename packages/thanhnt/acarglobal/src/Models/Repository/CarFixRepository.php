@@ -146,8 +146,10 @@ final class CarFixRepository
 	 */
 	public function carFixDetail(int $id)
 	{
-		return $this->carFix->query()->with('car')->with('activities', function ($query) {
-			$query->with('product');
+		return $this->carFix->query()->with(CarFixInterface::R_CAR, function ($car) {
+			$car->with(CarInterface::R_CUSTOMER);
+		})->with(CarFixInterface::R_ACTIVITIES, function ($query) {
+			$query->with(ActivityInterface::R_PRODUCT);
 		})->find($id);
 	}
 
