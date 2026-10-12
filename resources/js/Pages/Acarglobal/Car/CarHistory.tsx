@@ -1,5 +1,5 @@
 import { Head, Link } from "@inertiajs/react"
-import { Car, CarDetail } from "../types/CarType"
+import { CarDetail } from "../types/CarType"
 import ContentLayout from "../Layout/ContentLayout"
 
 export default function CarHistory({ car }: { car: CarDetail }) {

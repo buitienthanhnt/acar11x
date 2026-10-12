@@ -9,7 +9,6 @@ interface CarInterface
 	const KEY = 'key'; // mã xe(biển số)
 	const SUSPENSION = 'suspension'; // hãng xe
 	const TYPE = 'type'; // dòng xe
-	const KM = 'km'; // số km đã đi
 	const YEAR = 'year'; // năm sản xuất
 	const VIN = 'vin'; // mã VIN
 
@@ -28,7 +27,6 @@ interface CarInterface
 		self::KEY,
 		self::SUSPENSION,
 		self::TYPE,
-		self::KM,
 		self::YEAR,
 		self::VIN,
 		self::CUSTOMER,
@@ -43,7 +41,6 @@ interface CarInterface
 		['name' => self::KEY, 'type' => 'text', 'label' => 'Biển số', 'required' => true],
 		['name' => self::SUSPENSION, 'type' => 'text', 'label' => 'hãng xe(vd: Audi)',],
 		['name' => self::TYPE, 'type' => 'text', 'label' => 'dòng xe(vd: Q7)',],
-		['name' => self::KM, 'type' => 'number', 'label' => 'số km đã đi',],
 		['name' => self::YEAR, 'type' => 'time', 'label' => 'năm sản xuất',],
 		['name' => self::VIN, 'type' => 'text', 'label' => 'mã VIN',],
 		// ['name' => self::CUSTOMER, 'type' => 'text', 'label' => 'khách hàng',],

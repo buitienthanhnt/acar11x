@@ -18,7 +18,7 @@ export type Car = {
 }
 
 export type CarDetail = {
-  car_fix: CarFix[],
+  car_fix: CarFixType[],
 } & Car;
 
 export type Activity = {
@@ -38,7 +38,7 @@ export type Activity = {
   product?: any,
 }
 
-export type CarFix = {
+export type CarFixType = {
   id: number,
   car: Car,
   activities: Activity[],

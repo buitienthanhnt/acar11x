@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useState } from "react";
 import ContentLayout from "../Layout/ContentLayout";
-import { Activity, CarFix as CarFixType } from "../types/CarType";
+import { Activity, CarFixType } from "../types/CarType";
 import { CheckCircleIcon, PlusCircleIcon, TrashIcon, WrenchScrewdriverIcon, XCircleIcon } from "@heroicons/react/24/solid";
 import TextInputField from "../components/form/TextInputField";
 import { Head, Link, router, useForm, usePage, WhenVisible } from "@inertiajs/react";
@@ -206,7 +206,7 @@ const WrenchModal = ({ onSelectProduct }: { onSelectProduct?: (product: any) => 
             setShowForm(false)
           }}></XCircleIcon>
         </div>
-        <WhenVisible fallback={<div>Loading...</div>} data={'products'}>
+        <WhenVisible fallback={<div className="flex justify-center items-center font-semibold p-4">Loading...</div>} data={'products'}>
           <div className="p-4 h-[60vh] flex flex-col flex-1 w-auto overflow-y-scroll [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             <div className="my-2">
               <TextInputField name="" defaultValue={k_search} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {

@@ -1,6 +1,6 @@
 
 const TextInputField = ({ name, value, label, type, displayClass, error, ...props }: {
-  name: string;
+  name?: string;
   value?: any;
   label?: string;
   type?: string;

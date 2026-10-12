@@ -31,7 +31,7 @@ final class CarImport
 
 	/**
 	 * Register car info
-	 * @param array{customer: array{name: string, phone: string, address: string}, 
+	 * @param array{customer: array{name: string, phone: string, address: string},
 	 * key: string, suspension: string, type: string, year: string, vin: string, km: integer
 	 * } $requestInfo
 	 * @return \Thanhnt\Acarglobal\Models\Car
@@ -39,8 +39,8 @@ final class CarImport
 	public function registerCarinfo($requestInfo)
 	{
 		/**
-		 * array_flip: đảo ngược key và value của mảng, 
-		 * mục đích là để lấy ra các key cần thiết từ mảng $requestInfo, 
+		 * array_flip: đảo ngược key và value của mảng,
+		 * mục đích là để lấy ra các key cần thiết từ mảng $requestInfo,
 		 * array_intersect_key: chỉ lấy những key có trong CustomerInterface::FILLED_FIELDS
 		 */
 		$carCustomer = array_intersect_key(
@@ -73,7 +73,7 @@ final class CarImport
 	/**
 	 * Register car fix
 	 * @param \Thanhnt\Acarglobal\Models\Car $carInfo
-	 * @param array{customer: array{name: string, phone: string, address: string}, 
+	 * @param array{customer: array{name: string, phone: string, address: string},
 	 * key: string, suspension: string, type: string, year: string, vin: string, km: integer
 	 * } $requestInfo
 	 * @return \Thanhnt\Acarglobal\Models\CarFix
