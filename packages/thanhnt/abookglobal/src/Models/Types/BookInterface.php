@@ -8,7 +8,7 @@ use Thanhnt\Amuaglobal\Models\Types\FormInterface;
 
 interface BookInterface
 {
-	const TABLE_NAME = 'books';
+	const TABLE_NAME = 'abook_books';
 	const LINK_CATEGORY_TABLE = 'book_cate_link';
 
 	const ID = 'id';

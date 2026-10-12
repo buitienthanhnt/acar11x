@@ -8,7 +8,7 @@ use Thanhnt\Abookglobal\Models\BookCate;
 interface BookCateInterface
 {
 	const ID = 'id';
-	const TABLE_NAME = 'book_cates';
+	const TABLE_NAME = 'abook_cates';
 
 	const NAME = 'name';
 	const ALIAS = 'alias';

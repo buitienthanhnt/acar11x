@@ -4,7 +4,7 @@ namespace Thanhnt\Abookglobal\Models\Types;
 
 interface PublisherInterface
 {
-	const TABLE_NAME = 'publishers';
+	const TABLE_NAME = 'abook_publishers';
 
 	const ID = 'id';
 	const NAME = 'name';
