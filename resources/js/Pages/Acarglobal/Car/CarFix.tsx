@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useCallback, useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import ContentLayout from "../Layout/ContentLayout";
 import { Activity, CarFix as CarFixType } from "../types/CarType";
 import { CheckCircleIcon, PlusCircleIcon, TrashIcon, WrenchScrewdriverIcon, XCircleIcon } from "@heroicons/react/24/solid";
@@ -12,8 +12,9 @@ import { ProductItem } from "@/Pages/Amuaglobal/Screens/ProductList";
 import { ProductType } from "@/Pages/Amuaglobal/types/Product";
 import { useUrlParam } from "@/Pages/Amuaglobal/hooks/useUrlParam";
 import { debounce } from "lodash";
+import { PageWithLayout } from "../types/ExtendType";
 
-const CarFix: FunctionComponent<{ carFix: CarFixType }> = ({ carFix }) => {
+const CarFix: PageWithLayout<{ carFix: CarFixType }> = ({ carFix }) => {
 
   return (
     <div className="container mx-auto bg-white flex-1 p-1 space-y-2">
@@ -122,13 +123,13 @@ const ActivityForm = ({ id, car }: CarFixType) => {
               </div>
             </>}
             <b>Chi phí(đơn vị nghìn vnđ):</b>
-            <TextInputField type="number" value={data.price} onChange={e => setData('price', e.target.value)} className="w-full" placeholder="chi phí"></TextInputField>
+            <TextInputField type="number" name="price" value={data.price} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setData('price', Number(e.target.value))} className="w-full" placeholder="chi phí"></TextInputField>
           </div>
 
           <div className="flex space-x-1">
             <div className="flex flex-1 justify-center flex-col">
               <b>Số lượng:</b>
-              <TextInputField type="number" value={data.qty} min={1} onChange={e => setData('qty', e.target.value)} className="w-full" placeholder="số lượng"></TextInputField>
+              <TextInputField type="number" name="qty" value={data.qty} min={1} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setData('qty', Number(e.target.value))} className="w-full" placeholder="số lượng"></TextInputField>
             </div>
 
             <div className="flex flex-1 justify-center flex-col">
@@ -136,7 +137,9 @@ const ActivityForm = ({ id, car }: CarFixType) => {
               <TextInputField
                 list="browserx"
                 type="text"
-                onChange={e => setData('dvt', e.target.value)}
+                name="dvt"
+                value={data.dvt}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setData('dvt', e.target.value)}
                 className="w-full"
                 placeholder="đơn vị tính">
               </TextInputField>
@@ -206,12 +209,12 @@ const WrenchModal = ({ onSelectProduct }: { onSelectProduct?: (product: any) => 
         <WhenVisible fallback={<div>Loading...</div>} data={'products'}>
           <div className="p-4 h-[60vh] flex flex-col flex-1 w-auto overflow-y-scroll [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             <div className="my-2">
-              <TextInputField name="" defaultValue={k_search} onChange={e => {
+              <TextInputField name="" defaultValue={k_search} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                 onSeacch(e.target.value);
               }} placeholder="tìm kiếm"></TextInputField>
             </div>
             <div className="flex-1 flex-col">
-              {products?.data?.map(product => <ProductItem key={product.id} product={product} onSelectProduct={(p: any) => {
+              {products?.data?.map((product: ProductType) => <ProductItem key={product.id} product={product} onSelectProduct={(p: any) => {
                 onSelectProduct?.(p);
                 setShowForm(false);
               }} />)}

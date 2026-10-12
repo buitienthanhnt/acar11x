@@ -30,6 +30,40 @@ const CarfixList = ({ }: any) => {
   const { props: { car_fixs, calendar }, } = usePage() as any;
   const [seletedDate, setSelectedDate] = useState<Date[]>([]);
 
+  /**
+   * tim kiếm xe với biển số
+   */
+  const onSearch = useCallback(debounce((value: string) => {
+    if (!value || value.length > 2) {
+      /**
+      * chuyển hướng trang sau 260ms để tìm kiếm xe với biển số đã nhập
+      */
+      router.get('/acar', { ...params, search: value }, {
+        preserveState: true,
+        preserveScroll: true,
+        only: ['car_fixs'],
+      });
+    }
+  }, 260), [])
+
+  /**
+   * lọc giá trị với thời gian chọn
+   */
+  const onChangeDate = useCallback((seletedDate: Date[]) => {
+    setSelectedDate(seletedDate);
+    /**
+     * chuyển hướng trang với thời gian đã chọn
+     */
+    router.get('/acar', { ...params, from: seletedDate[0], to: seletedDate[1] }, {
+      preserveState: true,
+      preserveScroll: true,
+      only: ['car_fixs'],
+    });
+  }, [])
+
+  /**
+  * lắng nghe sự kiện thay đổi thời gian
+  */
   useEffect(() => {
     const defaultDate = [];
     if (params.from) {
@@ -43,36 +77,12 @@ const CarfixList = ({ }: any) => {
     }
   }, [])
 
-  const onSearch = useCallback(debounce((value: string) => {
-    if (!value || value.length > 2) {
-      router.get('/acar', { ...params, search: value }, {
-        preserveState: true,
-        preserveScroll: true,
-        only: ['car_fixs'],
-      });
-    }
-  }, 260), [])
-
-  const onChangeDate = useCallback((seletedDate: Date[]) => {
-    setSelectedDate(seletedDate);
-
-    router.get('/acar', { ...params, from: seletedDate[0], to: seletedDate[1] }, {
-      preserveState: true,
-      preserveScroll: true,
-      only: ['car_fixs'],
-    });
-  }, [])
-
   return (
     <div className="flex flex-col gap-1 mt-4">
-      <TextInputField placeholder="Nhập biển số" defaultValue={params.search} displayClass="justify-center"
+      <TextInputField name='search' placeholder="Nhập biển số" defaultValue={params.search} displayClass="justify-center"
         onChange={(e: any) => onSearch(e.target.value)}>
       </TextInputField>
-      {calendar && <CustomTimeTable
-        selected={seletedDate}
-        onChange={onChangeDate}
-      >
-      </CustomTimeTable>}
+      {calendar && <CustomTimeTable selected={seletedDate} onChange={onChangeDate} />}
       <CarfixFilter></CarfixFilter>
       <WhenVisible data="car_fixs" fallback={null}>
         {!!car_fixs?.data.length ?
@@ -86,7 +96,6 @@ const CarfixList = ({ }: any) => {
 }
 
 const CarfixFilter = () => {
-
   const urlParams = new URLSearchParams(window.location.search);
   const status = Object.fromEntries(urlParams.entries()).status;
 
@@ -101,6 +110,7 @@ const CarfixFilter = () => {
 }
 
 const CarfixItem = ({ id, car, created_at, updated_at, status_label, status }: CarFix) => {
+
   return (
     <Link href={route('car.fix.detail', { id: id })}
       className={`p-2 rounded-md flex ${status === 'wait' ? 'bg-brown-200' : status === 'processing' ? 'bg-blue-gray-300' : 'bg-green-400'} space-x-4`}
@@ -110,8 +120,8 @@ const CarfixItem = ({ id, car, created_at, updated_at, status_label, status }: C
         <p>{car.suspension} - {car.type}</p>
       </div>
       <div className="flex-1">
-        <p>{car.customer}({car.address})</p>
-        <p>sdt: {car.phone}</p>
+        <p>{car?.customer?.name}({car?.customer?.address})</p>
+        <p>sdt: {car?.customer?.phone}</p>
       </div>
       <div className="flex flex-col">
         <p className="font-semibold text-indigo-700">{status_label}</p>

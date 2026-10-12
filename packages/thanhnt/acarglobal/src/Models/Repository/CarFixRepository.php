@@ -82,7 +82,11 @@ final class CarFixRepository
 
 				// $query->whereDate($status === 'done' ? 'updated_at' : 'created_at', [$this->request->get('from'), $this->request->get('to')]);
 			})
-			->orderBy('updated_at', 'desc')->with('car')->with('activities')->paginate(8);
+			->orderBy('updated_at', 'desc')
+			->with(CarFixInterface::R_CAR, function ($car) {
+				$car->with(CarInterface::R_CUSTOMER);
+			})->with(CarFixInterface::R_ACTIVITIES)
+			->paginate(8);
 	}
 
 	/**

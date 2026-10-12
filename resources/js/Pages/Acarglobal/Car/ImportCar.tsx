@@ -7,6 +7,7 @@ import debounce from 'lodash/debounce';
 import { Car } from "../types/CarType";
 import PrimaryButton from "@/Components/PrimaryButton"
 import { XMarkIcon } from "@heroicons/react/24/solid"
+import { CustomerType } from "../types/CustomerType"
 
 type Props = {
   form_fields: FormField[];
@@ -37,18 +38,18 @@ const ImportCar = ({ form_fields, cars, selected }: Props) => {
    * }
    */
   const { data, setData, post, processing, errors, reset, recentlySuccessful } = useForm({
-    key: '',
-    suspension: '',
-    type: '',
-    vin: '',
+    // key: '',
+    // suspension: '',
+    // type: '',
+    // vin: '',
     customer: null,
     phone: '',
     address: '',
-    km: 0,
+    // km: 0,
     ...selected,
   });
 
-  const onSubmit = (e) => {
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     post('/acar/import-car',);
   }
@@ -101,11 +102,16 @@ const ImportCar = ({ form_fields, cars, selected }: Props) => {
           <div className="flex-1 space-y-2 sm:max-w-md md:max-w-2xl">
             <div >
               <div className="flex space-x-2 w-full items-center justify-between ">
-                <span className="font-semibold text-info text-md w-1/5 flex-1">Biển số: </span>
-                <input required type={"text"} placeholder="key" value={data.key} className={
-                  'flex rounded-md bg-transparent border-gray-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 w-3/5 ' +
-                  (processing ? ' bg-gray-100 cursor-not-allowed' : '')
-                }
+                <span className="font-semibold text-info text-md w-1/5 flex-1 after:content-['*'] after:ml-0.5 after:text-red-500">Biển số </span>
+                <input
+                  required
+                  type={"text"}
+                  placeholder="key"
+                  value={data.key}
+                  className={
+                    'flex rounded-md bg-transparent border-gray-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 w-3/5' +
+                    (processing ? ' bg-gray-100 cursor-not-allowed' : '')
+                  }
                   onChange={(e) => {
                     setData('key', e.target.value);
                     handleSearch(e.target.value);
@@ -121,14 +127,14 @@ const ImportCar = ({ form_fields, cars, selected }: Props) => {
               </div>
             </div>
             <TextInputField
-              list="browserx"
+              list="suspensionx"
               value={data.suspension}
               label={'Hãng xe(vd: Audi)'}
               onChange={(e: { target: { value: any } }) => setData('suspension', e.target.value)}
               placeholder={'suspension'}
               name={'suspension'}
             />
-            <datalist id="browserx">
+            <datalist id="suspensionx">
               <option value="BMW" />
               <option value="Audi" />
               <option value="Mercedes" />
@@ -223,8 +229,6 @@ const CustomerForm = ({ data, setData }: {
   data: { [key: string]: any; };
   setData: (key: string, value: any) => void;
 }) => {
-  console.log(data);
-  
   const { customers } = usePage().props as any;
 
   /**
@@ -245,26 +249,38 @@ const CustomerForm = ({ data, setData }: {
 
   return (
     <div className="flex flex-col flex-1 space-y-2 items-end justify-end">
-      <TextInputField
-        value={data.customer?.name}
-        label={'Khách hàng'}
-        name="customer.name"
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-          setData('customer.name', e.target.value);
-          searchCustomer(e.target.value);
-        }}
-        placeholder={'name'}
-      />
-      {customers && customers.map((customer: any) => (
-        <div key={customer.id} className="p-2 hover:bg-gray-200" onClick={() => setData('customer.name', customer.name)}>
-          {customer.name}
+      <div className="relative flex w-full">
+        <TextInputField
+          value={data.customer?.name}
+          label={'Khách hàng'}
+          name="customer.name"
+          required
+          // list="customer-list"
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            setData('customer.name', e.target.value);
+            searchCustomer(e.target.value);
+          }}
+          placeholder={'name'}
+        ></TextInputField>
+        <div className={`absolute z-10 right-0 top-12 rounded-md bg-white shadow-md ${data.customer?.name && data.customer?.phone ? 'hidden' : ''}`}>
+          {customers.map((customer: CustomerType) => (
+            <div
+              key={customer.id}
+              className="p-2 hover:bg-gray-200 cursor-pointer text-left" // Hoạt động 100% với CSS
+              onClick={() => {
+                setData('customer', customer);
+              }}
+            >
+              {customer.name} {customer.phone}
+            </div>
+          ))}
         </div>
-      ))}
-
+      </div>
       <TextInputField
         value={data.customer?.phone}
         label={'SĐT'}
         name='customer.phone'
+        required
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => setData('customer.phone', e.target.value)}
         placeholder={'phone'}
       />
@@ -275,6 +291,13 @@ const CustomerForm = ({ data, setData }: {
         name='customer.address'
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => setData('customer.address', e.target.value)}
         placeholder={'address'}
+      />
+      <TextInputField
+        value={data.customer?.company}
+        label={'Tên công ty'}
+        name='customer.company'
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setData('customer.company', e.target.value)}
+        placeholder={'company'}
       />
     </div>
   )

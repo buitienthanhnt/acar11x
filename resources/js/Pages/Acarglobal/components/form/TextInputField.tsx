@@ -10,8 +10,8 @@ const TextInputField = ({ name, value, label, type, displayClass, error, ...prop
 }) => {
   return (
     <div className={`flex space-x-2 w-full items-center ${displayClass}`}>
-      {label && <div className="w-auto flex-1 flex-col">
-        {label && <p className="font-semibold text-info text-md w-auto flex-1">{label}:</p>}
+      {label && <div className={`w-auto flex-1 flex-col`}>
+        {label && <p className={`font-semibold text-info text-md w-auto flex-1 ${props.required ? 'after:content-["*"] after:ml-0.5 after:text-red-500' : ''}`}>{label}</p>}
         {error && <p className="text-sm text-red-600">{error}</p>}
       </div>}
       {/* cần gán value={value || ''} nếu không với giá trị undefine trường này sẽ không nhận giá trị trống mà vẫn lưu giá trị cũ khi hiển thị */}
