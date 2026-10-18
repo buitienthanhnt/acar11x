@@ -6,7 +6,7 @@ use Thanhnt\Amuaglobal\Controllers\AmuaController;
 Route::prefix('adminhtml')->group(function () {
 	Route::get('clear-cache', [AmuaController::class, 'clearCache']);
 
-	Route::prefix('product')->group(function () {
+	Route::prefix('amua-product')->group(function () {
 
 		Route::get('/', [AmuaController::class, 'listProduct']);
 
@@ -16,4 +16,8 @@ Route::prefix('adminhtml')->group(function () {
 
 		Route::get('/detail/{id}', [AmuaController::class, 'detailProduct']);
 	});
+
+    Route::prefix('amua-category')->group(function(){
+        Route::get('/', [\Thanhnt\Amuaglobal\Controllers\Admin\CategoryController::class, 'listCategory']);
+    });
 });
