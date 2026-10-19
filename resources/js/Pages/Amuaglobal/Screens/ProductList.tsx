@@ -11,7 +11,7 @@ const ProductList = ({ products }: { products: PaginateInterface }) => {
       <Head title="Product List" />
       <div className="container mx-auto">
         <Link
-          href={'/adminhtml/product/create'}
+          href={'/adminhtml/amua-product/create'}
           className="bg-green-500 text-white px-4 py-2 rounded-md mb-4 inline-block w-fit">
           Create Product
         </Link>
