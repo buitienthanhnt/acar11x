@@ -29,7 +29,7 @@ const styles: {
         width: '100%',
         maxWidth: '100%',
         padding: 10,
-        backgroundColor: '#E4E4E4',
+        // backgroundColor: '#E4E4E4',
     },
     section: {
         margin: 10,

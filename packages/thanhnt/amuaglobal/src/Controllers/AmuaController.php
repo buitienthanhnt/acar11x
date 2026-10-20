@@ -34,7 +34,7 @@ class AmuaController extends Controller
 		$products = Product::when(request('k_search'), function ($query, $search) {
 			$query->whereAny(['name', 'sku'], 'like', '%' . $search . '%');
 		})->paginate(6);
-		return Inertia::render('Amuaglobal/Screens/ProductList', [
+		return Inertia::render('Amuaglobal/Screens/Adminhtml/Product/ProductList', [
 			'products' => $products,
 		]);
 	}
@@ -42,14 +42,14 @@ class AmuaController extends Controller
 	public function detailProduct($id)
 	{
 		$product = Product::findOrFail($id);
-		return Inertia::render('Amuaglobal/Screens/ProductDetail', [
+		return Inertia::render('Amuaglobal/Screens/Adminhtml/Product/ProductDetail', [
 			'product' => $product,
 		]);
 	}
 
 	public function createProduct()
 	{
-		return Inertia::render('Amuaglobal/Screens/ProductCreate');
+		return Inertia::render('Amuaglobal/Screens/Adminhtml/Product/ProductCreate');
 	}
 
 	public function storeProduct(Request $request)

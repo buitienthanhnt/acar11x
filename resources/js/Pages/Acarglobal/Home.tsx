@@ -1,11 +1,11 @@
 import { Head, Link, router, usePage, WhenVisible, } from "@inertiajs/react";
-import { CarFix } from "./types/CarType";
 import { CustomTimeTable, Paginate } from "../Amuaglobal/Components";
 import TextInputField from "./components/form/TextInputField";
 import { useCallback, useEffect, useState, } from "react";
 import { debounce } from "lodash";
 import { Cog6ToothIcon, TrashIcon, } from "@heroicons/react/24/solid";
 import TopBar from "./Layout/TopBar";
+import { CarFixType } from "./types/CarType";
 
 export default function Home() {
 
@@ -109,7 +109,7 @@ const CarfixFilter = () => {
   )
 }
 
-const CarfixItem = ({ id, car, created_at, updated_at, status_label, status }: CarFix) => {
+const CarfixItem = ({ id, car, created_at, updated_at, status_label, status }: CarFixType) => {
 
   return (
     <Link href={route('car.fix.detail', { id: id })}

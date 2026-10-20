@@ -1,20 +1,22 @@
 import { Head, Link } from "@inertiajs/react"
-import BaseLayout from "../Layouts/BaseLayout"
-import { PaginateInterface } from "../types/Paginate"
-import { Paginate } from "../Components"
-import ContentLayout from "@/Pages/Acarglobal/Layout/ContentLayout"
+import { PaginateInterface } from "../../../types/Paginate"
+import { Paginate } from "../../../Components"
+import BaseLayout from "../Layout/BaseLayout"
 
 const ProductList = ({ products }: { products: PaginateInterface }) => {
 
   return (
-    <ContentLayout>
+    <BaseLayout>
       <Head title="Product List" />
       <div className="container mx-auto">
-        <Link
+       <div className="flex space-x-2">
+         <Link
           href={'/adminhtml/amua-product/create'}
           className="bg-green-500 text-white px-4 py-2 rounded-md mb-4 inline-block w-fit">
           Create Product
         </Link>
+       </div>
+
         <h1 className="text-2xl font-bold mb-4">Product List</h1>
         {products?.data?.map(product => <ProductItem key={product.id} product={product} />)}
         <Paginate
@@ -24,7 +26,7 @@ const ProductList = ({ products }: { products: PaginateInterface }) => {
           pageName={'page'}
         />
       </div>
-    </ContentLayout>
+    </BaseLayout>
   )
 }
 

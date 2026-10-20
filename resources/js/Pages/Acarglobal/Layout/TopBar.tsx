@@ -24,7 +24,7 @@ const topBarAction = [
   },
   {
     name: 'Phụ tùng',
-    path: '/adminhtml/product/',
+    path: '/adminhtml/amua-product',
   }
 ];
 
@@ -35,6 +35,7 @@ export default function TopBar() {
   return (
     <div className="grid grid-cols-6 p-1 gap-[1px] no-print">
       {topBarAction.map((action) => (
+        // @ts-ignore
         <Button
           key={action.path}
           color={path === action.path ? "blue" : "gray"}

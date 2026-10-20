@@ -8,7 +8,7 @@ import { formatPrice } from "@/Helper/StringHelper";
 import { Step, Stepper } from "@material-tailwind/react";
 import Modal from "@/Components/Modal";
 import { Paginate } from "@/Components/Custom";
-import { ProductItem } from "@/Pages/Amuaglobal/Screens/ProductList";
+import { ProductItem } from "@/Pages/Amuaglobal/Screens/Adminhtml/Product/ProductList";
 import { ProductType } from "@/Pages/Amuaglobal/types/Product";
 import { useUrlParam } from "@/Pages/Amuaglobal/hooks/useUrlParam";
 import { debounce } from "lodash";

@@ -1,6 +1,6 @@
 <?php
 
-namespace Thanhnt\Amuaglobal\Models\ShareActions;
+namespace Thanhnt\Amuaglobal\Models\Casts;
 
 use Illuminate\Database\Eloquent\Casts\Attribute;
 
@@ -14,8 +14,8 @@ trait ActiveAttrModel
     function active(): Attribute
     {
         return Attribute::make(
-            get: function ($value) {
-                return $value;
+            get: function ($value): bool {
+                return !!$value;
                 // return $value ? __('attrval.active') : __('attrval.inactive');
             },
             set: fn(mixed $value) => !!$value,

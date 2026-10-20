@@ -3,7 +3,6 @@
 namespace Thanhnt\Amuaglobal\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Thanhnt\Amuaglobal\Models\Types\OrderTimeInterface;
 
 final class OrderTime extends Model implements OrderTimeInterface

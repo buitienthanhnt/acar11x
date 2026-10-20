@@ -1,6 +1,6 @@
 <?php
 
-namespace Thanhnt\Amuaglobal\Models\ShareActions;
+namespace Thanhnt\Amuaglobal\Models\Casts;
 
 use App\Helper\StringHelper;
 use Illuminate\Database\Eloquent\Casts\Attribute;
