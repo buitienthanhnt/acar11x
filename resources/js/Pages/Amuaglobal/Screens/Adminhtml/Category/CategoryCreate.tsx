@@ -5,11 +5,13 @@ import TextInputField from "@/Pages/Amuaglobal/Components/FormField/TextInputFie
 import PrimaryButton from "@/Components/PrimaryButton"
 import Checkbox from "@/Components/Checkbox"
 import { TrashIcon } from "@heroicons/react/24/solid"
+import { CategoryDetailType } from "@/Pages/Amuaglobal/types/Category"
 
 interface Props {
-  formFields: any[]
+  formFields: any[],
+  categoryTree: CategoryDetailType[],
 }
-const CategoryCreate: PageWithLayout<Props> = () => {
+const CategoryCreate: PageWithLayout<Props> = ({ categoryTree }) => {
 
   const { data, setData, errors, post, processing } = useForm({
     name: '',
@@ -17,7 +19,7 @@ const CategoryCreate: PageWithLayout<Props> = () => {
     description: '',
     active: true,
     image_path: null,
-    category_ids: [],
+    parent_id: [],
   })
 
   const submit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -36,7 +38,7 @@ const CategoryCreate: PageWithLayout<Props> = () => {
             onChange={(value) => setData('name', value)}
             error={errors.name}
             required
-          ></TextInputField>
+          />
 
           <TextInputField
             name="alias"
@@ -44,7 +46,7 @@ const CategoryCreate: PageWithLayout<Props> = () => {
             value={data.alias}
             onChange={(value) => setData('alias', value)}
             error={errors.alias}
-          ></TextInputField>
+          />
         </div>
 
         <div className="flex gap-2 items-center text-xl py-2">
@@ -65,10 +67,46 @@ const CategoryCreate: PageWithLayout<Props> = () => {
           onChange={(value) => setData('description', value)}
           error={errors.description}
           rows={4}
-        ></TextInputField>
+        />
+        {categoryTree.length > 0 && (
+          <div>
+            <label htmlFor="parent_id" className="block text-sm font-medium text-gray-700">Parent Category</label>
+            <select
+              id="parent_id"
+              name="parent_id"
+              value={data.parent_id}
+              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setData('parent_id', e.target.value)}
+              className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            >
+              <option value="">Select a category</option>
+              <CategoryOptions categories={categoryTree} sufix=""></CategoryOptions>
+            </select>
+          </div>
+        )}
         <PrimaryButton disabled={processing} className="mt-2">Save</PrimaryButton>
       </form>
     </div>
+  )
+}
+
+const CategoryOptions = ({ categories, sufix = '' }: { categories: CategoryDetailType[], sufix?: string }) => {
+  if (!categories) {
+    return null;
+  }
+
+  return (
+    <>
+      {categories.map((category) => (
+        <>
+          <option key={category.id} value={category.id}>
+            {sufix}{category.name}
+          </option>
+          {category?.childrents && category?.childrents.length > 0 && (
+            <CategoryOptions categories={category.childrents} sufix={sufix + "___"}></CategoryOptions>
+          )}
+        </>
+      ))}
+    </>
   )
 }
 

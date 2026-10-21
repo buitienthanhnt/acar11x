@@ -16,5 +16,5 @@ interface CategoryInterface
 
 	const FORM_FIELDS = [];
 	const FILLED_FIELDS = [self::ACTIVE, self::NAME, self::ALIAS, self::PARENT_ID, self::DESCRIPTION, self::IMAGE_PATH];
-	const HIDDEN_FIELDS = [];
+	const HIDDEN_FIELDS = [self::PARENT_ID, 'created_at', 'updated_at', 'deleted_at'];
 }

@@ -11,4 +11,6 @@ export interface CategoryType {
   parent_id?: number;
 }
 
-export interface CategoryDetailType extends CategoryType { }
+export interface CategoryDetailType extends CategoryType {
+  childrents?: CategoryType[];
+}

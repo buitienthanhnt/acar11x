@@ -18,7 +18,7 @@ const CategoryList: PageWithLayout<Props> = ({ categories }) => {
         <LinkBtn path={'/adminhtml/amua-category/create'} title={'create category'} className="text-green-500" />
       </div>
       <div>
-        <CategoryItems items={categories?.data} />
+        <CategoryItems items={categories?.data as unknown as CategoryType[]} />
       </div>
     </div>
   )
@@ -32,12 +32,15 @@ const CategoryItems = ({ items }: { items: CategoryType[] }) => {
   }
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="grid grid-cols-3 gap-2 md:gap-4">
       {items.map((item, index) => {
         return (
-          <div key={index} className="flex gap-2">
+          <div key={index} className="flex space-x-2">
             <img src={item.image_path} alt={item.name} className="size-24 object-cover rounded-full border border-gray-600" />
-            <p className={'font-semibold'}>{item.name}- {item.description} - {item.active.toString()} </p>
+            <div>
+              <p className={'font-semibold'}>{item.name}- {item.description}</p>
+              <p>{item.active.toString()}</p>
+            </div>
           </div>
         )
       })}

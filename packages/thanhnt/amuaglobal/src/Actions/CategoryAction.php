@@ -49,7 +49,7 @@ final class CategoryAction
 		 * storeAs image for category vào thư mục categories
 		 * sẽ vẫn giữ lại tên file ảnh đãtải lên
 		 */
-		return $image->storeAs('categories', $image->getClientOriginalName(), 'public');
+		return $image ? $image->storeAs('categories', $image->getClientOriginalName(), 'public') : null;
 		// throw new \Exception('Not implemented');
 	}
 }

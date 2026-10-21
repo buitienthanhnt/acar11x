@@ -6,12 +6,14 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Thanhnt\Amuaglobal\Actions\CategoryAction;
+use Thanhnt\Amuaglobal\Api\CategoryApi;
 use Thanhnt\Amuaglobal\Models\Category;
 
 final class CategoryController extends Controller
 {
 	function __construct(
 		protected CategoryAction $categoryAction,
+		protected CategoryApi $categoryApi,
 	) {
 		// throw new \Exception('Not implemented');
 	}
@@ -24,7 +26,7 @@ final class CategoryController extends Controller
 	{
 
 		return Inertia::render('Amuaglobal/Screens/Adminhtml/Category/CategoryList', [
-			'categories' => Category::paginate(12),
+			'categories' => Category::paginate(15),
 		]);
 	}
 
@@ -33,8 +35,11 @@ final class CategoryController extends Controller
 	 */
 	public function createCategory()
 	{
+		$categoryTree = $this->categoryApi->categoryTree();
+		// dd($categoryTree->toArray());
 		return Inertia::render('Amuaglobal/Screens/Adminhtml/Category/CategoryCreate', [
 			'fornFields' => [],
+			'categoryTree' => $categoryTree,
 		]);
 	}
 
