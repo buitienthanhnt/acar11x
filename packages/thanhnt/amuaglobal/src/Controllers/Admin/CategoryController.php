@@ -8,12 +8,14 @@ use Inertia\Inertia;
 use Thanhnt\Amuaglobal\Actions\CategoryAction;
 use Thanhnt\Amuaglobal\Api\CategoryApi;
 use Thanhnt\Amuaglobal\Models\Category;
+use Thanhnt\Amuaglobal\Models\Repository\CategoryRepository;
 
 final class CategoryController extends Controller
 {
 	function __construct(
 		protected CategoryAction $categoryAction,
 		protected CategoryApi $categoryApi,
+		protected CategoryRepository $categoryRepository,
 	) {
 		// throw new \Exception('Not implemented');
 	}
@@ -52,5 +54,17 @@ final class CategoryController extends Controller
 	{
 		$this->categoryAction->register($request);
 		return redirect()->to('adminhtml/amua-category')->with('message', 'created new category!');
+	}
+
+	public function editCategory($id, Request $request)
+	{
+		$category = $this->categoryRepository->categoryDetail($id);
+		return $category;
+		return Inertia::render('');
+	}
+
+	public function updateCategory()
+	{
+		return redirect()->back();
 	}
 }

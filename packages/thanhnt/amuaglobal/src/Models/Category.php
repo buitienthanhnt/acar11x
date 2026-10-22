@@ -24,7 +24,7 @@ final class Category extends Model implements CategoryInterface
 
 	public static function categoryOptions()
 	{
-		$categories = Category::all();
+		$categories = Category::where(self::PARENT_ID, 0)->with('childrents');
 		return $categories;
 	}
 
