@@ -6,12 +6,13 @@ import PrimaryButton from "@/Components/PrimaryButton"
 import Checkbox from "@/Components/Checkbox"
 import { TrashIcon } from "@heroicons/react/24/solid"
 import { CategoryDetailType } from "@/Pages/Amuaglobal/types/Category"
+import { DropdownMenu } from "@/Pages/Amuaglobal/Components"
 
 interface Props {
   formFields: any[],
   categoryTree: CategoryDetailType[],
 }
-const CategoryCreate: PageWithLayout<Props> = ({ categoryTree }) => {
+const CategoryCreate: PageWithLayout<Props> = ({ formFields }) => {
 
   const { data, setData, errors, post, processing } = useForm({
     name: '',
@@ -68,7 +69,18 @@ const CategoryCreate: PageWithLayout<Props> = ({ categoryTree }) => {
           error={errors.description}
           rows={4}
         />
-        {categoryTree.length > 0 && (
+        {formFields.length > 0 && (
+          formFields.map((field, index: number) => {
+            switch (field.type) {
+              case 'select':
+                return <DropdownMenu type="category" label="category" data={field.options} onChange={(type, value) => setData('parent_id', value)}></DropdownMenu>
+              default:
+                return null;
+            }
+          })
+        )}
+
+        {/* {categoryTree.length > 0 && (
           <div>
             <label htmlFor="parent_id" className="block text-sm font-medium text-gray-700">Parent Category</label>
             <select
@@ -82,7 +94,7 @@ const CategoryCreate: PageWithLayout<Props> = ({ categoryTree }) => {
               <CategoryOptions categories={categoryTree} sufix=""></CategoryOptions>
             </select>
           </div>
-        )}
+        )} */}
         <PrimaryButton disabled={processing} className="mt-2">Save</PrimaryButton>
       </form>
     </div>

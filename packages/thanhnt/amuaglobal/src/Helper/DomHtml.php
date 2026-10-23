@@ -25,7 +25,7 @@ trait DomHtml
 	/**
 	 * get element by element type or class
 	 *
-	 * @param [type] $doc
+	 * @param mixed $doc
 	 * @param string $type
 	 * @param string $value
 	 * @return mixed
@@ -43,7 +43,7 @@ trait DomHtml
 	}
 
 	/**
-	 * @param [type] $doc 
+	 * @param mixed $doc 
 	 * @param string $id
 	 */
 	public function geElementById($doc, $id = '')
@@ -54,7 +54,7 @@ trait DomHtml
 	/**
 	 * get all html element conten
 	 *
-	 * @param [type] $node
+	 * @param mixed $node
 	 * @return string
 	 */
 	public function getNodeHtml($node)
@@ -84,7 +84,7 @@ trait DomHtml
 	/**
 	 * get document title for all.
 	 *
-	 * @param [type] $doc
+	 * @param mixed $doc
 	 * @return string
 	 */
 	public function getTitle($doc)
@@ -139,7 +139,7 @@ trait DomHtml
 	 * $type = "w" là ghi đè nội dung file; $type = "a" là ghi nối tiếp với nội dung cũ.
 	 * trả về số lượng ký tự mới thêm vào.
 	 */
-	public function write_file($file, $text_value = "", $type = "w"): int
+	public function write_file(string $file, $text_value = "", $type = "w"): int
 	{
 		$w_file = fopen($file, $type);
 		$res = fprintf($w_file, $text_value); // tra ve so luong ky tu.
@@ -151,7 +151,7 @@ trait DomHtml
 	 * ghi nối tiếp nội dung
 	 * $return_text = false: trả về số lượng ký tự mới ghi thêm. $return_text = true: trả về nội dung file mới.
 	 */
-	public function add_text($file, $text_value, $return_text = false)
+	public function add_text(string $file, string $text_value, $return_text = false)
 	{
 		$old_text = $this->read_file($file);
 		$write_length = $this->write_file($old_text . "\n" . $text_value);
@@ -164,7 +164,7 @@ trait DomHtml
 	/**
 	 * tạo mới file bằng: "fopen" dùng đuôi: "a" hoặc "w". nếu chưa tồn tại sẽ tạo file mới, có rồi sẽ mở file đó.
 	 */
-	function create_file($file)
+	function create_file(string $file)
 	{
 		$new_file = fopen($file, "a");
 		fclose($new_file);

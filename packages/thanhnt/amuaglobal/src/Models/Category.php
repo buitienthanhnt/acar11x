@@ -22,17 +22,11 @@ final class Category extends Model implements CategoryInterface
 	protected $fillable = self::FILLED_FIELDS;
 	protected $hidden = self::HIDDEN_FIELDS;
 
-	public static function categoryOptions()
-	{
-		$categories = Category::where(self::PARENT_ID, 0)->with('childrents');
-		return $categories;
-	}
-
 	/**
 	 * link category to childrent
 	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
 	 */
-	public function childrent()
+	public function children()
 	{
 		return $this->hasMany(Category::class, self::PARENT_ID, self::ID);
 	}
@@ -41,10 +35,10 @@ final class Category extends Model implements CategoryInterface
 	 * 2. QUAN HỆ ĐỆ QUY: Lấy vô hạn cấp con (Con của con của con...)
 	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
 	 */
-	public function childrents()
+	public function childrens()
 	{
 		// Gọi lại chính quan hệ children và nạp đệ quy nó qua 'with'
-		return $this->childrent()->with('childrents');
+		return $this->children()->with(self::R_CHILDRENS);
 	}
 
 	/**

@@ -23,8 +23,8 @@ interface CategoryInterface
 	/**
 	 * relation attribute
 	 */
-	const R_CHILDRENT = 'childrent';
-	const R_CHILDRENTS = 'childrents';
+	const R_CHILDREN = 'children';
+	const R_CHILDRENS = 'childrens';
 	const R_PARENT = 'parent';
 	const R_PARENTS = 'parents';
 	const R_PRODUCTS = 'products';
@@ -38,12 +38,12 @@ interface CategoryInterface
 	 * define relation method link to category childrent
 	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
 	 */
-	public function childrent();
+	public function children();
 	/**
 	 * define relation method link to category childrent with loop sub category
 	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
 	 */
-	public function childrents();
+	public function childrens();
 	/**
 	 * define relation method link to category parent
 	 * @return  \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -69,12 +69,12 @@ interface CategoryInterface
 	 * define form fields
 	 */
 	const FORM_FIELDS = [
-		['key' => self::NAME, 'type' => FormInterface::TYPE_TEXT, 'required', 'label' => 'name', 'placeholder' => 'name'],
+		['key' => self::NAME, 'type' => FormInterface::TYPE_TEXT, 'required' => true, 'label' => 'name', 'placeholder' => 'name'],
 		['key' => self::ALIAS, 'type' => FormInterface::TYPE_TEXT, 'label' => 'alias'],
 		['key' => self::DESCRIPTION, 'type' => FormInterface::TYPE_TEXTAREA, 'label' => 'description'],
 		['key' => self::ACTIVE, 'type' => FormInterface::TYPE_BOOL, 'label' => 'active'],
 		['key' => self::IMAGE_PATH, 'type' => FormInterface::TYPE_IMAGE_CHOOSE, 'label' => 'avatar'],
-		['key' => self::PARENT_ID, 'type' => FormInterface::TYPE_SELECT, 'label' => 'parent category', 'options_source' => \Thanhnt\Amuaglobal\Models\Category::class, 'placeholder' => 'Select parent category'],
+		['key' => self::PARENT_ID, 'type' => FormInterface::TYPE_SELECT, 'label' => 'parent category', 'options_source' => \Thanhnt\Amuaglobal\Models\DataSource\CategorySource::class, 'placeholder' => 'Select parent category'],
 	];
 
 	/**

@@ -7,8 +7,11 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Thanhnt\Amuaglobal\Actions\CategoryAction;
 use Thanhnt\Amuaglobal\Api\CategoryApi;
+use Thanhnt\Amuaglobal\Helper\FormFieldHelper;
 use Thanhnt\Amuaglobal\Models\Category;
+use Thanhnt\Amuaglobal\Models\DataSource\CategorySource;
 use Thanhnt\Amuaglobal\Models\Repository\CategoryRepository;
+use Thanhnt\Amuaglobal\Models\Types\CategoryInterface;
 
 final class CategoryController extends Controller
 {
@@ -16,6 +19,8 @@ final class CategoryController extends Controller
 		protected CategoryAction $categoryAction,
 		protected CategoryApi $categoryApi,
 		protected CategoryRepository $categoryRepository,
+		protected CategorySource $categorySource,
+		protected FormFieldHelper $formFieldHelper,
 	) {
 		// throw new \Exception('Not implemented');
 	}
@@ -37,11 +42,8 @@ final class CategoryController extends Controller
 	 */
 	public function createCategory()
 	{
-		$categoryTree = $this->categoryApi->categoryTree();
-		// dd($categoryTree->toArray());
 		return Inertia::render('Amuaglobal/Screens/Adminhtml/Category/CategoryCreate', [
-			'fornFields' => [],
-			'categoryTree' => $categoryTree,
+			'formFields' => $this->formFieldHelper->formatFormFields(CategoryInterface::FORM_FIELDS,),
 		]);
 	}
 

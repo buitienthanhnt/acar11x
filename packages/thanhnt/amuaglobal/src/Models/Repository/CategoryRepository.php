@@ -29,7 +29,7 @@ final class CategoryRepository
 	 */
 	public function categoryTree()
 	{
-		return $this->category->where(CategoryInterface::PARENT_ID, 0)->with('childrents')->get();
+		return $this->category->where(CategoryInterface::PARENT_ID, 0)->with(CategoryInterface::R_CHILDRENS)->get();
 	}
 
 	/**
@@ -37,6 +37,6 @@ final class CategoryRepository
 	 */
 	public function categoryDetail(int $id)
 	{
-		return $this->category->with([CategoryInterface::R_CHILDRENT, CategoryInterface::R_PARENT])->find($id);
+		return $this->category->with([CategoryInterface::R_CHILDREN, CategoryInterface::R_PARENT])->find($id);
 	}
 }

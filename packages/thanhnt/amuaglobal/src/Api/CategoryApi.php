@@ -28,6 +28,6 @@ final class CategoryApi
 	 */
 	public function categoryTree()
 	{
-		return $this->category->where(CategoryInterface::PARENT_ID, 0)->with('childrents')->get();
+		return $this->category->where(CategoryInterface::PARENT_ID, 0)->with(CategoryInterface::R_CHILDRENS)->get();
 	}
 }
