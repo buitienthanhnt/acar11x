@@ -65,10 +65,10 @@ class AmuaController extends Controller
 			$request->only(ProductInterface::FILLED_FILEDS)
 		);
 
-		$image = $request->file('image');
+		$image = $request->file(ProductInterface::IMAGE);
 		if ($image) {
 			$path = $image->store('products', 'public');
-			$product->update(['image_path' => $path]);
+			$product->update([ProductInterface::IMAGE => $path]);
 		}
 
 		return redirect('adminhtml/product', 303)->with('success', 'Product created successfully!');

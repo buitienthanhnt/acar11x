@@ -18,7 +18,7 @@ final class ModelHelper
 
 		/**
 		 * format data for model factory by : FILLED_FILEDS và $data input:
-		 * $key: FILLED_FILEDS = [self::TITLE, self::ACTIVE, self::ALIAS, self::IMAGE_PATH, self::DESCRIPTION, self::WRITER];
+		 * $key: FILLED_FILEDS = [self::TITLE, self::ACTIVE, self::ALIAS, self::IMAGE, self::DESCRIPTION, self::WRITER];
 		 * $data:['TITLE' => 'view','ACTIVE' => '/detail/','ALIAS' => '','DESCRIPTION' => 'preview',]
 		 */
 		return array_intersect_key( // so sánh 2 mảng và trả về mảng có khóa chung

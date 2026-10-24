@@ -36,7 +36,7 @@ const CategoryItems = ({ items }: { items: CategoryType[] }) => {
       {items.map((item, index) => {
         return (
           <div key={index} className="flex space-x-2">
-            <img src={item.image_path} alt={item.name} className="size-24 object-cover rounded-full border border-gray-600" />
+            <img src={item.image} alt={item.name} className="size-24 object-cover rounded-full border border-gray-600" />
             <div>
               <p className={'font-semibold'}>{item.name}- {item.description}</p>
               <p>{item.active.toString()}</p>

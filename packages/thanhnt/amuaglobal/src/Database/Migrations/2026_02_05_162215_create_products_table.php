@@ -16,7 +16,7 @@ return new class extends Migration
             $table->id();
             $table->string(ProductInterface::NAME);
             $table->string(ProductInterface::DESCRIPTION)->nullable();
-            $table->string(ProductInterface::IMAGE_PATH)->nullable();
+            $table->string(ProductInterface::IMAGE)->nullable();
             $table->string(ProductInterface::ALIAS);
             $table->char(ProductInterface::SKU, 50)->unique();
             $table->decimal(ProductInterface::PRICE, 12, 2);

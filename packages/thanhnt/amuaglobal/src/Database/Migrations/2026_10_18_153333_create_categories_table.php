@@ -18,7 +18,7 @@ return new class extends Migration
             $table->boolean(CategoryInterface::ACTIVE)->default(true);
             $table->char(CategoryInterface::ALIAS)->unique();
             $table->text(CategoryInterface::DESCRIPTION)->nullable();
-            $table->text(CategoryInterface::IMAGE_PATH)->nullable();
+            $table->text(CategoryInterface::IMAGE)->nullable();
             $table->integer(CategoryInterface::PARENT_ID)->default(0);
             $table->softDeletes();
             $table->timestamps();

@@ -1,12 +1,10 @@
 import { PageWithLayout } from "@/Pages/Acarglobal/types/ExtendType"
 import BaseLayout from "../Layout/BaseLayout"
 import { useForm } from "@inertiajs/react"
-import TextInputField from "@/Pages/Amuaglobal/Components/FormField/TextInputField"
+import { TextInputField, CheckboxField, SelectOption } from "@/Pages/Amuaglobal/Components/FormField";
 import PrimaryButton from "@/Components/PrimaryButton"
-import Checkbox from "@/Components/Checkbox"
 import { TrashIcon } from "@heroicons/react/24/solid"
 import { CategoryDetailType } from "@/Pages/Amuaglobal/types/Category"
-import { DropdownMenu } from "@/Pages/Amuaglobal/Components"
 
 interface Props {
   formFields: any[],
@@ -19,8 +17,8 @@ const CategoryCreate: PageWithLayout<Props> = ({ formFields }) => {
     alias: '',
     description: '',
     active: true,
-    image_path: null,
-    parent_id: [],
+    image: null,
+    parent_id: 0,
   })
 
   const submit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -50,15 +48,12 @@ const CategoryCreate: PageWithLayout<Props> = ({ formFields }) => {
           />
         </div>
 
-        <div className="flex gap-2 items-center text-xl py-2">
-          active:
-          <Checkbox className="size-6" checked={data.active} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setData('active', e.target.checked)}></Checkbox>
-        </div>
+        <CheckboxField name='active' value={data.active} label="active" onChange={setData}></CheckboxField>
         <div className="flex gap-2 item-center relative">
-          {data.image_path && <TrashIcon className="size-6 absolute right-4 top-4" onClick={() => setData('image_path', null)}></TrashIcon>}
+          {data.image && <TrashIcon className="size-6 absolute right-4 top-4" onClick={() => setData('image', null)}></TrashIcon>}
           {/* @ts-ignore */}
-          <input type="file" className="my-2" onChange={(e: React.ChangeEvent<HTMLInputElement>) => setData('image_path', e?.target?.files[0])} />
-          {data?.image_path && <img src={URL.createObjectURL(data.image_path)} alt="" className="w-48 h-48 rounded-full object-center" />}
+          <input type="file" className="my-2" onChange={(e: React.ChangeEvent<HTMLInputElement>) => setData('image', e?.target?.files[0])} />
+          {data?.image && <img src={URL.createObjectURL(data.image)} alt="" className="w-48 h-48 rounded-full object-center" />}
         </div>
 
         <TextInputField
@@ -73,7 +68,14 @@ const CategoryCreate: PageWithLayout<Props> = ({ formFields }) => {
           formFields.map((field, index: number) => {
             switch (field.type) {
               case 'select':
-                return <DropdownMenu type="category" label="category" data={field.options} onChange={(type, value) => setData('parent_id', value)}></DropdownMenu>
+                return <SelectOption
+                  key={index}
+                  name="parent_id"
+                  label="category"
+                  data={field.options}
+                  value={data.parent_id}
+                  onChange={setData}
+                ></SelectOption>
               default:
                 return null;
             }

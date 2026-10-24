@@ -4,7 +4,7 @@ export type ProductType = {
   sku: string;
   price: number;
   base_price: number;
-  image_path: string;
+  image: string;
   description?: string;
   url?: string;
   qty: number;

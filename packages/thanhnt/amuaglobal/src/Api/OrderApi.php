@@ -22,7 +22,7 @@ final class OrderApi
 
 	/**
 	 * @param array{status: string, cart_type: string, currency_code: string, 
-	 * 	cart_item: array{id: integer, name: string, price: float, qty: integer, image_path?: string}, 
+	 * 	cart_item: array{id: integer, name: string, price: float, qty: integer, image?: string}, 
 	 * 	order_time: array{date_from: string, date_to: string, selected_time: string}, 
 	 * 	customer_info?: array{name: string, email: string, phone: string}, 
 	 * 	shipping_method?: array{key: string, name: string, shipping_cost: float, description?: string, id?: integer}, 

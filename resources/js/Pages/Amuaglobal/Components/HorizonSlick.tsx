@@ -60,7 +60,7 @@ const HorizonSlick = ({ items, title, onClick }: { items: any[], title?: string,
 	);
 }
 
-const CarouselItem = ({ value, onClick }: { value: { name: string, price?: number, image_path?: string }, onClick?: (item: any) => void }) => {
+const CarouselItem = ({ value, onClick }: { value: { name: string, price?: number, image?: string }, onClick?: (item: any) => void }) => {
 
 	return (
 		<div onClick={() => {
@@ -69,7 +69,7 @@ const CarouselItem = ({ value, onClick }: { value: { name: string, price?: numbe
 			<div className='border-1 border-gray-200 border rounded-[4px] shadow-md hover:shadow-lg'>
 				<div className='relative h-full w-full overflow-hidden rounded-md group p-4'>
 					<div style={{
-						backgroundImage: `url('${value.image_path}')`,
+						backgroundImage: `url('${value.image}')`,
 						backgroundPosition: 'center',
 						backgroundSize: 'cover',
 					}}

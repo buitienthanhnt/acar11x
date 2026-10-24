@@ -8,10 +8,10 @@ use Illuminate\Support\Facades\Storage;
 trait ImageAttrModel
 {
 	/**
-	 * format image_path to storage path in model
+	 * format image to storage path in model
 	 * @return Attribute
 	 */
-	public function imagePath(): Attribute
+	public function image(): Attribute
 	{
 		return Attribute::make(
 			get: function ($value) {

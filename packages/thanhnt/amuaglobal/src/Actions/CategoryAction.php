@@ -33,7 +33,7 @@ final class CategoryAction
 		 * update image for category after save new model 
 		 * các thuộc tính update cần được khai báo trong $fillable attribute trong model 
 		 */
-		$newCategory->update([CategoryInterface::IMAGE_PATH => $this->upLoadImage($request)]);
+		$newCategory->update([CategoryInterface::IMAGE => $this->upLoadImage($request)]);
 		return $newCategory;
 	}
 
@@ -44,7 +44,7 @@ final class CategoryAction
 	 */
 	protected function upLoadImage(Request $request)
 	{
-		$image = $request->file(CategoryInterface::IMAGE_PATH);
+		$image = $request->file(CategoryInterface::IMAGE);
 		/**
 		 * storeAs image for category vào thư mục categories
 		 * sẽ vẫn giữ lại tên file ảnh đãtải lên

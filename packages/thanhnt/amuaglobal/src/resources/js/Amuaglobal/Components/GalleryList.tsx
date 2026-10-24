@@ -25,11 +25,11 @@ const GalleryList = ({ data }) => {
 						key={alias}
 						value={alias}
 					>
-						{pages?.map(({ image_path, title, alias}, index) => (
+						{pages?.map(({ image, title, alias}, index) => (
 							<Link key={index} href={route('detail', {alias: alias})}>
 								<img
 									className="h-40 w-full max-w-full rounded-lg object-cover object-center"
-									src={image_path}
+									src={image}
 									alt="image-photo"
 								/>
 								<p className="line-clamp-2 font-semibold mt-1">{title}</p>

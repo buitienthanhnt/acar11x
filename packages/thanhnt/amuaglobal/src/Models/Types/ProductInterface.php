@@ -14,7 +14,10 @@ interface ProductInterface
 	const BASE_PRICE = 'base_price';
 	const QTY = 'qty';
 	const DESCRIPTION = 'description';
-	const IMAGE_PATH = 'image_path';
+	/**
+	 * cần thống nhất các ảnh đại diện là: image
+	 */
+	const IMAGE = 'image';
 
 	const FILLED_FILEDS = [
 		self::NAME,
@@ -24,6 +27,8 @@ interface ProductInterface
 		self::BASE_PRICE,
 		self::QTY,
 		self::DESCRIPTION,
-		self::IMAGE_PATH,
+		self::IMAGE,
 	];
+
+	const FORM_fIELDS = [];
 }

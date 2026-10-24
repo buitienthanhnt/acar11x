@@ -22,7 +22,7 @@ const SwipeSingle = () => {
 					>
 						{trend && trend.map((item: any, index: number) =>
 							<SwiperSlide key={index.toString()} style={{ height: 250 }}>
-								<img src={item.image_path}
+								<img src={item.image}
 									className="w-full h-auto absolute rounded-lg resize-none" alt="" >
 								</img>
 								<Link href={''} className='absolute w-full h-full z-20'>

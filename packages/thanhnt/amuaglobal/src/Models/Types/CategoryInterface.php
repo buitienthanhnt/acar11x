@@ -17,7 +17,7 @@ interface CategoryInterface
 	const ALIAS = 'alias';
 	const DESCRIPTION = 'description';
 	const PARENT_ID = 'parent_id';
-	const IMAGE_PATH = 'image_path';
+	const IMAGE = 'image';
 	const ACTIVE = 'active';
 
 	/**
@@ -63,7 +63,7 @@ interface CategoryInterface
 	/**
 	 * define massing field
 	 */
-	const FILLED_FIELDS = [self::ACTIVE, self::NAME, self::ALIAS, self::PARENT_ID, self::DESCRIPTION, self::IMAGE_PATH];
+	const FILLED_FIELDS = [self::ACTIVE, self::NAME, self::ALIAS, self::PARENT_ID, self::DESCRIPTION, self::IMAGE];
 
 	/**
 	 * define form fields
@@ -73,7 +73,7 @@ interface CategoryInterface
 		['key' => self::ALIAS, 'type' => FormInterface::TYPE_TEXT, 'label' => 'alias'],
 		['key' => self::DESCRIPTION, 'type' => FormInterface::TYPE_TEXTAREA, 'label' => 'description'],
 		['key' => self::ACTIVE, 'type' => FormInterface::TYPE_BOOL, 'label' => 'active'],
-		['key' => self::IMAGE_PATH, 'type' => FormInterface::TYPE_IMAGE_CHOOSE, 'label' => 'avatar'],
+		['key' => self::IMAGE, 'type' => FormInterface::TYPE_IMAGE_CHOOSE, 'label' => 'avatar'],
 		['key' => self::PARENT_ID, 'type' => FormInterface::TYPE_SELECT, 'label' => 'parent category', 'options_source' => \Thanhnt\Amuaglobal\Models\DataSource\CategorySource::class, 'placeholder' => 'Select parent category'],
 	];
 

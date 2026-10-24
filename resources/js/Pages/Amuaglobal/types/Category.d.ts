@@ -3,7 +3,7 @@ export interface CategoryType {
   name: string;
   alias: string;
   description?: string;
-  image_path?: string;
+  image?: string;
   active: boolean;
   created_at?: string;
   updated_at?: string;
