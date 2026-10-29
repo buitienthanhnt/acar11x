@@ -2,35 +2,33 @@ import { Listbox } from "@headlessui/react"
 import { FunctionComponent, useCallback, useMemo } from "react"
 import { ChevronUpDownIcon } from '@heroicons/react/16/solid'
 import { CheckIcon } from '@heroicons/react/20/solid'
-
-type Item = {
-  label: string;
-  value: string | number;
-  // selected?: boolean;
-  image?: string;
-};
+import { SelectOptionType } from "../../types/FormFieldType";
 
 type Props = {
   name: string;
   label?: string;
-  data: Item[];
+  options: SelectOptionType[];
   value: string | number;
   onChange?: (name: string, value: any) => void;
 };
 
 const SelectOption: FunctionComponent<Props> = (props) => {
-  const { name, label, data, onChange } = props;
+  const { name, label, options, onChange } = props;
 
   const selected = useMemo(() => {
-    return data.find((item) => item.value == props.value);
+    return options.find((item) => item.value == props.value);
   }, [props.value])
 
   /**
    * onselect setSelected value and call into onchange function.
    */
-  const onSelect = useCallback((value: Item) => {
+  const onSelect = useCallback((value: SelectOptionType) => {
     onChange?.(name, value.value);
   }, [onChange])
+
+  if (!options) {
+    return null;
+  }
 
   return (
     <div className="flex-1 bg-gray-400 rounded-md p-1">
@@ -49,20 +47,20 @@ const SelectOption: FunctionComponent<Props> = (props) => {
           </Listbox.Button>
 
           <Listbox.Options
-            className="absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg outline-1 outline-black/5 data-leave:transition data-leave:duration-100 data-leave:ease-in data-closed:data-leave:opacity-0 sm:text-sm"
+            className="absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg outline-1 outline-black/5 options-leave:transition options-leave:duration-100 options-leave:ease-in options-closed:options-leave:opacity-0 sm:text-sm"
           >
-            {data.map((item) => (
+            {options.map((item) => (
               <Listbox.Option
                 key={item.value}
                 value={item}
-                className={`group rounded-md relative cursor-default py-2 pr-9 pl-3 text-gray-900 select-none data-focus:bg-indigo-600 data-focus:text-white data-focus:outline-hidden ${selected?.value === item.value ? 'bg-gray-200' : ''}`}
+                className={`group rounded-md relative cursor-default py-2 pr-9 pl-3 text-gray-900 select-none options-focus:bg-indigo-600 options-focus:text-white options-focus:outline-hidden ${selected?.value === item.value ? 'bg-gray-200' : ''}`}
               >
                 <div className="flex items-center">
                   {item?.image && <img alt="" src={item.image} className="size-5 shrink-0 rounded-full" />}
-                  <span className="ml-3 block truncate font-normal group-data-selected:font-semibold">{item.label}</span>
+                  <span className="ml-3 block truncate font-normal group-options-selected:font-semibold">{item.label}</span>
                 </div>
 
-                {(selected?.value === item.value) && <span className="absolute inset-y-0 right-0 flex items-center pr-4 text-indigo-600 group-not-data-selected:hidden group-data-focus:text-white">
+                {(selected?.value === item.value) && <span className="absolute inset-y-0 right-0 flex items-center pr-4 text-indigo-600 group-not-options-selected:hidden group-options-focus:text-white">
                   <CheckIcon aria-hidden="true" className="size-5" />
                 </span>}
               </Listbox.Option>

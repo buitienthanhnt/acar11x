@@ -26,6 +26,6 @@ Route::prefix('adminhtml')->group(function () {
 
 		Route::get('edit/{id}', [\Thanhnt\Amuaglobal\Controllers\Admin\CategoryController::class, 'editCategory']);
 
-		Route::put('update', [\Thanhnt\Amuaglobal\Controllers\Admin\CategoryController::class, 'updateCategory']);
+		Route::put('update/{id}', [\Thanhnt\Amuaglobal\Controllers\Admin\CategoryController::class, 'updateCategory']);
 	});
 });

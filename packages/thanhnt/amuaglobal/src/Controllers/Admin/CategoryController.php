@@ -58,15 +58,18 @@ final class CategoryController extends Controller
 		return redirect()->to('adminhtml/amua-category')->with('message', 'created new category!');
 	}
 
-	public function editCategory($id, Request $request)
+	public function editCategory(int $id, Request $request)
 	{
 		$category = $this->categoryRepository->categoryDetail($id);
-		return $category;
-		return Inertia::render('');
+		return Inertia::render('Amuaglobal/Screens/Adminhtml/Category/CategoryEdit', [
+			'category' => $category,
+			'formFields' => $this->formFieldHelper->formatFormFields(CategoryInterface::FORM_FIELDS, $category->toArray())
+		]);
 	}
 
-	public function updateCategory()
+	public function updateCategory(int $id, Request $request)
 	{
+		$this->categoryAction->update($id, $request->toArray());
 		return redirect()->back();
 	}
 }

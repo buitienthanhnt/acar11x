@@ -72,7 +72,7 @@ interface CategoryInterface
 		['key' => self::NAME, 'type' => FormInterface::TYPE_TEXT, 'required' => true, 'label' => 'name', 'placeholder' => 'name'],
 		['key' => self::ALIAS, 'type' => FormInterface::TYPE_TEXT, 'label' => 'alias'],
 		['key' => self::DESCRIPTION, 'type' => FormInterface::TYPE_TEXTAREA, 'label' => 'description'],
-		['key' => self::ACTIVE, 'type' => FormInterface::TYPE_BOOL, 'label' => 'active'],
+		['key' => self::ACTIVE, 'type' => FormInterface::TYPE_CHECKBOX, 'label' => 'active'],
 		['key' => self::IMAGE, 'type' => FormInterface::TYPE_IMAGE_CHOOSE, 'label' => 'avatar'],
 		['key' => self::PARENT_ID, 'type' => FormInterface::TYPE_SELECT, 'label' => 'parent category', 'options_source' => \Thanhnt\Amuaglobal\Models\DataSource\CategorySource::class, 'placeholder' => 'Select parent category'],
 	];
@@ -80,5 +80,5 @@ interface CategoryInterface
 	/**
 	 * define hidden fields
 	 */
-	const HIDDEN_FIELDS = [self::PARENT_ID, 'created_at', 'updated_at', 'deleted_at'];
+	const HIDDEN_FIELDS = ['created_at', 'updated_at', 'deleted_at'];
 }

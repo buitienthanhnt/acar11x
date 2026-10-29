@@ -4,7 +4,7 @@ interface Props {
   name: string;
   label?: string;
   value: boolean;
-  onChange: (type: string, value: any) => void
+  onChange?: (type: string, value: any) => void
 }
 const CheckboxField = ({ name, label, value, onChange }: Props) => {
   return (
@@ -13,7 +13,7 @@ const CheckboxField = ({ name, label, value, onChange }: Props) => {
       <Checkbox
         className="size-6"
         checked={value}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(name, e.target.checked)}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange?.(name, e.target.checked)}
       >
       </Checkbox>
     </div>

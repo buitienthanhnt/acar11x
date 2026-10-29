@@ -55,13 +55,14 @@ final class FormFieldHelper
 					unset($field['options_source']);
 					break;
 				default:
-					/**
-					 * input value if is exist
-					 */
-					if (isset($values[$field['key']])) {
-						$field['value'] = $values[$field['key']];
-					}
 					break;
+			}
+
+			/**
+			 * input value if is exist
+			 */
+			if (isset($values[$field['key']])) {
+				$field['value'] = $values[$field['key']];
 			}
 		}
 		return $formFields;
