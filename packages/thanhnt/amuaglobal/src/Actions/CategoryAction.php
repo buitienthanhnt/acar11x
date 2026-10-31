@@ -27,16 +27,17 @@ final class CategoryAction
 	public function register(Request $request)
 	{
 		$modelData = $request->toArray();
+
 		/**
 		 * save new category model
 		 * @var Category $newCategory
 		 */
 		$newCategory = Category::create($this->modelHelper->massDataAttribute(CategoryInterface::FILLED_FIELDS, $modelData));
 		/**
-		 * update image for category after save new model 
-		 * các thuộc tính update cần được khai báo trong $fillable attribute trong model 
+		 * update image for category after save new model
+		 * các thuộc tính update cần được khai báo trong $fillable attribute trong model
 		 */
-		$newCategory->update([CategoryInterface::IMAGE => $this->upLoadImage($request->get(CategoryInterface::IMAGE))]);
+		$newCategory->update([CategoryInterface::IMAGE => $this->upLoadImage($request->file(CategoryInterface::IMAGE))]);
 		return $newCategory;
 	}
 

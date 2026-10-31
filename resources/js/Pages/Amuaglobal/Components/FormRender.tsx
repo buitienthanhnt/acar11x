@@ -1,26 +1,25 @@
 import { FunctionComponent } from "react";
 import { FormFieldType } from "../types/FormFieldType";
-import { CheckboxField, SelectOption, TextInputField } from "./FormField";
-import ImageChoose from "./FormField/ImageChoose";
-import TextAreaField from "./FormField/TextArea";
+import { CheckboxField, SelectOption, TextInputField, ImageChoose, TextAreaField } from "./FormField";
 
 interface Props {
-  url: string;
-  method: 'GET' | "POST" | "PUT" | "DELETE" | "PATCH" | "HEAD";
+//   url: string;
+//   method: 'GET' | "POST" | "PUT" | "DELETE" | "PATCH" | "HEAD";
   formFields: FormFieldType[];
   data: { [key: string]: any };
   onChange?: (key: string, value: any) => void;
-  errors?: { [key: string]: string }
+  errors?: { [key: string]: string },
+  style?: React.CSSProperties,
 }
 
-const FormRender: FunctionComponent<Props> = ({ url, method, formFields, onChange, data }) => {
+const FormRender: FunctionComponent<Props> = ({formFields, onChange, data, style }) => {
 
   if (!formFields) {
     return null;
   }
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2" style={style}>
       {formFields.map((form_field, index: number) => {
         switch (form_field.type) {
           case 'text':

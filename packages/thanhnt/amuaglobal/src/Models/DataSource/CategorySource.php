@@ -18,10 +18,13 @@ class CategorySource extends AbstractSource
 	 */
 	public function sourceModel()
 	{
-		return $this->categoriesSource(prefix: '_');
+        /**
+         * merge with root category
+         */
+		return array_merge([[ "value" => 0, "label" => "Root"]], $this->categoriesSource(prefix: '_'));
 	}
 
-	/**
+	/** flat array of categories
 	 * @return array{value: string, label: string}
 	 */
 	protected function categoriesSource($parentId = 0, $prefix = '__')

@@ -16,7 +16,7 @@ const SelectOption: FunctionComponent<Props> = (props) => {
   const { name, label, options, onChange } = props;
 
   const selected = useMemo(() => {
-    return options.find((item) => item.value == props.value);
+    return options?.find((item) => item.value == props.value);
   }, [props.value])
 
   /**

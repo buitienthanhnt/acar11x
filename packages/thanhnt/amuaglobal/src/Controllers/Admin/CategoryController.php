@@ -43,7 +43,7 @@ final class CategoryController extends Controller
 	public function createCategory()
 	{
 		return Inertia::render('Amuaglobal/Screens/Adminhtml/Category/CategoryCreate', [
-			'formFields' => $this->formFieldHelper->formatFormFields(CategoryInterface::FORM_FIELDS,),
+			'formFields' => $this->formFieldHelper->formatFormFields(CategoryInterface::FORM_FIELDS),
 		]);
 	}
 
