@@ -1,9 +1,7 @@
 import { PageWithLayout } from "@/Pages/Acarglobal/types/ExtendType"
 import BaseLayout from "../Layout/BaseLayout"
 import { useForm } from "@inertiajs/react"
-import { TextInputField, CheckboxField, SelectOption } from "@/Pages/Amuaglobal/Components/FormField";
 import PrimaryButton from "@/Components/PrimaryButton"
-import { TrashIcon } from "@heroicons/react/24/solid"
 import { CategoryDetailType } from "@/Pages/Amuaglobal/types/Category"
 import FormRender from "@/Pages/Amuaglobal/Components/FormRender";
 
