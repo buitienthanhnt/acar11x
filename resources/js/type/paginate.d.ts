@@ -3,6 +3,7 @@ export interface PaginateProp {
 	currentPage: number;
 	url?: string;
 	pageName?: string;
+    options: any;
 }
 
 type DataType = {

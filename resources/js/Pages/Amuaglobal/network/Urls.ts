@@ -5,4 +5,8 @@ export default {
 	register: '/register',
 	logout: './logout',
 	domain: 'http://acar11x.dev',
+    adminhtml: {
+        product: {},
+        category: {},
+    },
 }

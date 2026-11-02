@@ -2,20 +2,20 @@
 
 namespace Thanhnt\Amuaglobal\Models;
 
-use Illuminate\Database\Eloquent\Attributes\ObservedBy;
-use Illuminate\Database\Eloquent\Attributes\ScopedBy;
+use Illuminate\Database\Eloquent\Attributes\{ObservedBy, ScopedBy};
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Thanhnt\Amuaglobal\Models\Types\CategoryInterface;
 use Thanhnt\Amuaglobal\Models\Casts\{ActiveAttrModel, AliasAttrModel, ImageAttrModel};
 use Thanhnt\Amuaglobal\Models\Scopes\ActiveScope;
+use Thanhnt\Amuaglobal\Models\Types\ProductCategoryInterface;
 use Thanhnt\Amuaglobal\Observers\CategoryObserver;
 
 /**
  * apply global scope for model
  */
 #[ScopedBy([ActiveScope::class])]
-#[ObservedBy([CategoryObserver::class])]
+#[ObservedBy([CategoryObserver::class])] // obserber for model action delete, create, update
 final class Category extends Model implements CategoryInterface
 {
     use SoftDeletes;
@@ -37,7 +37,7 @@ final class Category extends Model implements CategoryInterface
     ];
 
     /**
-     * link category to childrent
+     * link category to childrent(liên kết danh mục con)
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function children()
@@ -46,7 +46,7 @@ final class Category extends Model implements CategoryInterface
     }
 
     /**
-     * 2. QUAN HỆ ĐỆ QUY: Lấy vô hạn cấp con (Con của con của con...)
+     * QUAN HỆ ĐỆ QUY: Lấy vô hạn cấp con (Con của con của con...)
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function childrens()
@@ -56,7 +56,7 @@ final class Category extends Model implements CategoryInterface
     }
 
     /**
-     * link category to parent
+     * link category to parent(liên kết danh mục cha)
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function parent()
@@ -79,6 +79,14 @@ final class Category extends Model implements CategoryInterface
      */
     public function products()
     {
-        return $this->belongsToMany(Product::class, 'amua_product_categories', 'category_id', 'product_id');
+        /**
+         * belongsToMany<
+         * model liên kết,
+         * bảng trung gian,
+         * khóa tham chiếu bảng hiện tại trong bảng trung gian,
+         * khóa tham chiếu bảng liên kết trong bảng trung gian
+         * >
+         */
+        return $this->belongsToMany(Product::class, ProductCategoryInterface::TABLE_NAME, ProductCategoryInterface::CATEGORY_ID, ProductCategoryInterface::PRODUCT_ID);
     }
 }

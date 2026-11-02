@@ -1,15 +1,15 @@
-import { Link } from "@inertiajs/react";
+import { Link, router } from "@inertiajs/react";
 import BaseLayout from "../Layout/BaseLayout";
 import { PaginateInterface } from "@/Pages/Amuaglobal/types/Paginate";
 import { PageWithLayout } from "@/Pages/Amuaglobal/types/PageWithLayout";
 import LinkBtn from "@/Pages/Amuaglobal/Components/LinkBtn";
 import { CategoryType } from "@/Pages/Amuaglobal/types/Category";
 import { TrashIcon } from "@heroicons/react/24/solid";
+import { useCallback } from "react";
 
 interface Props {
     categories: PaginateInterface
 }
-
 
 const CategoryList: PageWithLayout<Props> = ({ categories }) => {
 
@@ -31,18 +31,23 @@ const CategoryItems = ({ items }: { items: CategoryType[] }) => {
     }
 
     return (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 md:gap-4">
+        <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-4 md:gap-4">
             {items.map((item, index) => {
                 return (
-                    <Link key={index} className="relative flex space-x-2 border border-gray-600 p-2 rounded-md" href={`/adminhtml/amua-category/edit/${item.id}`}>
+                    <Link key={index}
+                        className="relative flex p-2 space-x-2 border border-gray-600 rounded-md hover:bg-blue-gray-100"
+                        href={`/adminhtml/amua-category/edit/${item.id}`}
+                    >
                         <img src={item.image} alt={item.name} className="object-cover border border-gray-600 rounded-full size-24" />
                         <div>
-                            <p className={'font-semibold'}>{item.name}- {item.description}</p>
+                            <p className={'font-semibold'}>{item.name}</p>
+                            <p className={"text-sm text-green-600 font-semibold italic"}>{item.description}</p>
                             <p>{item.active.toString()}</p>
                         </div>
-                        <Link className={'absolute right-1 hover:text-red-500'}
-                            href={`/adminhtml/amua-category/delete/${item.id}`}
-                            onBefore={() => confirm('are you sure for delete the item')}
+                        <Link className={'absolute right-1 text-gray-500 hover:text-red-500'}
+                        href={`/adminhtml/amua-category/delete/${item.id}`}
+                        method="delete"
+                        onBefore={() => confirm('are you sure for delete the item?')}
                         >
                             <TrashIcon className={'size-8'}></TrashIcon>
                         </Link>

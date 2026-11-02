@@ -4,6 +4,7 @@ namespace Thanhnt\Amuaglobal\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Thanhnt\Amuaglobal\Actions\CategoryAction;
 use Thanhnt\Amuaglobal\Api\CategoryApi;
@@ -60,6 +61,9 @@ final class CategoryController extends Controller
 
     public function editCategory(int $id, Request $request)
     {
+        /**
+         * get category detail
+         */
         $category = $this->categoryRepository->categoryDetail($id);
         return Inertia::render('Amuaglobal/Screens/Adminhtml/Category/CategoryEdit', [
             'category' => $category,
@@ -73,9 +77,20 @@ final class CategoryController extends Controller
         return redirect()->back();
     }
 
+    /**
+     * @param int $id
+     * @return \Inertia\Response
+     */
     public function deleteCategory(int $id)
     {
+
+        /**
+         * delete action
+         */
         $this->categoryAction->delete($id);
+        /**
+         * return redirect to list
+         */
         return redirect()->back()->with('message', 'deleted the category');
     }
 }

@@ -35,9 +35,17 @@ class CategoryObserver
     public function deleted(Category $category): void
     {
         /**
+         * lấy đường dẫn trực tiếp từ database chưa qua cast
+         * vì nếu lấy bình thường thì giá trị đã bị cast chuyển đổi qua dạng url(thêm đầu storage/)
+         * và không phải đường dẫn file trong storage.
+         * vd trực tiếp: categories/loc-dau.jfif
+         * sau cast:     /storage/categories/loc-dau.jfif
+         */
+        $file_path_storage = $category->getAttributes()[CategoryInterface::IMAGE] ?? null;
+        /**
          * delete image of category
          */
-        Storage::delete($category->{CategoryInterface::IMAGE});
+        $file_path_storage && $status = Storage::disk('public')->delete($file_path_storage);
     }
 
     /**

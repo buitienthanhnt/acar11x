@@ -53,11 +53,10 @@ interface ProductInterface
             'label' => 'Mã sản phẩm',
         ],
         [
-            'key' => self::PRICE,
+            'key' => self::QTY,
             'type' => FormInterface::TYPE_TEXT,
-            'placeholder' => 'Nhập giá sản phẩm',
-            'required' => true,
-            'label' => 'Giá bán',
+            'placeholder' => 'Nhập số lượng sản phẩm',
+            'label' => 'Số lượng',
         ],
         [
             'key' => self::BASE_PRICE,
@@ -67,10 +66,11 @@ interface ProductInterface
             'label' => 'Giá nhập'
         ],
         [
-            'key' => self::QTY,
+            'key' => self::PRICE,
             'type' => FormInterface::TYPE_TEXT,
-            'placeholder' => 'Nhập số lượng sản phẩm',
-            'label' => 'Số lượng',
+            'placeholder' => 'Nhập giá sản phẩm',
+            'required' => true,
+            'label' => 'Giá bán',
         ],
         [
             'key' => self::DESCRIPTION,
@@ -81,7 +81,7 @@ interface ProductInterface
         [
             'key' => self::CATEGORY_IDS,
             'type' => FormInterface::TYPE_SELECT,
-            'label' => 'parent category',
+            'label' => 'category',
             'options_source' => \Thanhnt\Amuaglobal\Models\DataSource\CategorySource::class,
             'placeholder' => 'Select parent category',
             'Danh mục sản phẩm',

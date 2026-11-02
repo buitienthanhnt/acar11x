@@ -18,7 +18,7 @@ const ProductCreate = ({ formFields }) => {
 
     const submit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        post('/adminhtml/product/store');
+        post('/adminhtml/amua-product/store');
     }
 
     return (

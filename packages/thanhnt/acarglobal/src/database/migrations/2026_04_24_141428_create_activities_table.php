@@ -19,7 +19,7 @@ return new class extends Migration
 			$table->string(ActivityInterface::TITLE);
 			$table->char(ActivityInterface::STATUS);
 			$table->string(ActivityInterface::NOTE)->nullable();
-			$table->integer(ActivityInterface::QTY)->default(1);
+			$table->float(ActivityInterface::QTY)->default(1);
 			$table->float(ActivityInterface::PRICE)->default(0);
 			$table->integer(ActivityInterface::PRODUCT_ID)->nullable();
 			$table->softDeletes();

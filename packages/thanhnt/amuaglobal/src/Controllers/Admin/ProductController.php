@@ -53,13 +53,16 @@ final class ProductController extends Controller
             $request->only(ProductInterface::FILLED_FILEDS)
         );
 
+        $category = $request->get(ProductInterface::CATEGORY_IDS);
+        $product->categories()->sync([$category]);
+
         $image = $request->file(ProductInterface::IMAGE);
         if ($image) {
             $path = $image->store('products', 'public');
             $product->update([ProductInterface::IMAGE => $path]);
         }
 
-        return redirect('adminhtml/product', 303)->with('success', 'Product created successfully!');
+        return redirect('adminhtml/amua-product', 303)->with('success', 'Product created successfully!');
         return redirect()->back()->with('success', 'Product created successfully!');
     }
 }
