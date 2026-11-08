@@ -8,7 +8,7 @@ export type ProductType = {
   description?: string;
   url?: string;
   qty: number;
-  dvt?: string;
+  unit?: string;
 }
 
 export type ProductDetailType = ProductType & {
