@@ -18,6 +18,7 @@ interface ProductInterface
 	const UNIT = 'unit';
 
 	const R_CATEGORIES = 'categories';
+	const R_GALLERIES = 'galleries';
 
 	/**
 	 * cần thống nhất các ảnh đại diện là: image
@@ -97,6 +98,12 @@ interface ProductInterface
 			'type' => FormInterface::TYPE_IMAGE_CHOOSE,
 			'placeholder' => 'Nhập hình ảnh sản phẩm',
 			'label' => 'Ảnh đại diện',
+		],
+		[
+			'key' => 'galleries',
+			'type' => FormInterface::TYPE_IMAGE_SELECT,
+			'placeholder' => 'Nhập hình ảnh sản phẩm',
+			'label' => 'Ảnh chi tiết',
 		],
 		[
 			'key' => self::UNIT,

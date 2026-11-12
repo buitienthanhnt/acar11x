@@ -32,7 +32,7 @@ const ProductList = ({ products }: { products: PaginateInterface }) => {
 
 export const ProductItem = ({ product, onSelectProduct }: { product: any; onSelectProduct?: (product: any) => void }) => {
   return (
-    <div className="border border-gray-700 rounded-md mb-1 flex gap-4" onClick={() => onSelectProduct?.(product)}>
+    <div className="border border-gray-700 rounded-md mb-1 flex gap-4 cursor-pointer" onClick={() => onSelectProduct?.(product)}>
       <img src={product.image} className="size-24 rounded-md object-cover" alt="" />
       <div className="flex flex-col justify-between">
         <p className="font-semibold text-lg">{product.name}</p>

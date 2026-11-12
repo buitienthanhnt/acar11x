@@ -1,10 +1,11 @@
 import { FunctionComponent } from "react";
 import { FormFieldType } from "../types/FormFieldType";
 import { CheckboxField, SelectOption, TextInputField, ImageChoose, TextAreaField } from "./FormField";
+import ImageSelect from "./FormField/ImageSelect";
 
 interface Props {
-//   url: string;
-//   method: 'GET' | "POST" | "PUT" | "DELETE" | "PATCH" | "HEAD";
+  //   url: string;
+  //   method: 'GET' | "POST" | "PUT" | "DELETE" | "PATCH" | "HEAD";
   formFields: FormFieldType[];
   data: { [key: string]: any };
   onChange?: (key: string, value: any) => void;
@@ -12,7 +13,7 @@ interface Props {
   style?: React.CSSProperties,
 }
 
-const FormRender: FunctionComponent<Props> = ({formFields, onChange, data, style }) => {
+const FormRender: FunctionComponent<Props> = ({ formFields, onChange, data, style }) => {
 
   if (!formFields) {
     return null;
@@ -61,6 +62,14 @@ const FormRender: FunctionComponent<Props> = ({formFields, onChange, data, style
                 key={index}
                 value={data[form_field.key]}
                 onChange={(value) => onChange?.(form_field.key, value)}
+              />
+            )
+          case 'imageSelect':
+            return (
+              <ImageSelect
+                key={index}
+                value={data[form_field.key]}
+                onChange={(value: any) => onChange?.(form_field.key, value)}
               />
             )
           case 'select':

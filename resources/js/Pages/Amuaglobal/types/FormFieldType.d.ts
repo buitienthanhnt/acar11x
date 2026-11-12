@@ -17,4 +17,4 @@ export type SelectOptionType = {
   image?: string;
 };
 
-export type FieldType = 'text' | 'textarea' | 'image' | 'file' | 'email' | 'password' | 'number' | 'select' | 'checkbox' | 'radio' | 'boolean' | 'imageChoose';
+export type FieldType = 'text' | 'textarea' | 'image' | 'imageSelect' | 'file' | 'email' | 'password' | 'number' | 'select' | 'checkbox' | 'radio' | 'boolean' | 'imageChoose';
