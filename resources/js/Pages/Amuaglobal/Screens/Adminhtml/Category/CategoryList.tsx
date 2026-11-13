@@ -5,7 +5,6 @@ import { PageWithLayout } from "@/Pages/Amuaglobal/types/PageWithLayout";
 import LinkBtn from "@/Pages/Amuaglobal/Components/LinkBtn";
 import { CategoryType } from "@/Pages/Amuaglobal/types/Category";
 import { TrashIcon } from "@heroicons/react/24/solid";
-import { useCallback } from "react";
 
 interface Props {
     categories: PaginateInterface

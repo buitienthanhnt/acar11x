@@ -2,7 +2,7 @@ import Modal from "@/Components/Modal"
 import { TrashIcon, XCircleIcon } from "@heroicons/react/24/solid";
 import { Button } from "@material-tailwind/react"
 import { useCallback, useState } from "react";
-import ImageManage from "../../Screens/Adminhtml/ImageManage";
+import ImageManage from "./FileManage";
 
 const ImageSelect = ({ value, onChange }: { value: string[], onChange: (value: string[]) => void }) => {
   const [showForm, setShowForm] = useState(false);

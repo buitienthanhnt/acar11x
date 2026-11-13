@@ -9,5 +9,6 @@ export default {
     product: {},
     category: {},
     fileManage: "/amua-api/dir-structure",
+    fileUpload: "/amua-api/upload-file",
   },
 }

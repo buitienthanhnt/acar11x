@@ -1,11 +1,10 @@
-import { FolderIcon } from '@heroicons/react/24/solid';
-import { Head, Link } from '@inertiajs/react';
+import { FolderIcon, PlusCircleIcon, XCircleIcon } from '@heroicons/react/24/solid';
+import { useForm } from '@inertiajs/react';
 import axios from 'axios';
 import { useCallback, useEffect, useState } from 'react';
 import Urls from '../../network/Urls';
 
-export default function ImageManage({ selected, onSelect }: { selected: string[], onSelect: (value: string) => void }) {
-
+export default function FileManage({ selected, onSelect }: { selected: string[], onSelect: (value: string) => void }) {
   const [path, setPath] = useState('');
   const [data, setData] = useState({ files: [], directories: [], currentDirectory: '' });
   const { files, directories, currentDirectory } = data;
@@ -24,8 +23,8 @@ export default function ImageManage({ selected, onSelect }: { selected: string[]
 
   return (
     <div className="p-4">
-      <Head title="image manage"></Head>
-      {/* <p className={'text-gray-600 text-lg italic'}>{currentDirectory}</p> */}
+      {currentFolder}
+      <UploadFile currentFolder={currentFolder}></UploadFile>
       {parts.length > 1 && (
         <div className="flex items-center mb-4">
           {parts.map((part, index) => (
@@ -89,7 +88,7 @@ const Files = ({ files, selected, onSelect }: { files: string[], selected: strin
   }
 
   return (
-    <div className="p-4 bg-gray-200 grid grid-cols-3 gap-4">
+    <div className="p-4 bg-gray-200 grid grid-cols-3 gap-4 rounded-md">
       {files.map((file, index) => (
         <div key={index} onClick={() => onSelect(file)} className={'cursor-pointer'}>
           <img
@@ -99,6 +98,69 @@ const Files = ({ files, selected, onSelect }: { files: string[], selected: strin
           />
         </div>
       ))}
+    </div>
+  )
+}
+
+const UploadFile = ({ currentFolder, afterUpload }: { currentFolder: string, afterUpload?: () => void }) => {
+  const { data, setData } = useForm({
+    fileUpload: null,
+  })
+
+  const onUpload = useCallback(async () => {
+    console.log(data);
+    if (!data.fileUpload) {
+      return;
+    }
+    /**
+     * post thường sẽ không upload được file lên server
+     * mà phải dùng: postForm
+     * nếu không có thể dùng:
+     * router.post(Urls.adminhtml.fileUpload, data) của inertiaJs nhưng sẽ bị điều hướng trang
+     */
+    await axios.postForm(Urls.adminhtml.fileUpload, {
+      ...data,
+      currentFolder
+    });
+    afterUpload?.();
+  }, [data.fileUpload, data, currentFolder])
+
+  return (
+    <div className='flex flex-1 bg-blue-gray-50 rounded-md p-4 items-center space-x-2'>
+      <div className=''>
+        <div className='border border-gray-600 rounded-md p-2 flex space-x-2'>
+          {data.fileUpload && <div>
+            <XCircleIcon className='size-9 text-gray-500 hover:text-orange-600 cursor-pointer' onClick={() => setData('fileUpload', null)}></XCircleIcon></div>}
+          <input
+            type="file"
+            multiple id="upload-file"
+            /** @ts-ignore */
+            onChange={e => setData('fileUpload', e?.target?.files as unknown as FileList)}
+          />
+        </div>
+        {data.fileUpload && <div className='grid grid-cols-5 gap-2 py-4'>
+          {
+            (
+              () => {
+                let files: any[] = [];
+                /**
+                 * duyệt qua danh sách file upload cần dùng for loop
+                 * vì nó không phải 1 mảng thuần túy nên không dùng .map() được.
+                 * nó ở dạng object: FileList {0: File, 1: File, 2: File, ....}
+                 */
+                // @ts-ignore
+                for (let i = 0; i < data.fileUpload.length; i++) {
+                  files.push(<img src={URL.createObjectURL(data.fileUpload[i])} key={i} className='size-20 rounded-md' />);
+                }
+                return files;
+              }
+            )()
+          }
+        </div>
+        }
+      </div>
+
+      <PlusCircleIcon className='size-9 text-gray-600 hover:text-black cursor-pointer' title='upload now' onClick={onUpload}></PlusCircleIcon>
     </div>
   )
 }

@@ -30,9 +30,7 @@ class AmuaController extends Controller
 
 	public function fileManage(Request $request)
 	{
-		return Inertia::render('Amuaglobal/Screens/Adminhtml/ImageManage', );
-
-		return Inertia::render('Amuaglobal/Screens/Adminhtml/FileManage');
+		return Inertia::render('Amuaglobal/Screens/Adminhtml/FileManageScreen',);
 	}
 
 	public function dirStructure(Request $request)
@@ -44,11 +42,12 @@ class AmuaController extends Controller
 		 */
 		$fileSystem = Storage::disk('public');
 		/**
-		 * get all files in directory galleries path
+		 * get files in directory galleries path
 		 */
-		$files = $fileSystem->allFiles($path);
+		$files = $fileSystem->files($path);
 		/**
 		 * get all dirrectories in directory path
+		 * use: allFiles for get all file with loop deep in directory(lấy tất cả tập tin trong thu mục kể cả thư mục con)
 		 */
 		$directories = $fileSystem->allDirectories($path);
 
@@ -58,10 +57,12 @@ class AmuaController extends Controller
 				return Storage::url($file);
 			}, $files),
 			'directories' => $directories,
-			// 'firstFileUrl' => !empty($files[0]) ? Storage::url($files[0]) : null
 		]);
-		// return Inertia::render('Amuaglobal/Screens/Adminhtml/ImageManage', );
-		dd($files, $directories, !empty($files[0]) ? Storage::url($files[0]) : null);
+	}
+
+	public function uploadFile(Request $request) {
+		$files = $request->file('fileUpload');
+		dd($files, $request->all());
 	}
 
 	public function getImages(Request $request)
