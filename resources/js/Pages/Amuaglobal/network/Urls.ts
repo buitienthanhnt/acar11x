@@ -10,5 +10,7 @@ export default {
     category: {},
     fileManage: "/amua-api/dir-structure",
     fileUpload: "/amua-api/upload-file",
+    addFolder: "/amua-api/add-folder",
+    deleteFolder: "/amua-api/remove-folder",
   },
 }

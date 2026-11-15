@@ -7,5 +7,9 @@ Route::prefix('amua-api')->group(function () {
 
 	Route::post('upload-file', [\Thanhnt\Amuaglobal\Controllers\AmuaController::class, 'uploadFile']);
 
+	Route::post('add-folder', [\Thanhnt\Amuaglobal\Controllers\AmuaController::class, 'addFolder']);
+
+	Route::delete('remove-folder', [\Thanhnt\Amuaglobal\Controllers\AmuaController::class, 'removeFolder']);
+
 	Route::get('dir-structure', [\Thanhnt\Amuaglobal\Controllers\AmuaController::class, 'dirStructure']);
 });

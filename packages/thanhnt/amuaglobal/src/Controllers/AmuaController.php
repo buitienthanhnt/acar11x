@@ -7,11 +7,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
+use Thanhnt\Amuaglobal\Helper\FileHelper;
 
 class AmuaController extends Controller
 {
-	public function __construct()
-	{
+	public function __construct(
+		protected FileHelper $fileHelper
+	) {
 		// throw new \Exception('Not implemented');
 	}
 
@@ -60,9 +62,81 @@ class AmuaController extends Controller
 		]);
 	}
 
-	public function uploadFile(Request $request) {
-		$files = $request->file('fileUpload');
-		dd($files, $request->all());
+	/**
+	 * upload files for file-manage dashboard
+	 * @throws \Exception
+	 */
+	public function uploadFile(Request $request)
+	{
+		$savedFiles = [];
+		foreach ($request->file('fileUpload') as $file) {
+			try {
+				$savedFiles[] = $this->fileHelper->uploadFile($file, $request->get('currentFolder', 'galleries'), ['disk' => 'public']);
+			} catch (\Throwable $th) {
+				continue;
+			}
+		}
+
+		return response()->json([
+			'status' => 'success',
+			'uploaded' => $savedFiles,
+		]);
+	}
+
+	public function addFolder(Request $request)
+	{
+		$request->validate([
+			'name' => 'required',
+		]);
+
+		/**
+		 * @var string $newFolder
+		 * new folder name
+		 */
+		$newFolder = $request->get('name');
+		/**
+		 * @var \Illuminate\Contracts\Filesystem\Filesystem|\Illuminate\Filesystem\LocalFilesystemAdapter $fileSystem
+		 */
+		$fileSystem = Storage::disk('public');
+		/**
+		 * create new folder
+		 */
+		$fileSystem->makeDirectory(($request->get('path') ?: 'galleries') . '/' . $newFolder);
+		/**
+		 * return response
+		 * Lưu ý không truyền status:200 vào response(staus:200) sẽ gây ra lỗi phản hồi:
+		 * message: "Method Illuminate\Http\Response::json does not exist.", exception: "BadMethodCallException",…}
+		 * Vì khi truyền status:200 vào response thi Laravel sẽ trả về một đối tượng Illuminate\Http\Response
+		 * thay vì ResponseFactory — và class Response này không có phương thức ->json().
+		 * Thay vào đó cần truyền status:200 vào tham số thứ hai trong phương thức ->json().
+		 */
+		return response()->json([
+			'message' => 'success',
+			'folderName' => $newFolder,
+			'folderUrl' => Storage::url($newFolder),
+		], status: 200);
+	}
+
+	public function removeFolder(Request $request)
+	{
+		/**
+		 * target folder path
+		 */
+		$path = $request->get('path');
+		/**
+		 * @var \Illuminate\Contracts\Filesystem\Filesystem|\Illuminate\Filesystem\LocalFilesystemAdapter $fileSystem
+		 */
+		$fileSystem = Storage::disk('public');
+		/**
+		 * remove folder action
+		 */
+		$fileSystem->deleteDirectory($path);
+		/**
+		 * return response
+		 */
+		return response()->json([
+			'message' => 'success',
+		], status: 200);
 	}
 
 	public function getImages(Request $request)

@@ -34,7 +34,7 @@ return [
             'driver' => 'local',
             'root' => storage_path('app'), // change: 'app/private'(v11) -> 'app'(v10)
             'serve' => true,
-            'throw' => false,
+            'throw' => true,
             'report' => false,
         ],
 
@@ -43,7 +43,7 @@ return [
             'root' => storage_path('app/public'),
             'url' => env('APP_URL').'/storage',
             'visibility' => 'public',
-            'throw' => false,
+            'throw' => true,
             'report' => false,
         ],
 
