@@ -12,5 +12,6 @@ export default {
     fileUpload: "/amua-api/upload-file",
     addFolder: "/amua-api/add-folder",
     deleteFolder: "/amua-api/remove-folder",
+    deleteFile: "/amua-api/remove-file",
   },
 }

@@ -10,3 +10,10 @@ export function formartFormData(formFields: FormFieldType[]) {
     formFields.map(field => [field.key, field.value])
   );
 }
+
+export function confirmAction(action: () => void, message?: string) {
+  if (!window.confirm(message || 'Are you sure?')) {
+    return;
+  }
+  action();
+}

@@ -11,5 +11,7 @@ Route::prefix('amua-api')->group(function () {
 
 	Route::delete('remove-folder', [\Thanhnt\Amuaglobal\Controllers\AmuaController::class, 'removeFolder']);
 
+	Route::delete('remove-file', [\Thanhnt\Amuaglobal\Controllers\AmuaController::class, 'removeFile']);
+
 	Route::get('dir-structure', [\Thanhnt\Amuaglobal\Controllers\AmuaController::class, 'dirStructure']);
 });

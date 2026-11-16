@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Thanhnt\Amuaglobal\Helper\FormFieldHelper;
 use Thanhnt\Amuaglobal\Models\Product;
+use Thanhnt\Amuaglobal\Models\Repository\ProductRepository;
 use Thanhnt\Amuaglobal\Models\Types\GalleryInterface;
 use Thanhnt\Amuaglobal\Models\Types\ProductInterface;
 
@@ -14,6 +15,7 @@ final class ProductController extends Controller
 {
 	public function __construct(
 		protected FormFieldHelper $formFieldHelper,
+		protected ProductRepository $productRepository
 	) {}
 
 	public function listProduct()
@@ -28,9 +30,9 @@ final class ProductController extends Controller
 
 	public function detailProduct(int $id)
 	{
-		$product = Product::findOrFail($id);
+		// dd($this->productRepository->productDetail($id)->toArray());
 		return Inertia::render('Amuaglobal/Screens/Adminhtml/Product/ProductDetail', [
-			'product' => $product,
+			'product' => $this->productRepository->productDetail($id),
 		]);
 	}
 

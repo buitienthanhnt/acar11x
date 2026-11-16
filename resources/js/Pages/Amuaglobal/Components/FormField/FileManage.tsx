@@ -12,13 +12,22 @@ export default function FileManage({ selected, onSelect }: { selected: string[],
   const { files, directories, currentDirectory } = data;
 
   const parts = currentDirectory.split('/');
+  /**
+   * tên thư mục hiện tại
+   */
   const currentFolder = parts[parts.length - 1];
 
+  /**
+   * Lấy danh sách thư mục, tập tin trong thư mục hiện tại
+   */
   const getDirectories = useCallback(async () => {
     const response = await axios.get(Urls.adminhtml.fileManage, { params: { path: path } });
     setData(response.data);
   }, [path]);
 
+  /**
+   * register new folder
+   */
   const addFolder = useCallback(async () => {
     const response = await axios.post(Urls.adminhtml.addFolder, { path: path, name: newFolder });
     getDirectories();
@@ -67,7 +76,7 @@ export default function FileManage({ selected, onSelect }: { selected: string[],
         onChangeDir={(value: string) => { setPath(value); }}
         onDeleteSuccess={getDirectories}
       />
-      <Files files={files} selected={selected} onSelect={onSelect} />
+      <Files files={files} selected={selected} onSelect={onSelect} onDeleteSuccess={getDirectories} />
     </div>
   )
 }
@@ -82,8 +91,14 @@ const Directories = ({ directories, onChangeDir, onDeleteSuccess }: { directorie
     return parts[parts.length - 1];
   }, [])
 
+  /**
+   * Xóa thư mục
+   */
   const onDeleteFolder = useCallback(async (directory: string) => {
-    await axios.delete(Urls.adminhtml.deleteFolder, { params: { path: directory } });
+    if (!window.confirm('Bạn có chắc chắn muốn xóa thư mục này?')) {
+      return;
+    }
+    await axios.delete(Urls.adminhtml.deleteFolder, { data: { path: directory } });
     onDeleteSuccess?.();
   }, [onDeleteSuccess])
 
@@ -113,7 +128,16 @@ const Directories = ({ directories, onChangeDir, onDeleteSuccess }: { directorie
   )
 }
 
-const Files = ({ files, selected, onSelect }: { files: string[], selected: string[], onSelect: (value: string) => void }) => {
+const Files = ({ files, selected, onSelect, onDeleteSuccess }: { files: string[], selected: string[], onSelect: (value: string) => void, onDeleteSuccess?: () => void }) => {
+
+  const onDeleteFile = useCallback(async (file: string) => {
+    if (!window.confirm('Bạn có chắc chắn muốn xóa hình ảnh này?')) {
+      return;
+    }
+    await axios.delete(Urls.adminhtml.deleteFile, { data: { path: file } });
+    onDeleteSuccess?.();
+  }, [onDeleteSuccess]);
+
   if (!files || files.length === 0) {
     return <p className="text-red-600 text-lg italic mt-4">
       Không có hình ảnh nào trong thư mục này!
@@ -121,14 +145,19 @@ const Files = ({ files, selected, onSelect }: { files: string[], selected: strin
   }
 
   return (
-    <div className="p-4 bg-gray-200 grid grid-cols-3 gap-4 rounded-md">
+    <div className="p-5 bg-gray-200 grid grid-cols-3 gap-4 rounded-md">
       {files.map((file, index) => (
-        <div key={index} onClick={() => onSelect(file)} className={'cursor-pointer'}>
+        <div key={index} onClick={() => onSelect(file)} className={'cursor-pointer relative'}>
           <img
             src={file}
             alt=""
             className={`size-20 rounded-md object-cover ${selected?.includes(file) ? 'ring-2 ring-blue-700 ring-offset-2' : ''}`}
           />
+          <TrashIcon
+            className="h-5 w-5 inline-block ml-auto hover:text-red-600 absolute left-[-16px] top-[-16px]"
+            onClick={() => {
+              onDeleteFile(file);
+            }} />
         </div>
       ))}
     </div>
@@ -141,7 +170,6 @@ const UploadFile = ({ currentFolder, uploadSuccess }: { currentFolder: string, u
   })
 
   const onUpload = useCallback(async () => {
-    console.log(data);
     if (!data.fileUpload) {
       return;
     }

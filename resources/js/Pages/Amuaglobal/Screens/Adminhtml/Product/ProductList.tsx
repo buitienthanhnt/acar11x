@@ -1,7 +1,8 @@
-import { Head, Link } from "@inertiajs/react"
+import { Head, Link, router } from "@inertiajs/react"
 import { PaginateInterface } from "../../../types/Paginate"
 import { Paginate } from "../../../Components"
 import BaseLayout from "../Layout/BaseLayout"
+import { useCallback } from "react"
 
 const ProductList = ({ products }: { products: PaginateInterface }) => {
 
@@ -9,13 +10,13 @@ const ProductList = ({ products }: { products: PaginateInterface }) => {
     <BaseLayout>
       <Head title="Product List" />
       <div className="container mx-auto">
-       <div className="flex space-x-2">
-         <Link
-          href={'/adminhtml/amua-product/create'}
-          className="bg-green-500 text-white px-4 py-2 rounded-md mb-4 inline-block w-fit">
-          Create Product
-        </Link>
-       </div>
+        <div className="flex space-x-2">
+          <Link
+            href={'/adminhtml/amua-product/create'}
+            className="bg-green-500 text-white px-4 py-2 rounded-md mb-4 inline-block w-fit">
+            Create Product
+          </Link>
+        </div>
 
         <h1 className="text-2xl font-bold mb-4">Product List</h1>
         {products?.data?.map(product => <ProductItem key={product.id} product={product} />)}
@@ -31,8 +32,13 @@ const ProductList = ({ products }: { products: PaginateInterface }) => {
 }
 
 export const ProductItem = ({ product, onSelectProduct }: { product: any; onSelectProduct?: (product: any) => void }) => {
+
+  const openDetail = useCallback(() => {
+    router.get(`/adminhtml/amua-product/detail/${product.id}`);
+  }, [product.id])
+
   return (
-    <div className="border border-gray-700 rounded-md mb-1 flex gap-4 cursor-pointer" onClick={() => onSelectProduct?.(product)}>
+    <div className="border border-gray-700 rounded-md mb-1 flex gap-4 cursor-pointer" onClick={openDetail}>
       <img src={product.image} className="size-24 rounded-md object-cover" alt="" />
       <div className="flex flex-col justify-between">
         <p className="font-semibold text-lg">{product.name}</p>

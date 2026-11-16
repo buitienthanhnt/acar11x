@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Thanhnt\Amuaglobal\Helper\FileHelper;
+use Illuminate\Support\Str;
 
 class AmuaController extends Controller
 {
@@ -121,6 +122,7 @@ class AmuaController extends Controller
 	{
 		/**
 		 * target folder path
+		 * ex: galleries/product
 		 */
 		$path = $request->get('path');
 		/**
@@ -130,12 +132,44 @@ class AmuaController extends Controller
 		/**
 		 * remove folder action
 		 */
-		$fileSystem->deleteDirectory($path);
+		$status = $fileSystem->deleteDirectory($path);
 		/**
 		 * return response
 		 */
 		return response()->json([
-			'message' => 'success',
+			'message' => $status ? 'success' : 'failed',
+		], status: 200);
+	}
+
+	/**
+	 * remove file support for file-manager
+	 * @throws \Exception
+	 */
+	public function removeFile(Request $request)
+	{
+		$request->validate([
+			'path' => 'required',
+		]);
+		/**
+		 * lấy đường dẫn vị trí của file trong thư mục từ url path
+		 * vì đường dẫn path truyền lên là 1 url tương đối với localhost:8000/storage/galleries/image3.png
+		 * ex: /storage/galleries/image3.png -> galleries/image3.png
+		 * @var string $relativePath
+		 */
+		$relativePath = Str::after($request->get('path'), '/storage/');
+
+		/**
+		 * @var \Illuminate\Contracts\Filesystem\Filesystem|\Illuminate\Filesystem\LocalFilesystemAdapter $fileSystem
+		 */
+		$fileSystem = Storage::disk('public');
+		/**
+		 * delete file action
+		 * /storage/galleries/image3.png
+		 */
+		$status = $fileSystem->delete($relativePath);
+
+		return response()->json([
+			'message' => $status ? 'success' : 'failed',
 		], status: 200);
 	}
 
