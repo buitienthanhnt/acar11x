@@ -15,7 +15,7 @@ export default function Home() {
       <TopBar></TopBar>
       <div className="container mx-auto">
         <CarfixList></CarfixList>
-        <Link href={'/acar/setting'} className="absolute left-10 bottom-10">
+        <Link href={'/acar/setting'} className="fixed left-10 bottom-10">
           <Cog6ToothIcon className="size-10 text-gray-600 hover:text-gray-900"></Cog6ToothIcon>
         </Link>
       </div>
